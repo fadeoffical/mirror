@@ -8,4 +8,4 @@
  */
 
 rootProject.name = "mirror"
-include("lib")
+include("api")
