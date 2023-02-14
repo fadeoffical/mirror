@@ -1,10 +1,20 @@
-package mirror;
+package fade.mirror;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Mirror {
+public final class Mirror {
 
-    public static @NotNull ClassMirror mirror(@NotNull Class<?> clazz) {
+    private Mirror() {
+        throw new UnsupportedOperationException("Instantiating '%s' is forbidden!".formatted(Mirror.class.getName()));
+    }
+
+    public static <T> @NotNull ClassMirror<T> mirror(@NotNull Class<T> clazz) {
         return ClassMirror.fromClass(clazz);
     }
+//
+//    public static @NotNull FieldMirror mirror(@NotNull Field field) {
+//    }
+//
+//    public static <T> @NotNull ConstructorMirror<T> mirror(@NotNull Constructor<T> constructor) {
+//    }
 }

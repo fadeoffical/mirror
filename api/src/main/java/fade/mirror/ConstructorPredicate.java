@@ -3,30 +3,28 @@ package fade.mirror;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
+import java.util.function.Predicate;
 
-public class ConstructorPredicate {
+public final class ConstructorPredicate implements Predicate<ConstructorAccessor<?>> {
 
     private final Class<?>[] types;
-    private final Annotation[] annotations;
-
-    private ConstructorPredicate(@NotNull Class<?>[] types, @NotNull Annotation[] annotations) {
-        this.types = types;
-        this.annotations = annotations;
-    }
+    private Annotation[] annotations;
 
     private ConstructorPredicate(@NotNull Class<?>[] types) {
-        this(types, new Annotation[]{});
-    }
-
-    private ConstructorPredicate(@NotNull Annotation[] annotation) {
-        this(new Class[]{}, annotation);
+        this.types = types;
     }
 
     public static @NotNull ConstructorPredicate withTypes(@NotNull Class<?>... types) {
         return new ConstructorPredicate(types);
     }
 
-    public static @NotNull ConstructorPredicate withAnnotations(@NotNull Annotation... annotations) {
-        return new ConstructorPredicate(annotations);
+    public @NotNull ConstructorPredicate andAnnotations(@NotNull Annotation... annotations) {
+        this.annotations = annotations.clone();
+        return this;
+    }
+
+    @Override
+    public boolean test(ConstructorAccessor<?> accessor) {
+        return accessor.areParametersEqual(this.types) && (this.annotations == null || accessor.areAnnotationsEqual(this.annotations));
     }
 }

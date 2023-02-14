@@ -1,4 +1,8 @@
 package fade.mirror;
 
-public class Instantiable {
+import org.jetbrains.annotations.NotNull;
+
+public interface Instantiable<T> {
+
+    @NotNull T instantiate();
 }
