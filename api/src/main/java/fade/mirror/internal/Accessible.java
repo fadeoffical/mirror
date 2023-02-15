@@ -1,4 +1,4 @@
-package fade.mirror;
+package fade.mirror.internal;
 
 import fade.mirror.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;

@@ -1,6 +1,5 @@
 package fade.mirror;
 
-import fade.mirror.constructor.ConstructorPredicate;
 import fade.mirror.mock.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ class MirrorTest {
     @DisplayName("instantiate user with username and email")
     void testAccessDefaultConstructorAndInstantiate() {
         MockUser user = mirror(MockUser.class)
-                .getConstructor(ConstructorPredicate.withTypes(String.class, String.class))
+                .getConstructor(ConstructorFilter.create().withParameters(String.class, String.class))
                 .orElseThrow()
                 .requireAccessible()
                 .invoke("bob", "bob@example.com");

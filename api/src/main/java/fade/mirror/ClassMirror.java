@@ -1,7 +1,5 @@
 package fade.mirror;
 
-import fade.mirror.constructor.ConstructorAccessor;
-import fade.mirror.constructor.ConstructorPredicate;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -21,12 +19,12 @@ public final class ClassMirror<T> {
         return new ClassMirror<>(clazz);
     }
 
-    public @NotNull Optional<ConstructorAccessor<T>> getConstructor(@NotNull ConstructorPredicate predicate) {
+    public @NotNull Optional<MConstructor<T>> getConstructor(@NotNull ConstructorFilter predicate) {
         return this.getConstructors().filter(predicate).findFirst();
     }
 
-    public @NotNull Stream<ConstructorAccessor<T>> getConstructors() {
-        return this.constructorStream().map(ConstructorAccessor::from);
+    public @NotNull Stream<MConstructor<T>> getConstructors() {
+        return this.constructorStream().map(MConstructor::new);
     }
 
     @SuppressWarnings("unchecked") // cast should always succeed

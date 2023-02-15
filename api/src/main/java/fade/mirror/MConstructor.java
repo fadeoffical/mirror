@@ -1,12 +1,9 @@
-package fade.mirror.constructor;
+package fade.mirror;
 
-import fade.mirror.Accessible;
-import fade.mirror.Annotated;
-import fade.mirror.Invokable;
-import fade.mirror.Parametized;
 import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
 import fade.mirror.exception.MismatchedArgumentsException;
+import fade.mirror.internal.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -15,17 +12,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>, Parametized, Annotated, Invokable<T> {
+public final class MConstructor<T> implements Typed<T>, Accessible<Constructor<T>>, Parameterized, Annotated, Invokable<T> {
 
     private final Constructor<T> constructor;
 
-    private ConstructorAccessor(@NotNull Constructor<T> constructor) {
+    MConstructor(@NotNull Constructor<T> constructor) {
         this.constructor = constructor;
-    }
-
-    public static <T> ConstructorAccessor<T> from(@NotNull Constructor<T> constructor) {
-        return new ConstructorAccessor<>(constructor);
     }
 
     @Override
@@ -34,7 +28,7 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
     }
 
     @Override
-    public @NotNull ConstructorAccessor<T> makeAccessible() {
+    public @NotNull MConstructor<T> makeAccessible() {
         if (!this.isAccessible()) {
             this.constructor.trySetAccessible();
         }
@@ -42,12 +36,12 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
     }
 
     @Override
-    public @NotNull ConstructorAccessor<T> requireAccessible() {
-        return (ConstructorAccessor<T>) Accessible.super.requireAccessible();
+    public @NotNull MConstructor<T> requireAccessible() {
+        return (MConstructor<T>) Accessible.super.requireAccessible();
     }
 
     @Override
-    public @NotNull ConstructorAccessor<T> requireAccessible(@NotNull Supplier<? extends RuntimeException> exception) {
+    public @NotNull MConstructor<T> requireAccessible(@NotNull Supplier<? extends RuntimeException> exception) {
         this.makeAccessible();
         if (!this.isAccessible()) throw exception.get();
 
@@ -55,13 +49,13 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
     }
 
     @Override
-    public @NotNull ConstructorAccessor<T> ifAccessible(@NotNull Consumer<Constructor<T>> consumer) {
+    public @NotNull MConstructor<T> ifAccessible(@NotNull Consumer<Constructor<T>> consumer) {
         if (this.isAccessible()) consumer.accept(this.constructor);
         return this;
     }
 
     @Override
-    public @NotNull ConstructorAccessor<T> ifNotAccessible(@NotNull Consumer<Constructor<T>> consumer) {
+    public @NotNull MConstructor<T> ifNotAccessible(@NotNull Consumer<Constructor<T>> consumer) {
         if (!this.isAccessible()) consumer.accept(this.constructor);
         return this;
     }
@@ -69,7 +63,8 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
     @Override
     public @NotNull T invoke(@NotNull Object... arguments) {
         if (!this.isAccessible())
-            throw InaccessibleException.from("Could not invoke constructor '%s' from '%s'; it is inaccessible", this.getPrettyConstructorRepresentation(), this.getDeclaringClass().getName());
+            throw InaccessibleException.from("Could not invoke constructor '%s' from '%s'; it is inaccessible", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
+                    .getName());
 
         Class<?>[] argumentTypes = Arrays.stream(arguments).map(Object::getClass).toArray(Class<?>[]::new);
         if (!Arrays.equals(this.constructor.getParameterTypes(), argumentTypes))
@@ -91,8 +86,48 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
     }
 
     @Override
+    public @NotNull Stream<MParameter<?>> getParameters() {
+        return null;
+    }
+
+    @Override
+    public @NotNull <T> Stream<MParameter<T>> getParametersWithType(@NotNull Class<T> type) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Stream<MParameter<?>> getParametersWithAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Stream<MParameter<?>> getParametersWithAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Stream<MParameter<?>> getParametersWithoutAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Stream<MParameter<?>> getParametersWithoutAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
+        return null;
+    }
+
+    @Override
     public boolean areParametersEqual(@NotNull Class<?>[] types) {
         return Arrays.equals(this.constructor.getParameterTypes(), types);
+    }
+
+    @Override
+    public boolean isParameterPresent(@NotNull Class<?>[] type) {
+        return false;
+    }
+
+    @Override
+    public boolean isParameterAbsent(@NotNull Class<?>[] type) {
+        return false;
     }
 
     @Override
@@ -107,5 +142,10 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
 
     public @NotNull Class<T> getDeclaringClass() {
         return this.constructor.getDeclaringClass();
+    }
+
+    @Override
+    public @NotNull Class<T> getType() {
+        return null;
     }
 }

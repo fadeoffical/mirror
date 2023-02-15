@@ -1,4 +1,4 @@
-package fade.mirror;
+package fade.mirror.internal;
 
 import org.jetbrains.annotations.NotNull;
 
