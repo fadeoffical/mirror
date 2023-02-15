@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>, Parametized, Annotated {
+public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>, Parametized, Annotated, Invokable<T> {
 
     private final Constructor<T> constructor;
 
@@ -60,7 +60,8 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
         return this;
     }
 
-    public T invoke(@NotNull Object... arguments) {
+    @Override
+    public @NotNull T invoke(@NotNull Object... arguments) {
         try {
             return this.constructor.newInstance(arguments);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
