@@ -1,4 +1,4 @@
-package fade.mirror;
+package fade.mirror.constructor;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +25,6 @@ public final class ConstructorPredicate implements Predicate<ConstructorAccessor
 
     @Override
     public boolean test(ConstructorAccessor<?> accessor) {
-        return accessor.areParametersEqual(this.types) && (this.annotations == null || accessor.areAnnotationsEqual(this.annotations));
+        return accessor.areParametersEqual(this.types) && (this.annotations == null || accessor.areAnnotationsPresent(this.annotations));
     }
 }

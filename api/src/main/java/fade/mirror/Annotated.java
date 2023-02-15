@@ -6,5 +6,7 @@ import java.lang.annotation.Annotation;
 
 public interface Annotated {
 
-    boolean areAnnotationsEqual(@NotNull Annotation[] annotations);
+    boolean areAnnotationsPresent(@NotNull Annotation[] annotations);
+
+    boolean isAnnotationPresent(@NotNull Annotation annotation);
 }

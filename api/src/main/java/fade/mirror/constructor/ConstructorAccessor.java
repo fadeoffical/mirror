@@ -1,5 +1,9 @@
-package fade.mirror;
+package fade.mirror.constructor;
 
+import fade.mirror.Accessible;
+import fade.mirror.Annotated;
+import fade.mirror.Invokable;
+import fade.mirror.Parametized;
 import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
 import fade.mirror.exception.MismatchedArgumentsException;
@@ -20,7 +24,7 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
         this.constructor = constructor;
     }
 
-    static <T> ConstructorAccessor<T> from(@NotNull Constructor<T> constructor) {
+    public static <T> ConstructorAccessor<T> from(@NotNull Constructor<T> constructor) {
         return new ConstructorAccessor<>(constructor);
     }
 
@@ -92,8 +96,13 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
     }
 
     @Override
-    public boolean areAnnotationsEqual(@NotNull Annotation[] annotations) {
-        return Arrays.equals(this.constructor.getDeclaredAnnotations(), annotations);
+    public boolean areAnnotationsPresent(@NotNull Annotation[] annotations) {
+        return Arrays.stream(annotations).anyMatch(annotation -> !this.isAnnotationPresent(annotation));
+    }
+
+    @Override
+    public boolean isAnnotationPresent(@NotNull Annotation annotation) {
+        return this.constructor.isAnnotationPresent(annotation.annotationType());
     }
 
     public @NotNull Class<T> getDeclaringClass() {

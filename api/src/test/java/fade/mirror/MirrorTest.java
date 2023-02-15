@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import fade.mirror.constructor.ConstructorPredicate;
 import fade.mirror.mock.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
