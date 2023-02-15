@@ -1,6 +1,5 @@
 package fade.mirror.internal;
 
-import fade.mirror.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -10,16 +9,13 @@ public interface Accessible<T> {
 
     boolean isAccessible();
 
-    @NotNull Accessible<T> makeAccessible();
+    @NotNull T makeAccessible();
 
-    @NotNull
-    default Accessible<T> requireAccessible() {
-        return this.requireAccessible(() -> InaccessibleException.from("Inaccessible"));
-    }
+    @NotNull T requireAccessible();
 
-    @NotNull Accessible<T> requireAccessible(@NotNull Supplier<? extends RuntimeException> exception);
+    @NotNull T requireAccessible(@NotNull Supplier<? extends RuntimeException> exception);
 
-    @NotNull Accessible<T> ifAccessible(@NotNull Consumer<T> consumer);
+    @NotNull T ifAccessible(@NotNull Consumer<T> consumer);
 
-    @NotNull Accessible<T> ifNotAccessible(@NotNull Consumer<T> consumer);
+    @NotNull T ifNotAccessible(@NotNull Consumer<T> consumer);
 }

@@ -4,25 +4,27 @@ import fade.mirror.MParameter;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public interface Parameterized {
 
     @NotNull Stream<MParameter<?>> getParameters();
 
-    <T> @NotNull Stream<MParameter<T>> getParametersWithType(@NotNull Class<T> type);
+    @NotNull Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter);
 
-    @NotNull Stream<MParameter<?>> getParametersWithAnnotation(@NotNull Class<? extends Annotation> annotation);
+    @NotNull Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter);
+
+    <T> @NotNull Stream<MParameter<T>> getParametersOfType(@NotNull Class<T> type);
+
+    <T> @NotNull Optional<MParameter<T>> getParameterOfType(@NotNull Class<T> type);
 
     @NotNull Stream<MParameter<?>> getParametersWithAnnotations(@NotNull Class<? extends Annotation>[] annotations);
 
-    @NotNull Stream<MParameter<?>> getParametersWithoutAnnotation(@NotNull Class<? extends Annotation> annotation);
+    @NotNull Optional<MParameter<?>> getParameterWithAnnotations(@NotNull Class<? extends Annotation>[] annotations);
 
-    @NotNull Stream<MParameter<?>> getParametersWithoutAnnotations(@NotNull Class<? extends Annotation>[] annotations);
+    boolean hasParameters();
 
-    boolean areParametersEqual(@NotNull Class<?>[] types);
-
-    boolean isParameterPresent(@NotNull Class<?>[] type);
-
-    boolean isParameterAbsent(@NotNull Class<?>[] type);
+    int getParameterCount();
 }

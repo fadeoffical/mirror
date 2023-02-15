@@ -1,5 +1,6 @@
-package fade.mirror;
+package fade.mirror.filter;
 
+import fade.mirror.MConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -27,7 +28,9 @@ public final class ConstructorFilter implements Predicate<MConstructor<?>> {
     }
 
     @Override
-    public boolean test(@NotNull MConstructor<?> accessor) {
-        return accessor.areParametersEqual(this.types) && (this.annotations == null || accessor.areAnnotationsPresent(this.annotations));
+    public boolean test(@NotNull MConstructor<?> constructor) {
+        //  return constructor.areParametersEqual(this.types) && (this.annotations == null || accessor.areAnnotationsPresent(this.annotations));
+        // todo: currently broken, machste nix
+        return false;
     }
 }
