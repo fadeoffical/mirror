@@ -1,6 +1,8 @@
 package fade.mirror;
 
+import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
+import fade.mirror.exception.MismatchedArgumentsException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -62,11 +64,19 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
 
     @Override
     public @NotNull T invoke(@NotNull Object... arguments) {
+        if (!this.isAccessible())
+            throw InaccessibleException.from("Could not invoke constructor '%s' from '%s'; it is inaccessible", this.getPrettyConstructorRepresentation(), this.getDeclaringClass().getName());
+
+        Class<?>[] argumentTypes = Arrays.stream(arguments).map(Object::getClass).toArray(Class<?>[]::new);
+        if (!Arrays.equals(this.constructor.getParameterTypes(), argumentTypes))
+            throw MismatchedArgumentsException.from("Mismatched argument types for constructor '%s' from '%s'", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
+                    .getName());
+
         try {
             return this.constructor.newInstance(arguments);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
-            throw InvocationException.from("Could not invoke constructor '%s' from '%s'".formatted(this.getPrettyConstructorRepresentation(), this.constructor.getDeclaringClass()
-                    .getName()), exception);
+            throw InvocationException.from(exception, "Could not invoke constructor '%s' from '%s'", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
+                    .getName());
         }
     }
 
@@ -84,5 +94,9 @@ public final class ConstructorAccessor<T> implements Accessible<Constructor<T>>,
     @Override
     public boolean areAnnotationsEqual(@NotNull Annotation[] annotations) {
         return Arrays.equals(this.constructor.getDeclaredAnnotations(), annotations);
+    }
+
+    public @NotNull Class<T> getDeclaringClass() {
+        return this.constructor.getDeclaringClass();
     }
 }

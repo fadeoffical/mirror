@@ -14,7 +14,7 @@ public interface Accessible<T> {
 
     @NotNull
     default Accessible<T> requireAccessible() {
-        return this.requireAccessible(InaccessibleException::create);
+        return this.requireAccessible(() -> InaccessibleException.from("Inaccessible"));
     }
 
     @NotNull Accessible<T> requireAccessible(@NotNull Supplier<? extends RuntimeException> exception);
