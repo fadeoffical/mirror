@@ -36,10 +36,11 @@ java {
 }
 
 tasks.withType<Jar> {
-    archiveBaseName.set(rootProject.name + "-" + project.name)
-    if (System.getenv().containsKey("CI_GITHUB")) {
-        archiveBaseName.set(archiveBaseName.get() + "-" + System.getenv("CI_GITHUB_BRANCH"))
-    }
+    var finalName = rootProject.name + "-" + project.name
+    if (System.getenv().containsKey("CI_GITHUB"))
+        finalName += "-" + System.getenv("CI_GITHUB_BRANCH")
+
+    archiveBaseName.set(finalName)
 }
 
 publishing {
@@ -57,6 +58,11 @@ publishing {
     publications {
         register<MavenPublication>("gpr") {
             from(components["java"])
+
+            var finalName = rootProject.name + "-" + project.name
+            if (System.getenv().containsKey("CI_GITHUB"))
+                finalName += "-" + System.getenv("CI_GITHUB_BRANCH")
+            artifactId = finalName
         }
     }
 }
