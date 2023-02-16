@@ -44,15 +44,19 @@ tasks.withType<Jar> {
 
 publishing {
     repositories {
-        if (System.getenv().containsKey("CI_GITHUB")) {
-            maven {
-                name = "github"
-                url = uri("https://github.com/fadeoffical/mirror")
-                credentials {
-                    username = System.getenv("CI_GITHUB_USERNAME")
-                    password = System.getenv("CI_GITHUB_PASSWORD")
-                }
+        maven {
+            name = "github"
+            url = uri("https://github.com/fadeoffical/mirror")
+            credentials {
+                username = System.getenv("CI_GITHUB_USERNAME")
+                password = System.getenv("CI_GITHUB_PASSWORD")
             }
+        }
+    }
+
+    publications {
+        register<MavenPublication>("gpr") {
+            from(components["java"])
         }
     }
 }
