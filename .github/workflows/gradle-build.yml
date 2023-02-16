@@ -42,7 +42,7 @@ jobs:
       - name: gradle build
         uses: 'gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1'
         with:
-          args: build
+          arguments: build
         env:
           CI_GITHUB: 'x'
           CI_GITHUB_BRANCH: ${GITHUB_REF##*/}
@@ -53,7 +53,7 @@ jobs:
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         if: ${{ github.event_name != 'pull_request' }}
         with:
-          args: publish
+          arguments: publish
         env:
           CI_GITHUB: 'x'
           CI_GITHUB_BRANCH: ${GITHUB_REF##*/}
