@@ -150,9 +150,15 @@ public final class MClassImpl<T> implements MClass<T> {
     }
 
     @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
+    @SafeVarargs
+    public final boolean isAnnotatedWith(@NotNull Class<? extends Annotation>... annotations) {
         Set<Class<? extends Annotation>> annotationList = Set.of(annotations);
         return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotationList::contains);
+    }
+
+    @Override
+    public @NotNull Optional<Annotation> getAnnotationOfType(@NotNull Class<? extends Annotation> type) {
+        return this.getAnnotation(annotation -> annotation.annotationType() == type);
     }
 
     @Override

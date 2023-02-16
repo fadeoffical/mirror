@@ -15,7 +15,10 @@ public interface Annotated {
 
     @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter);
 
-    boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations);
+    @SuppressWarnings("unchecked") // implementations are REQUIRED to use the varargs in a safe manner!
+    boolean isAnnotatedWith(@NotNull Class<? extends Annotation>... annotations);
+
+    @NotNull Optional<Annotation> getAnnotationOfType(@NotNull Class<? extends Annotation> type);
 
     boolean isAnnotated();
 
