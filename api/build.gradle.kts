@@ -64,11 +64,7 @@ publishing {
     publications {
         register<MavenPublication>("gpr") {
             from(components["java"])
-
-            var finalName = rootProject.name + "-" + project.name
-            if (System.getenv().containsKey("CI_GITHUB"))
-                finalName += "-" + System.getenv("CI_GITHUB_BRANCH")
-            artifactId = finalName
+            artifactId = rootProject.name + "-" + project.name
         }
     }
 }

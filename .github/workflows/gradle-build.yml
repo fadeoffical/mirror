@@ -47,7 +47,7 @@ jobs:
           CI_GITHUB: 'x'
           CI_GITHUB_BRANCH: ${{ github.ref_name }}
           CI_GITHUB_USERNAME: ${{ github.actor }}
-          CI_GITHUB_PASSWORD: ${{ secrets.TEST_SECRET }}
+          CI_GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       - name: gradle publish
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
@@ -58,4 +58,4 @@ jobs:
           CI_GITHUB: 'x'
           CI_GITHUB_BRANCH: ${{ github.ref_name }}
           CI_GITHUB_USERNAME: ${{ github.actor }}
-          CI_GITHUB_PASSWORD: ${{ secrets.TEST_SECRET }}
+          CI_GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
