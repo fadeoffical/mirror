@@ -39,10 +39,14 @@ public final class MParameterImpl<T> implements MParameter<T> {
     }
 
     @Override
-    @SafeVarargs
-    public final boolean isAnnotatedWith(@NotNull Class<? extends Annotation>... annotations) {
+    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
         Set<Class<? extends Annotation>> annotationList = Set.of(annotations);
         return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotationList::contains);
+    }
+
+    @Override
+    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
+        return this.getAnnotations().map(Annotation::annotationType).anyMatch(clazz -> clazz == annotation);
     }
 
     @Override
