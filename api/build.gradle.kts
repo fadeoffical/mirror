@@ -53,7 +53,7 @@ publishing {
     repositories {
         maven {
             name = "github"
-            url = uri("https://github.com/fadeoffical/mirror")
+            url = uri("https://github.com/FADEOffical/mirror")
             credentials {
                 username = System.getenv("CI_GITHUB_USERNAME")
                 password = System.getenv("CI_GITHUB_PASSWORD")
