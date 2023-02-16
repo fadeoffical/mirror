@@ -11,7 +11,8 @@ group = "fade"
 description = "Reflections made easy!"
 
 plugins {
-    `java-library`
+    id("maven-publish")
+    id("java-library")
 }
 
 repositories {
@@ -36,4 +37,17 @@ java {
 
 tasks.withType<Jar> {
     archiveBaseName.set(rootProject.name + "-" + project.name)
+}
+
+publishing {
+    repositories {
+        if (System.getenv().containsKey("CI_GITHUB")) maven {
+            name = "github"
+            url = uri("https://github.com/fadeoffical/mirror")
+            credentials {
+                username = System.getenv("CI_GITHUB_USERNAME")
+                password = System.getenv("CI_GITHUB_PASSWORD")
+            }
+        }
+    }
 }
