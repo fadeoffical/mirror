@@ -40,16 +40,21 @@ tasks.withType<Jar> {
     if (System.getenv().containsKey("CI_GITHUB")) {
         archiveBaseName.set(archiveBaseName.get() + "-" + System.getenv("CI_GITHUB_BRANCH"))
     }
+
+    println(archiveBaseName.get())
 }
 
 publishing {
     repositories {
-        if (System.getenv().containsKey("CI_GITHUB")) maven {
-            name = "github"
-            url = uri("https://github.com/fadeoffical/mirror")
-            credentials {
-                username = System.getenv("CI_GITHUB_USERNAME")
-                password = System.getenv("CI_GITHUB_PASSWORD")
+        if (System.getenv().containsKey("CI_GITHUB")) {
+            println(System.getenv("CI_GITHUB"))
+            maven {
+                name = "github"
+                url = uri("https://github.com/fadeoffical/mirror")
+                credentials {
+                    username = System.getenv("CI_GITHUB_USERNAME")
+                    password = System.getenv("CI_GITHUB_PASSWORD")
+                }
             }
         }
     }
