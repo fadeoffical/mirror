@@ -6,7 +6,7 @@
  * User Manual available at https://docs.gradle.org/8.0/userguide/building_java_projects.html
  */
 
-version = "0.0.1-beta.1"
+version = "0.0.2-beta.0"
 group = "fade"
 description = "Reflections made easy!"
 
