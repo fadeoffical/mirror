@@ -7,11 +7,13 @@ import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
 import fade.mirror.exception.MismatchedArgumentsException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -69,14 +71,14 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
     }
 
     @Override
-    public @NotNull T invoke(@NotNull Object... arguments) {
+    public @NotNull T invoke(@Nullable Object... arguments) {
         if (!this.isAccessible())
             throw InaccessibleException.from("Could not invoke constructor '%s' from '%s'; it is inaccessible", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
                     .getName());
 
         if (!this.invokableWith(arguments))
-            throw MismatchedArgumentsException.from("Mismatched argument types for constructor '%s' from '%s'", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
-                    .getName());
+            throw MismatchedArgumentsException.from("Mismatched argument types for constructor '%s' from '%s'; provided=%s", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
+                    .getName(), Arrays.toString(arguments));
 
         try {
             return this.constructor.newInstance(arguments);
@@ -87,9 +89,20 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
     }
 
     @Override
-    public boolean invokableWith(@NotNull Object... arguments) {
-        Class<?>[] argumentTypes = Arrays.stream(arguments).map(Object::getClass).toArray(Class<?>[]::new);
-        return Arrays.equals(this.constructor.getParameterTypes(), argumentTypes);
+    public boolean invokableWith(@Nullable Object... arguments) {
+        Class<?>[] argumentTypes = Arrays.stream(arguments)
+                .map(object -> object == null ? null : object.getClass())
+                .toArray(Class<?>[]::new);
+        Class<?>[] parameterTypes = this.constructor.getParameterTypes();
+
+        // copied and adapted from Arrays#equals
+        if (parameterTypes == argumentTypes) return true;
+        if (parameterTypes.length != argumentTypes.length) return false;
+        for (int i = 0; i < parameterTypes.length; i++) {
+            if (argumentTypes[i] != null && !Objects.equals(parameterTypes[i], argumentTypes[i])) return false;
+        }
+
+        return true;
     }
 
     private @NotNull String getPrettyConstructorRepresentation() {
