@@ -161,8 +161,9 @@ public final class MClassImpl<T> implements MClass<T> {
     }
 
     @Override
-    public @NotNull Optional<Annotation> getAnnotationOfType(@NotNull Class<? extends Annotation> type) {
-        return this.getAnnotation(annotation -> annotation.annotationType() == type);
+    @SuppressWarnings("unchecked")
+    public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
+        return (Optional<C>) this.getAnnotation(annotation -> annotation.annotationType() == type);
     }
 
     @Override

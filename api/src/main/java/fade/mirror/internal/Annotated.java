@@ -19,7 +19,7 @@ public interface Annotated {
 
     boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation);
 
-    @NotNull Optional<Annotation> getAnnotationOfType(@NotNull Class<? extends Annotation> type);
+    <T extends Annotation> @NotNull Optional<T> getAnnotationOfType(@NotNull Class<T> type);
 
     boolean isAnnotated();
 
