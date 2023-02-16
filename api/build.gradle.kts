@@ -10,6 +10,11 @@ version = "0.0.1-alpha.0"
 group = "fade"
 description = "Reflections made easy!"
 
+if (System.getenv().containsKey("CI_GITHUB")) {
+    val branchName = System.getenv("CI_GITHUB_BRANCH")
+    version = "${(version as String)}+$branchName"
+}
+
 plugins {
     id("maven-publish")
     id("java-library")
@@ -36,11 +41,7 @@ java {
 }
 
 tasks.withType<Jar> {
-    var finalName = rootProject.name + "-" + project.name
-    if (System.getenv().containsKey("CI_GITHUB"))
-        finalName += "-" + System.getenv("CI_GITHUB_BRANCH")
-
-    archiveBaseName.set(finalName)
+    archiveBaseName.set(rootProject.name + "-" + project.name)
 }
 
 tasks.javadoc {
@@ -64,7 +65,7 @@ publishing {
     publications {
         register<MavenPublication>("gpr") {
             from(components["java"])
-            artifactId = rootProject.name + "-" + project.name
+            artifactId = rootProject.name
         }
     }
 }
