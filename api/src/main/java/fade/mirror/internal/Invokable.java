@@ -5,4 +5,6 @@ import org.jetbrains.annotations.NotNull;
 public interface Invokable<T> {
 
     @NotNull T invoke(@NotNull Object... arguments);
+
+    boolean invokableWith(@NotNull Object... arguments);
 }

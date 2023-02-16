@@ -74,8 +74,7 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
             throw InaccessibleException.from("Could not invoke constructor '%s' from '%s'; it is inaccessible", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
                     .getName());
 
-        Class<?>[] argumentTypes = Arrays.stream(arguments).map(Object::getClass).toArray(Class<?>[]::new);
-        if (!Arrays.equals(this.constructor.getParameterTypes(), argumentTypes))
+        if (!this.invokableWith(arguments))
             throw MismatchedArgumentsException.from("Mismatched argument types for constructor '%s' from '%s'", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
                     .getName());
 
@@ -85,6 +84,12 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
             throw InvocationException.from(exception, "Could not invoke constructor '%s' from '%s'", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
                     .getName());
         }
+    }
+
+    @Override
+    public boolean invokableWith(@NotNull Object... arguments) {
+        Class<?>[] argumentTypes = Arrays.stream(arguments).map(Object::getClass).toArray(Class<?>[]::new);
+        return Arrays.equals(this.constructor.getParameterTypes(), argumentTypes);
     }
 
     private @NotNull String getPrettyConstructorRepresentation() {
