@@ -44,10 +44,4 @@ class MockUserTest {
         assertEquals("bob", user.getUsername(), "'username' did not match");
         assertEquals("bob@example.com", user.getEmail(), "'email' did not match");
     }
-
-    @Test
-    @DisplayName("ci test")
-    void testCiTest() {
-
-    }
 }
