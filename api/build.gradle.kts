@@ -6,8 +6,8 @@
  * User Manual available at https://docs.gradle.org/8.0/userguide/building_java_projects.html
  */
 
-version = "0.0.2-beta.0"
 group = "fade"
+version = "0.0.2-beta.0"
 description = "Reflections made easy!"
 
 if (System.getenv().containsKey("CI_GITHUB")) {
@@ -16,8 +16,8 @@ if (System.getenv().containsKey("CI_GITHUB")) {
 }
 
 plugins {
-    id("maven-publish")
     id("java-library")
+    id("maven-publish")
 }
 
 repositories {
@@ -29,10 +29,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
 }
 
-tasks.named<Test>("test") {
-    useJUnitPlatform()
-}
-
 java {
     withSourcesJar()
     withJavadocJar()
@@ -42,6 +38,18 @@ java {
 
 tasks.withType<Jar> {
     archiveBaseName.set(rootProject.name + "-" + project.name)
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Javadoc> {
+    options.encoding = "UTF-8"
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.javadoc {
