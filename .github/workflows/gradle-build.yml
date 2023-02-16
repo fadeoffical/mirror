@@ -36,7 +36,7 @@ jobs:
 
     concurrency:
       cancel-in-progress: true
-      group: ${{ github.head_ref }}
+      group: ${{ github.ref_name }}
 
     runs-on: ubuntu-latest
 
