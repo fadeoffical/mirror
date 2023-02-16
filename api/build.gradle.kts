@@ -37,6 +37,9 @@ java {
 
 tasks.withType<Jar> {
     archiveBaseName.set(rootProject.name + "-" + project.name)
+    if (System.getenv().containsKey("CI_GITHUB")) {
+        archiveBaseName.set(archiveBaseName.get() + "-" + System.getenv("CI_GITHUB_BRANCH"))
+    }
 }
 
 publishing {
