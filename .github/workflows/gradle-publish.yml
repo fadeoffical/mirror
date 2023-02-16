@@ -1,0 +1,49 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
+
+name: Gradle Package
+
+on:
+  release:
+    types: [ 'created' ]
+  push:
+    branches: [ 'prod', 'develop' ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: 'checkout'
+        uses: actions/checkout@v3
+
+      - name: 'setup java'
+        uses: 'actions/setup-java@v3'
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: github
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: 'gradle build'
+        uses: 'gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1'
+        with:
+          arguments: 'build'
+
+      - name: 'gradle publish'
+        uses: 'gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1'
+        with:
+          arguments: 'publish'
+        env:
+          CI_GITHUB: 'x'
+          CI_GITHUB_BRANCH: ${GITHUB_REF##*/}
+          CI_GITHUB_USERNAME: ${{ github.actor }}
+          CI_GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
