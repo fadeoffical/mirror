@@ -45,7 +45,7 @@ jobs:
           arguments: build
         env:
           CI_GITHUB: 'x'
-          CI_GITHUB_BRANCH: ${GITHUB_REF##*/}
+          CI_GITHUB_BRANCH: ${{ github.ref_name }}
           CI_GITHUB_USERNAME: ${{ github.actor }}
           CI_GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
