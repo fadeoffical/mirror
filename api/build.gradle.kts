@@ -43,6 +43,12 @@ tasks.withType<Jar> {
     archiveBaseName.set(finalName)
 }
 
+tasks.javadoc {
+    if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
+}
+
 publishing {
     repositories {
         maven {
