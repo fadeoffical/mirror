@@ -9,9 +9,9 @@ name: 'gradle build'
 
 on:
   push:
-    branches: [ 'develop' ]
+    branches: [ 'develop', 'prod' ]
   pull_request:
-    branches: [ 'develop' ]
+    branches: [ 'develop', 'prod' ]
 
 permissions:
   contents: 'read'
