@@ -12,7 +12,7 @@ description = "Reflections made easy!"
 
 if (System.getenv().containsKey("CI_GITHUB")) {
     val branchName = System.getenv("CI_GITHUB_BRANCH")
-    version = "${(version as String)}+$branchName"
+    if (branchName == "develop") version = "${(version as String)}+$branchName" // this is a bit stupid but whatever
 }
 
 plugins {
