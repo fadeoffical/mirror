@@ -28,6 +28,10 @@ permissions:
 
 jobs:
   build:
+    concurrency:
+      cancel-in-progress: true
+      group: ${{ github.head_ref }}
+
     runs-on: ubuntu-latest
 
     steps:
