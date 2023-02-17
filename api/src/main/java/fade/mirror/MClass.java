@@ -1,6 +1,5 @@
 package fade.mirror;
 
-import fade.mirror.internal.Annotated;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;

@@ -1,6 +1,5 @@
-package fade.mirror.internal;
+package fade.mirror;
 
-import fade.mirror.MParameter;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
