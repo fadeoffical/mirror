@@ -9,9 +9,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public interface MClass<T> extends Annotated {
-
-    @NotNull String getName();
+public interface MClass<T> extends Annotated, Named {
 
     @NotNull Class<T> getRawClass();
 
@@ -52,5 +50,9 @@ public interface MClass<T> extends Annotated {
     int getMethodCount();
 
     @NotNull Stream<Method> getRawMethods();
+
+    @NotNull String getSimpleName();
+
+    @NotNull String getCanonicalName();
 
 }

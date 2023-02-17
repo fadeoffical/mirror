@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +32,31 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
 
     public static <T> MConstructor<T> from(@NotNull Constructor<T> constructor) {
         return new MConstructorImpl<>(constructor);
+    }
+
+    @Override
+    public boolean isPublic() {
+        return Modifier.isPublic(this.constructor.getModifiers());
+    }
+
+    @Override
+    public boolean isProtected() {
+        return Modifier.isProtected(this.constructor.getModifiers());
+    }
+
+    @Override
+    public boolean isPackagePrivate() {
+        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
+    }
+
+    @Override
+    public boolean isPrivate() {
+        return Modifier.isPrivate(this.constructor.getModifiers());
+    }
+
+    @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(this.constructor.getModifiers());
     }
 
     @Override
@@ -144,13 +170,12 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
 
     @Override
     public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(clazz -> clazz == annotation);
+        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return (Optional<C>) this.getAnnotation(annotation -> annotation.annotationType() == type);
+        return this.getAnnotations().filter(type::isInstance).map(type::cast).findFirst();
     }
 
     @Override

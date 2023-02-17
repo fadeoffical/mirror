@@ -7,6 +7,16 @@ import java.util.function.Supplier;
 
 public interface Accessible<T> {
 
+    boolean isPublic();
+
+    boolean isProtected();
+
+    boolean isPackagePrivate();
+
+    boolean isPrivate();
+
+    boolean isStatic();
+
     boolean isAccessible();
 
     @NotNull T makeAccessible();

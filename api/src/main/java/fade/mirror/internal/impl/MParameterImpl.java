@@ -70,4 +70,14 @@ public final class MParameterImpl<T> implements MParameter<T> {
     public @NotNull Class<T> getType() {
         return (Class<T>) this.parameter.getType();
     }
+
+    @Override
+    public @NotNull String getName() {
+        return this.parameter.getName();
+    }
+
+    @Override
+    public boolean isNameEqualTo(@NotNull String name) {
+        return this.getName().equals(name);
+    }
 }
