@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import fade.mirror.internal.impl.MClassImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -9,8 +10,21 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public interface MClass<T> extends Annotated, Named {
+/**
+ * Represents a class.
+ *
+ * @param <T> The type of the class.
+ *
+ * @author fade <truefadeoffical@gmail.com>
+ */
+public sealed interface MClass<T> extends Annotated, Named
+        permits MClassImpl {
 
+    /**
+     * Returns the raw class represented by this object.
+     *
+     * @return The raw class.
+     */
     @NotNull Class<T> getRawClass();
 
     @NotNull Stream<MConstructor<T>> getConstructors();
