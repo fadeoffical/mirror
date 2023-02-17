@@ -7,8 +7,10 @@ import org.jetbrains.annotations.NotNull;
  * have annotations.
  *
  * @param <T> the type of the parameter
+ * @author fade <truefadeoffical@gmail.com>
  */
-public interface MParameter<T> extends Annotated, Named {
+public interface MParameter<T>
+        extends Annotated, Named {
 
     /**
      * Returns the type of this parameter represented by a java class.
