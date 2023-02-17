@@ -186,9 +186,4 @@ public final class MClassImpl<T> implements MClass<T> {
     public @NotNull String getName() {
         return this.clazz.getName();
     }
-
-    @Override
-    public boolean isNameEqualTo(@NotNull String identifier) {
-        return this.getName().equals(identifier);
-    }
 }

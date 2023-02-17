@@ -181,11 +181,6 @@ public final class MMethodImpl<T> implements MMethod<T> {
     }
 
     @Override
-    public boolean isNameEqualTo(@NotNull String name) {
-        return this.getName().equals(name);
-    }
-
-    @Override
     public @NotNull Stream<MParameter<?>> getParameters() {
         return Arrays.stream(this.method.getParameters()).map(MParameterImpl::from);
     }
