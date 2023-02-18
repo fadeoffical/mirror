@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  * to be implemented by any other class.
  * </p>
  *
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public sealed interface Parameterized permits MConstructor, MMethod {
 

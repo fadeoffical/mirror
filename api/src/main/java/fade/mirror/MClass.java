@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  * Represents a class.
  *
  * @param <T> The type of the class.
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public sealed interface MClass<T>
         extends Annotated, Named
@@ -113,6 +113,7 @@ public sealed interface MClass<T>
      * Returns an optional containing the first field of this class that matches the given filter. The optional may be
      * empty if the class has no fields that match the filter. The optional will never be {@code null}.
      *
+     * @param filter the filter to apply.
      * @return the first field that matches the filter.
      */
     @NotNull Optional<MField<?>> getField(@NotNull Predicate<MField<?>> filter);
@@ -164,6 +165,7 @@ public sealed interface MClass<T>
      * Returns an optional containing the first method of this class that matches the given filter. The optional may be
      * empty if the class has no methods that match the filter. The optional will never be {@code null}.
      *
+     * @param filter the filter to apply.
      * @return the first method that matches the filter.
      */
     @NotNull Optional<MMethod<?>> getMethod(@NotNull Predicate<MMethod<?>> filter);

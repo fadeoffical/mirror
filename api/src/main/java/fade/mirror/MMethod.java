@@ -7,7 +7,7 @@ import fade.mirror.internal.impl.MMethodImpl;
  * It may also have annotations.
  *
  * @param <T> the type of the method.
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public sealed interface MMethod<T>
         extends Invokable<T>,

@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  * object and to make it accessible.
  *
  * @param <T> The type of the object.
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public interface Accessible<T> {
 

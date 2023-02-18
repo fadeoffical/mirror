@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents a reflection object that has a name. This is a common interface for {@link MClass}, {@link MField},
  * {@link MMethod} and {@link MParameter}.
  *
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public interface Named {
 

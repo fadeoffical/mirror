@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents a method or constructor that can be bound to an object. This is used to invoke non-static methods.
  *
- * @author fade <fadeoffical@gmail.com>
+ * @author fade
  */
 public interface InstanceBindable {
 

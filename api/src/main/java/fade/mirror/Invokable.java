@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents a method or constructor that can be invoked.
  *
  * @param <T> the return type of the method or constructor
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public interface Invokable<T> {
 

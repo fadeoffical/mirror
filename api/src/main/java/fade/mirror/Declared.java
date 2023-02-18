@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents a class member that can be declared in a class.
  *
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public interface Declared {
 

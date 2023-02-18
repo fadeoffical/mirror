@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 /**
  * Represents an element that can be annotated.
  *
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public interface Annotated {
 

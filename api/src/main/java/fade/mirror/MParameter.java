@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * have annotations.
  *
  * @param <T> the type of the parameter
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public interface MParameter<T>
         extends Annotated, Named {

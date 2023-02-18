@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 /**
  * The class that provides the entry point to the API.
  *
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public final class Mirror {
 

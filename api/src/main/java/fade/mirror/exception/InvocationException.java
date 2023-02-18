@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Exception thrown when an error occurs during the invocation of a {@link fade.mirror.Invokable} mirror object.
  */
-public final class InvocationException extends MirrorException {
+public final class InvocationException
+        extends MirrorException {
 
     /**
      * Constructs a new {@link InvocationException} with the specified detail message.
@@ -19,6 +20,7 @@ public final class InvocationException extends MirrorException {
     /**
      * Constructs a new {@link InvocationException} with the specified detail message.
      *
+     * @param cause   the cause
      * @param message the detail message
      * @param format  the format arguments
      * @return a new {@link InvocationException} with the specified detail message

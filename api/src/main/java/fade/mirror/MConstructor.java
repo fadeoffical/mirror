@@ -9,7 +9,7 @@ import java.lang.reflect.Constructor;
  * Represents a constructor of a {@link MClass}. A constructor has parameters and may also have annotations.
  *
  * @param <T> the type of the class that declares this constructor
- * @author fade <truefadeoffical@gmail.com>
+ * @author fade
  */
 public sealed interface MConstructor<T>
         extends Invokable<T>, Accessible<MConstructor<T>>, Parameterized, Annotated, Declared
