@@ -1,13 +1,24 @@
 package fade.mirror.internal.impl;
 
+import fade.mirror.MClass;
 import fade.mirror.MField;
+import fade.mirror.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public final class MFieldImpl<T> implements MField<T> {
 
     private final Field field;
+    private Object object;
 
     private MFieldImpl(@NotNull Field field) {
         this.field = field;
@@ -15,5 +26,123 @@ public final class MFieldImpl<T> implements MField<T> {
 
     public static <T> @NotNull MFieldImpl<T> from(@NotNull Field field) {
         return new MFieldImpl<>(field);
+    }
+
+    @Override
+    public boolean isPublic() {
+        return Modifier.isPublic(this.field.getModifiers());
+    }
+
+    @Override
+    public boolean isProtected() {
+        return Modifier.isProtected(this.field.getModifiers());
+    }
+
+    @Override
+    public boolean isPackagePrivate() {
+        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
+    }
+
+    @Override
+    public boolean isPrivate() {
+        return Modifier.isPrivate(this.field.getModifiers());
+    }
+
+    @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(this.field.getModifiers());
+    }
+
+    @Override
+    public boolean isAccessible() {
+        if (this.isStatic()) return this.field.canAccess(null);
+        if (this.object == null) return false; // todo: throw exception
+
+        return this.field.canAccess(this.object);
+    }
+
+    @Override
+    public @NotNull MField<T> makeAccessible() {
+        if (!this.isAccessible()) this.field.trySetAccessible();
+        return this;
+    }
+
+    @Override
+    public @NotNull MField<T> requireAccessible() {
+        return this.requireAccessible(() -> InaccessibleException.from("Field is not accessible"));
+    }
+
+    @Override
+    public @NotNull MField<T> requireAccessible(@NotNull Supplier<? extends RuntimeException> exception) {
+        this.makeAccessible();
+        if (!this.isAccessible()) throw exception.get();
+        return this;
+    }
+
+    @Override
+    public @NotNull MField<T> ifAccessible(@NotNull Consumer<MField<T>> consumer) {
+        if (this.isAccessible()) consumer.accept(this);
+        return this;
+    }
+
+    @Override
+    public @NotNull MField<T> ifNotAccessible(@NotNull Consumer<MField<T>> consumer) {
+        if (!this.isAccessible()) consumer.accept(this);
+        return this;
+    }
+
+    @Override
+    public @NotNull Stream<Annotation> getAnnotations() {
+        return Arrays.stream(this.field.getAnnotations());
+    }
+
+    @Override
+    public @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
+        return this.getAnnotations().filter(filter);
+    }
+
+    @Override
+    public @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
+        return this.getAnnotations(filter).findFirst();
+    }
+
+    @Override
+    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
+        return Arrays.stream(annotations).anyMatch(this::isAnnotatedWith);
+    }
+
+    @Override
+    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
+        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
+    }
+
+    @Override
+    public @NotNull <C extends Annotation> Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
+        return this.getAnnotations().filter(type::isInstance).map(type::cast).findFirst();
+    }
+
+    @Override
+    public boolean isAnnotated() {
+        return this.getAnnotationCount() > 0;
+    }
+
+    @Override
+    public int getAnnotationCount() {
+        return this.field.getAnnotations().length;
+    }
+
+    @Override
+    public @NotNull MClass<?> getDeclaringClass() {
+        return MClassImpl.from(this.field.getDeclaringClass());
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return this.field.getName();
+    }
+
+    @Override
+    public void bindToObject(@NotNull Object object) {
+        this.object = object;
     }
 }

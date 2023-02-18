@@ -29,11 +29,6 @@ public final class MClassImpl<T> implements MClass<T> {
     }
 
     @Override
-    public @NotNull String getName() {
-        return this.clazz.getName();
-    }
-
-    @Override
     public @NotNull Class<T> getRawClass() {
         return this.clazz;
     }
@@ -60,7 +55,8 @@ public final class MClassImpl<T> implements MClass<T> {
 
     @Override
     public @NotNull Optional<MConstructor<T>> getConstructorWithTypes(@NotNull Class<?>... types) {
-        return this.getConstructor(constructor -> Arrays.equals(constructor.getRawConstructor().getParameterTypes(), types));
+        return this.getConstructor(constructor -> Arrays.equals(constructor.getRawConstructor()
+                .getParameterTypes(), types));
     }
 
     @Override
@@ -135,6 +131,16 @@ public final class MClassImpl<T> implements MClass<T> {
     }
 
     @Override
+    public @NotNull String getSimpleName() {
+        return this.clazz.getSimpleName();
+    }
+
+    @Override
+    public @NotNull String getCanonicalName() {
+        return this.clazz.getSimpleName();
+    }
+
+    @Override
     public @NotNull Stream<Annotation> getAnnotations() {
         return Arrays.stream(this.clazz.getAnnotations());
     }
@@ -157,13 +163,12 @@ public final class MClassImpl<T> implements MClass<T> {
 
     @Override
     public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(clazz -> clazz == annotation);
+        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return (Optional<C>) this.getAnnotation(annotation -> annotation.annotationType() == type);
+        return this.getAnnotations().map(Annotation::annotationType).filter(type::equals).map(type::cast).findFirst(); // todo: check if this works
     }
 
     @Override
@@ -174,5 +179,10 @@ public final class MClassImpl<T> implements MClass<T> {
     @Override
     public int getAnnotationCount() {
         return this.clazz.getAnnotations().length;
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return this.clazz.getName();
     }
 }

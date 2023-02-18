@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 
 public final class ConstructorFilter implements Predicate<MConstructor<?>> {
 
-    private Class<?>[] types;
+    private Class<?>[] parameterTypes;
     private Annotation[] annotations;
 
     private ConstructorFilter() {}
@@ -17,8 +17,8 @@ public final class ConstructorFilter implements Predicate<MConstructor<?>> {
         return new ConstructorFilter();
     }
 
-    public @NotNull ConstructorFilter withParameters(@NotNull Class<?>... types) {
-        this.types = types.clone();
+    public @NotNull ConstructorFilter withParameters(@NotNull Class<?>... parameterTypes) {
+        this.parameterTypes = parameterTypes.clone();
         return this;
     }
 
@@ -29,8 +29,7 @@ public final class ConstructorFilter implements Predicate<MConstructor<?>> {
 
     @Override
     public boolean test(@NotNull MConstructor<?> constructor) {
-        //  return constructor.areParametersEqual(this.types) && (this.annotations == null || accessor.areAnnotationsPresent(this.annotations));
-        // todo: currently broken, machste nix
+        // todo: implement
         return false;
     }
 }

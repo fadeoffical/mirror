@@ -1,18 +1,25 @@
 package fade.mirror;
 
-import fade.mirror.internal.Accessible;
-import fade.mirror.internal.Annotated;
-import fade.mirror.internal.Invokable;
-import fade.mirror.internal.Parameterized;
+import fade.mirror.internal.impl.MConstructorImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
 
-public interface MConstructor<T> extends Accessible<MConstructor<T>>, Parameterized, Annotated, Invokable<T> {
+/**
+ * Represents a constructor of a {@link MClass}. A constructor has parameters and may also have annotations.
+ *
+ * @param <T> the type of the class that declares this constructor
+ * @author fade
+ */
+public sealed interface MConstructor<T>
+        extends Invokable<T>, Accessible<MConstructor<T>>, Parameterized, Annotated, Declared
+        permits MConstructorImpl {
 
+    /**
+     * Returns the raw constructor. This is the constructor that is represented by this object.
+     *
+     * @return the raw constructor.
+     */
     @NotNull Constructor<T> getRawConstructor();
-
-    @NotNull MClass<T> getDeclaringClass();
-
 
 }
