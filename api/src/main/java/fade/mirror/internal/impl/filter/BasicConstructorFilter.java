@@ -17,6 +17,12 @@ public final class BasicConstructorFilter
     private Annotation @Nullable [] annotations;
 
     private BasicConstructorFilter() {
+        super();
+    }
+
+    private BasicConstructorFilter(Class<?> @Nullable [] parameterTypes, Annotation @Nullable [] annotations) {
+        this.parameterTypes = parameterTypes == null ? null : parameterTypes.clone();
+        this.annotations = annotations == null ? null : annotations.clone();
     }
 
     public static @NotNull BasicConstructorFilter create() {
@@ -51,7 +57,14 @@ public final class BasicConstructorFilter
     public boolean test(MConstructor<?> constructor) {
         if (this.parameterTypes != null && !constructor.getParameters()
                 .map(MParameter::getType)
-                .allMatch(this::testAllMatch0)) return false;
-        return this.annotations == null || constructor.getAnnotations().allMatch(this::testAllMatch1);
+                .allMatch(parameterType -> FilterUtil.isParameterOneOfRequired(this.parameterTypes, parameterType)))
+            return false;
+        return this.annotations == null || constructor.getAnnotations()
+                .allMatch(annotation -> FilterUtil.isAnnotationOneOfRequired(this.annotations, annotation));
+    }
+
+    @Override
+    public @NotNull ConstructorFilter copy() {
+        return new BasicConstructorFilter(this.parameterTypes, this.annotations);
     }
 }

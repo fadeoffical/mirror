@@ -1,15 +1,20 @@
 package fade.mirror.filter;
 
+import fade.mirror.Copyable;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 
 /**
  * Represents a filter for constructors. The filter can be used to filter constructors by parameters and annotations.
+ * <p>
+ * A new filter can be created using {@link Filter#forConstructors()} or constructed using the {@link ConstructorFilter#copy()}
+ * method on an existing filter.
+ * </p>
  *
  * @author fade
  */
-public interface ConstructorFilter {
+public interface ConstructorFilter extends Copyable<ConstructorFilter> {
 
     /**
      * Adds required parameters to this filter. The filter will only keep constructors with the specified parameters.

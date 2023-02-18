@@ -22,6 +22,13 @@ public final class BasicMethodFilter
         super();
     }
 
+    private BasicMethodFilter(Class<?> @Nullable [] parameterTypes, Annotation @Nullable [] annotations, @Nullable String name, @Nullable Class<?> returnType) {
+        this.parameterTypes = parameterTypes == null ? null : parameterTypes.clone();
+        this.annotations = annotations == null ? null : annotations.clone();
+        this.name = name;
+        this.returnType = returnType;
+    }
+
     public static BasicMethodFilter create() {
         return new BasicMethodFilter();
     }
@@ -85,5 +92,10 @@ public final class BasicMethodFilter
                 .allMatch(annotation -> FilterUtil.isAnnotationOneOfRequired(this.annotations, annotation)))
             return false;
         return this.returnType == null || this.returnType.isAssignableFrom(method.getReturnType());
+    }
+
+    @Override
+    public @NotNull MethodFilter copy() {
+        return new BasicMethodFilter(this.parameterTypes, this.annotations, this.name, this.returnType);
     }
 }

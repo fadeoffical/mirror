@@ -1,15 +1,21 @@
 package fade.mirror.filter;
 
+import fade.mirror.Copyable;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 
 /**
- * Represents a filter for methods. The filter can be used to filter methods by name, parameters and annotations.
+ * Represents a filter for methods. The filter can be used to filter methods by name, parameters, return type and
+ * annotations.
+ * <p>
+ * A new filter can be created using {@link Filter#forMethods()} or constructed using the {@link MethodFilter#copy()}
+ * method on an existing filter.
+ * </p>
  *
  * @author fade
  */
-public interface MethodFilter {
+public interface MethodFilter extends Copyable<MethodFilter> {
 
     /**
      * Adds a required name to this filter. The field filter will only keep fields with the specified name.
