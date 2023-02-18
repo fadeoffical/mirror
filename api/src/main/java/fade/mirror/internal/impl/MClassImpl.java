@@ -163,13 +163,12 @@ public final class MClassImpl<T> implements MClass<T> {
 
     @Override
     public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(clazz -> clazz == annotation);
+        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return (Optional<C>) this.getAnnotation(annotation -> annotation.annotationType() == type);
+        return this.getAnnotations().map(Annotation::annotationType).filter(type::equals).map(type::cast).findFirst(); // todo: check if this works
     }
 
     @Override
@@ -185,10 +184,5 @@ public final class MClassImpl<T> implements MClass<T> {
     @Override
     public @NotNull String getName() {
         return this.clazz.getName();
-    }
-
-    @Override
-    public boolean isNameEqualTo(@NotNull String identifier) {
-        return this.getName().equals(identifier);
     }
 }

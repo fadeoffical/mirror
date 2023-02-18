@@ -142,11 +142,6 @@ public final class MFieldImpl<T> implements MField<T> {
     }
 
     @Override
-    public boolean isNameEqualTo(@NotNull String name) {
-        return this.getName().equals(name);
-    }
-
-    @Override
     public void bindToObject(@NotNull Object object) {
         this.object = object;
     }

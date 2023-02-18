@@ -1,3 +1,6 @@
+/**
+ * Module definition for the mirror API.
+ */
 module fade.mirror {
     requires org.jetbrains.annotations;
 
