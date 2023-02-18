@@ -2,7 +2,7 @@ package fade.mirror.internal.impl;
 
 import fade.mirror.MClass;
 import fade.mirror.MField;
-import fade.mirror.exception.InaccessibleException;
+import fade.mirror.internal.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;

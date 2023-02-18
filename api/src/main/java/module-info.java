@@ -6,5 +6,6 @@ module fade.mirror {
 
     exports fade.mirror;
     exports fade.mirror.internal.impl.filter;
-    exports fade.mirror.exception;
+    exports fade.mirror.internal.exception;
+    exports fade.mirror.filter;
 }

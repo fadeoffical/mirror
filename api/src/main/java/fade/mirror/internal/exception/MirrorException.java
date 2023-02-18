@@ -1,4 +1,4 @@
-package fade.mirror.exception;
+package fade.mirror.internal.exception;
 
 /**
  * Represents a generic exception that can be thrown by the mirror API.
