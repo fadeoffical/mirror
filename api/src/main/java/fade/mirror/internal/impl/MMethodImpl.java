@@ -176,6 +176,12 @@ public final class MMethodImpl<T> implements MMethod<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Class<T> getReturnType() {
+        return (Class<T>) this.method.getReturnType();
+    }
+
+    @Override
     public @NotNull String getName() {
         return this.method.getName();
     }

@@ -145,4 +145,10 @@ public final class MFieldImpl<T> implements MField<T> {
     public void bindToObject(@NotNull Object object) {
         this.object = object;
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Class<T> getType() {
+        return (Class<T>) this.field.getType();
+    }
 }

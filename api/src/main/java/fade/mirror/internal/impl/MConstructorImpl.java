@@ -131,6 +131,11 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
         return true;
     }
 
+    @Override
+    public @NotNull Class<T> getReturnType() {
+        return this.getDeclaringClass().getRawClass();
+    }
+
     private @NotNull String getPrettyConstructorRepresentation() {
         StringBuilder builder = new StringBuilder().append(this.constructor.getName()).append('(');
         for (Class<?> type : this.constructor.getParameterTypes()) builder.append(type.getSimpleName()).append(", ");
