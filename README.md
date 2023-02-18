@@ -67,5 +67,5 @@ mirror(Person.class)
 
 ## "I still have questions!"
 
-If you need any help, tutorials or a guide, check out the detailed javadocs, the wiki
-or the discord server!
+If you need any help, tutorials or a guide, check out the detailed [javadocs](), the [wiki]()
+or the [discord]()!
