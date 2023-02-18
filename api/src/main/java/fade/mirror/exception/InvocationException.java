@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Exception thrown when an error occurs during the invocation of a {@link fade.mirror.Invokable} mirror object.
+ *
+ * @author fade
  */
 public final class InvocationException
         extends MirrorException {

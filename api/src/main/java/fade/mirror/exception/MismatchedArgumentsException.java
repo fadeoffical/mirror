@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Thrown when the number of arguments passed to an {@link fade.mirror.Invokable} does not match the number of arguments
  * expected by the method or when the type of the arguments passed are not compatible with the types of the arguments.
+ *
+ * @author fade
  */
 public final class MismatchedArgumentsException
         extends MirrorException {

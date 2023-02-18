@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Thrown when a mirror object of type {@link fade.mirror.Accessible} is not accessible.
+ *
+ * @author fade
  */
 public final class InaccessibleException extends MirrorException {
 

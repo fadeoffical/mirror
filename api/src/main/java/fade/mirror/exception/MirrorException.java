@@ -2,6 +2,8 @@ package fade.mirror.exception;
 
 /**
  * Represents a generic exception that can be thrown by the mirror API.
+ *
+ * @author fade
  */
 public class MirrorException extends RuntimeException {
 
