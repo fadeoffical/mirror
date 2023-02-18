@@ -39,8 +39,6 @@ public interface MethodFilter {
      * <p>
      * If the parameters are already set, the new parameters will replace the old ones.
      * <br>
-     * If the parameters are empty, the filter will not keep any methods.
-     * <br>
      * If the parameters are not empty, the filter will only keep methods with the specified parameters.
      * <br>
      * The filter will only keep methods with the same amount of parameters.
@@ -65,15 +63,17 @@ public interface MethodFilter {
     @NotNull MethodFilter clearParameters();
 
     /**
-     * Adds required annotations to this filter. The method filter will only keep methods with the specified annotations.
+     * Adds required annotations to this filter. The method filter will only keep methods with the specified
+     * annotations.
      * <p>
-     *     If the annotations are already set, the new annotations will replace the old ones.
-     *     <br>
-     *     If the annotations are empty, the filter ignores the annotations.
-     *     <br>
-     *     If the annotations are not empty, the filter will only keep methods with the specified annotations.
-     *     <br>
-     *     The filter will only keep methods with the specified annotations but ignores all other annotations on the method.
+     * If the annotations are already set, the new annotations will replace the old ones.
+     * <br>
+     * If the annotations are empty, the filter ignores the annotations.
+     * <br>
+     * If the annotations are not empty, the filter will only keep methods with the specified annotations.
+     * <br>
+     * The filter will only keep methods with the specified annotations but ignores all other annotations on the
+     * method.
      * </p>
      *
      * @param annotations the annotations of the method
@@ -87,5 +87,24 @@ public interface MethodFilter {
      * @return this filter
      */
     @NotNull MethodFilter clearAnnotations();
+
+    /**
+     * Adds a required return type to this filter. The method filter will only keep methods with the specified return
+     * type.
+     * <p>
+     * If the return type is already set, the new return type will replace the old one.
+     * </p>
+     *
+     * @param returnType the return type of the method
+     * @return this filter
+     */
+    @NotNull MethodFilter withReturnType(@NotNull Class<?> returnType);
+
+    /**
+     * Clears the return type of this filter. The filter will not filter by return type anymore.
+     *
+     * @return this filter
+     */
+    @NotNull MethodFilter clearReturnType();
 
 }

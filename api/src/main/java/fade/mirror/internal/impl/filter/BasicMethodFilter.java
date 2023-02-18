@@ -16,6 +16,7 @@ public final class BasicMethodFilter
     private Class<?> @Nullable [] parameterTypes;
     private Annotation @Nullable [] annotations;
     private @Nullable String name;
+    private @Nullable Class<?> returnType;
 
     private BasicMethodFilter() {
         super();
@@ -50,6 +51,18 @@ public final class BasicMethodFilter
     }
 
     @Override
+    public @NotNull MethodFilter withReturnType(@NotNull Class<?> returnType) {
+        this.returnType = returnType;
+        return this;
+    }
+
+    @Override
+    public @NotNull MethodFilter clearReturnType() {
+        this.returnType = null;
+        return this;
+    }
+
+    @Override
     public @NotNull BasicMethodFilter withName(@NotNull String name) {
         this.name = name;
         return this;
@@ -66,29 +79,11 @@ public final class BasicMethodFilter
         if (this.name != null && !method.getName().equals(this.name)) return false;
         if (this.parameterTypes != null && !method.getParameters()
                 .map(MParameter::getType)
-                .allMatch(this::testAllMatch0)) return false;
-        if (this.annotations != null && !method.getAnnotations().allMatch(this::testAllMatch1)) return false;
-
-        return false;
-    }
-
-    private boolean testAllMatch0(Class<?> parameterType) {
-        // already checked for null
-        if (this.parameterTypes == null) return true;
-
-        for (Class<?> filterParameterType : this.parameterTypes) {
-            if (filterParameterType.isAssignableFrom(parameterType)) return true;
-        }
-        return false;
-    }
-
-    private boolean testAllMatch1(Annotation annotation) {
-        // already checked for null
-        if (this.annotations == null) return true;
-
-        for (Annotation filterAnnotations : this.annotations) {
-            if (filterAnnotations.annotationType().isAssignableFrom(annotation.annotationType())) return true;
-        }
-        return false;
+                .allMatch(parameterType -> FilterUtil.isParameterOneOfRequired(this.parameterTypes, parameterType)))
+            return false;
+        if (this.annotations != null && !method.getAnnotations()
+                .allMatch(annotation -> FilterUtil.isAnnotationOneOfRequired(this.annotations, annotation)))
+            return false;
+        return this.returnType == null || this.returnType.isAssignableFrom(method.getReturnType());
     }
 }
