@@ -12,8 +12,19 @@ public final class BasicParameterFilter
         extends Filter<MParameter<?>>
         implements ParameterFilter {
 
+    /**
+     * The annotations to filter by. If {@code null}, no filtering will be done.
+     */
     private Annotation @Nullable [] annotations;
+
+    /**
+     * The name to filter by. If {@code null}, no filtering will be done.
+     */
     private @Nullable String name;
+
+    /**
+     * The type to filter by. If {@code null}, no filtering will be done.
+     */
     private @Nullable Class<?> type;
 
     private BasicParameterFilter() {
@@ -21,6 +32,7 @@ public final class BasicParameterFilter
     }
 
     private BasicParameterFilter(Annotation @Nullable [] annotations, @Nullable String name, @Nullable Class<?> type) {
+        super();
         this.annotations = annotations == null ? null : annotations.clone();
         this.name = name;
         this.type = type;

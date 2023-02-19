@@ -18,6 +18,11 @@ public abstract class Filter<T>
         implements Predicate<T> {
 
     /**
+     * Prevents instantiation outside the package.
+     */
+    protected Filter() {}
+
+    /**
      * Returns a new method filter. This type of filter can be used to filter methods by name, parameters, return type
      * and annotations.
      *
