@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 
 /**
- * A basic implementation of {@link ConstructorFilter}.
+ * Basic implementation of {@link ConstructorFilter}.
  *
  * @author fade
  */
