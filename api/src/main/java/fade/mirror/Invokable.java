@@ -27,5 +27,10 @@ public interface Invokable<T> {
      */
     boolean invokableWith(@Nullable Object... arguments);
 
+    /**
+     * Gets the return type of the method or constructor represented by this object.
+     *
+     * @return the return type.
+     */
     @NotNull Class<T> getReturnType();
 }

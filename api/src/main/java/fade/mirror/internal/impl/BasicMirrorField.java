@@ -2,6 +2,7 @@ package fade.mirror.internal.impl;
 
 import fade.mirror.MClass;
 import fade.mirror.MField;
+import fade.mirror.Mirror;
 import fade.mirror.internal.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,15 +16,31 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class BasicMirrorField<T> implements MField<T> {
+/**
+ * A basic implementation of {@link MField}.
+ *
+ * @param <T> The type of the field.
+ * @author fade
+ */
+public final class BasicMirrorField<T>
+        implements MField<T> {
 
     private final Field field;
     private Object object;
+
 
     private BasicMirrorField(@NotNull Field field) {
         this.field = field;
     }
 
+    /**
+     * Creates a new {@link BasicMirrorField} instance. This method should not be used directly. Instead, use
+     * {@link Mirror#mirror(Field)}.
+     *
+     * @param field The field to create the mirror from.
+     * @param <T>   The type of the field.
+     * @return The created mirror.
+     */
     public static <T> @NotNull BasicMirrorField<T> from(@NotNull Field field) {
         return new BasicMirrorField<>(field);
     }

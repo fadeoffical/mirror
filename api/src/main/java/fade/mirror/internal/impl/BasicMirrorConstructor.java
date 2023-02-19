@@ -3,6 +3,7 @@ package fade.mirror.internal.impl;
 import fade.mirror.MClass;
 import fade.mirror.MConstructor;
 import fade.mirror.MParameter;
+import fade.mirror.Mirror;
 import fade.mirror.internal.exception.InaccessibleException;
 import fade.mirror.internal.exception.InvocationException;
 import fade.mirror.internal.exception.MismatchedArgumentsException;
@@ -37,6 +38,14 @@ public final class BasicMirrorConstructor<T>
         this.constructor = constructor;
     }
 
+    /**
+     * Creates a new {@link MConstructor} from the given {@link Constructor}. This method should not be used directly.
+     * Instead, use {@link Mirror#mirror(Constructor)}.
+     *
+     * @param constructor The constructor to create the mirror from.
+     * @param <T>         The type of the constructor's declaring class.
+     * @return The created mirror.
+     */
     public static <T> MConstructor<T> from(@NotNull Constructor<T> constructor) {
         return new BasicMirrorConstructor<>(constructor);
     }

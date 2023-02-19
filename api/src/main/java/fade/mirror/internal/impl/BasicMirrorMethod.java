@@ -3,6 +3,7 @@ package fade.mirror.internal.impl;
 import fade.mirror.MClass;
 import fade.mirror.MMethod;
 import fade.mirror.MParameter;
+import fade.mirror.Mirror;
 import fade.mirror.internal.exception.InaccessibleException;
 import fade.mirror.internal.exception.InvocationException;
 import fade.mirror.internal.exception.MismatchedArgumentsException;
@@ -13,13 +14,22 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class BasicMirrorMethod<T> implements MMethod<T> {
+/**
+ * A basic implementation of {@link MMethod}.
+ *
+ * @param <T> The return type of the method.
+ * @author fade
+ */
+public final class BasicMirrorMethod<T>
+        implements MMethod<T> {
 
     private final Method method;
     private Object object;
@@ -28,6 +38,14 @@ public final class BasicMirrorMethod<T> implements MMethod<T> {
         this.method = method;
     }
 
+    /**
+     * Creates a new {@link BasicMirrorMethod} instance. This method should not be used directly. Instead, use
+     * {@link Mirror#mirror(Method)}.
+     *
+     * @param method The method to create the mirror from.
+     * @param <T>    The return type of the method.
+     * @return The created mirror.
+     */
     public static <T> BasicMirrorMethod<T> from(@NotNull Method method) {
         return new BasicMirrorMethod<>(method);
     }

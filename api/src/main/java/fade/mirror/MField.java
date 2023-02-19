@@ -12,5 +12,9 @@ import org.jetbrains.annotations.NotNull;
 public interface MField<T>
         extends Accessible<MField<T>>, Annotated, Named, Declared, InstanceBindable {
 
+    /**
+     * Gets the type of the field.
+     * @return the field type.
+     */
     @NotNull Class<T> getType();
 }

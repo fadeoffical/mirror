@@ -4,6 +4,7 @@ import fade.mirror.MClass;
 import fade.mirror.MConstructor;
 import fade.mirror.MField;
 import fade.mirror.MMethod;
+import fade.mirror.Mirror;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -40,7 +41,7 @@ public final class BasicMirrorClass<T>
 
     /**
      * Creates a new {@link BasicMirrorClass} instance. This method should not be used directly. Use
-     * {@link fade.mirror.Mirror#mirror(Class)} instead.
+     * {@link Mirror#mirror(Class)} instead.
      *
      * @param clazz The class.
      * @param <T>   The type of the class.
