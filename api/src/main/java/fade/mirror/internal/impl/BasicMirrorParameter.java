@@ -11,14 +11,32 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public final class BasicMirrorParameter<T> implements MParameter<T> {
+/**
+ * Basic implementation of {@link MParameter}.
+ *
+ * @param <T> The type of the parameter.
+ */
+public final class BasicMirrorParameter<T>
+        implements MParameter<T> {
 
     private final Parameter parameter;
 
+    /**
+     * Creates a new {@link BasicMirrorParameter} from the given {@link Parameter}.
+     *
+     * @param parameter The parameter to create the mirror parameter from.
+     */
     private BasicMirrorParameter(Parameter parameter) {
         this.parameter = parameter;
     }
 
+    /**
+     * Creates a new {@link BasicMirrorParameter} from the given {@link Parameter}. This method should not be used
+     * directly.
+     *
+     * @param parameter The parameter to create the mirror parameter from.
+     * @return The created mirror parameter.
+     */
     public static @NotNull BasicMirrorParameter<?> from(@NotNull Parameter parameter) {
         return new BasicMirrorParameter<>(parameter);
     }

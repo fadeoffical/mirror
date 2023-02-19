@@ -22,7 +22,14 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class BasicMirrorConstructor<T> implements MConstructor<T> {
+/**
+ * A basic implementation of {@link MConstructor}.
+ *
+ * @param <T> The type of the constructor's declaring class.
+ * @author fade
+ */
+public final class BasicMirrorConstructor<T>
+        implements MConstructor<T> {
 
     private final Constructor<T> constructor;
 

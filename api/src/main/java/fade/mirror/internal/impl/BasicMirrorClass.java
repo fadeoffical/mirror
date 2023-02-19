@@ -16,14 +16,36 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public final class BasicMirrorClass<T> implements MClass<T> {
+/**
+ * Basic implementation of {@link MClass}.
+ *
+ * @param <T> The type of the class.
+ */
+public final class BasicMirrorClass<T>
+        implements MClass<T> {
 
+    /**
+     * The class.
+     */
     private final @NotNull Class<T> clazz;
 
+    /**
+     * Creates a new {@link BasicMirrorClass} instance.
+     *
+     * @param clazz The class.
+     */
     private BasicMirrorClass(@NotNull Class<T> clazz) {
         this.clazz = clazz;
     }
 
+    /**
+     * Creates a new {@link BasicMirrorClass} instance. This method should not be used directly. Use
+     * {@link fade.mirror.Mirror#mirror(Class)} instead.
+     *
+     * @param clazz The class.
+     * @param <T>   The type of the class.
+     * @return The new {@link BasicMirrorClass} instance.
+     */
     public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
         return new BasicMirrorClass<>(clazz);
     }
@@ -168,7 +190,11 @@ public final class BasicMirrorClass<T> implements MClass<T> {
 
     @Override
     public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return this.getAnnotations().map(Annotation::annotationType).filter(type::equals).map(type::cast).findFirst(); // todo: check if this works
+        return this.getAnnotations()
+                .map(Annotation::annotationType)
+                .filter(type::equals)
+                .map(type::cast)
+                .findFirst(); // todo: check if this works
     }
 
     @Override

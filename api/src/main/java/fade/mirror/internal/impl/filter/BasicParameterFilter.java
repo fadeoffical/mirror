@@ -62,63 +62,42 @@ public final class BasicParameterFilter
         return new BasicParameterFilter();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull ParameterFilter withAnnotations(@NotNull Annotation... annotations) {
         this.annotations = annotations.clone();
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull ParameterFilter clearAnnotations() {
         this.annotations = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull ParameterFilter ofType(@NotNull Class<?> type) {
         this.type = type;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull ParameterFilter clearType() {
         this.type = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull ParameterFilter withName(@NotNull String name) {
         this.name = name;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull ParameterFilter clearName() {
         this.name = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean test(MParameter<?> parameter) {
         if (this.name != null && !parameter.getName().equals(this.name)) return false;
@@ -128,9 +107,6 @@ public final class BasicParameterFilter
         return this.type == null || this.type.isAssignableFrom(parameter.getType());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull ParameterFilter copy() {
         return new BasicParameterFilter(this.annotations, this.name, this.type);
