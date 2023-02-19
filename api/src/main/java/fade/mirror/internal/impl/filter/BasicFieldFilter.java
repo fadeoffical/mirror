@@ -62,63 +62,42 @@ public final class BasicFieldFilter
         return new BasicFieldFilter();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull FieldFilter withAnnotations(@NotNull Annotation... annotations) {
         this.annotations = annotations.clone();
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull FieldFilter clearAnnotations() {
         this.annotations = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull FieldFilter ofType(@NotNull Class<?> type) {
         this.type = type;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull FieldFilter clearType() {
         this.type = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull FieldFilter withName(@NotNull String name) {
         this.name = name;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull FieldFilter clearName() {
         this.name = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean test(MField<?> field) {
         if (this.name != null && !field.getName().equals(this.name)) return false;
@@ -128,9 +107,6 @@ public final class BasicFieldFilter
         return this.type == null || this.type.isAssignableFrom(field.getType());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull FieldFilter copy() {
         return new BasicFieldFilter(this.annotations, this.name, this.type);

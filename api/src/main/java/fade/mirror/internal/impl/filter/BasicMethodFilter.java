@@ -70,81 +70,54 @@ public final class BasicMethodFilter
         return new BasicMethodFilter();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull BasicMethodFilter withParameters(@NotNull Class<?>... parameterTypes) {
         this.parameterTypes = parameterTypes.clone();
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull MethodFilter clearParameters() {
         this.parameterTypes = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull BasicMethodFilter withAnnotations(@NotNull Annotation... annotations) {
         this.annotations = annotations.clone();
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull MethodFilter clearAnnotations() {
         this.annotations = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull MethodFilter withReturnType(@NotNull Class<?> returnType) {
         this.returnType = returnType;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull MethodFilter clearReturnType() {
         this.returnType = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull BasicMethodFilter withName(@NotNull String name) {
         this.name = name;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull MethodFilter clearName() {
         this.name = null;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean test(MMethod<?> method) {
         if (this.name != null && !method.getName().equals(this.name)) return false;
@@ -158,9 +131,6 @@ public final class BasicMethodFilter
         return this.returnType == null || this.returnType.isAssignableFrom(method.getReturnType());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NotNull MethodFilter copy() {
         return new BasicMethodFilter(this.parameterTypes, this.annotations, this.name, this.returnType);
