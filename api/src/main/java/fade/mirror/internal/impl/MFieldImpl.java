@@ -2,7 +2,7 @@ package fade.mirror.internal.impl;
 
 import fade.mirror.MClass;
 import fade.mirror.MField;
-import fade.mirror.exception.InaccessibleException;
+import fade.mirror.internal.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -144,5 +144,11 @@ public final class MFieldImpl<T> implements MField<T> {
     @Override
     public void bindToObject(@NotNull Object object) {
         this.object = object;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Class<T> getType() {
+        return (Class<T>) this.field.getType();
     }
 }

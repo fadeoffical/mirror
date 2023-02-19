@@ -4,6 +4,7 @@ import fade.mirror.internal.impl.MClassImpl;
 import fade.mirror.internal.impl.MConstructorImpl;
 import fade.mirror.internal.impl.MFieldImpl;
 import fade.mirror.internal.impl.MMethodImpl;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -21,6 +22,7 @@ public final class Mirror {
      * The private constructor that prevents the instantiation of the class. Calling this constructor will throw an
      * {@link UnsupportedOperationException}.
      */
+    @Contract(" -> fail")
     private Mirror() {
         throw new UnsupportedOperationException("Instantiating '%s' is forbidden!".formatted(Mirror.class.getName()));
     }

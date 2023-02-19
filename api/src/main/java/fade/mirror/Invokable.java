@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -25,4 +26,6 @@ public interface Invokable<T> {
      * @return whether the method or constructor can be invoked with the given arguments.
      */
     boolean invokableWith(@Nullable Object... arguments);
+
+    @NotNull Class<T> getReturnType();
 }

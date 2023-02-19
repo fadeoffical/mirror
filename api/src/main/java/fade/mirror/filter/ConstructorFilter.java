@@ -1,35 +1,73 @@
 package fade.mirror.filter;
 
-import fade.mirror.MConstructor;
+import fade.mirror.Copyable;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
-import java.util.function.Predicate;
 
-public final class ConstructorFilter implements Predicate<MConstructor<?>> {
+/**
+ * Represents a filter for constructors. The filter can be used to filter constructors by parameters and annotations.
+ * <p>
+ * A new filter can be created using {@link Filter#forConstructors()} or constructed using the {@link ConstructorFilter#copy()}
+ * method on an existing filter.
+ * </p>
+ *
+ * @author fade
+ */
+public interface ConstructorFilter extends Copyable<ConstructorFilter> {
 
-    private Class<?>[] parameterTypes;
-    private Annotation[] annotations;
+    /**
+     * Adds required parameters to this filter. The filter will only keep constructors with the specified parameters.
+     * <p>
+     * If the parameters are already set, the new parameters will replace the old ones.
+     * <br>
+     * If the parameters are not empty, the filter will only keep constructors with the specified parameters.
+     * <br>
+     * The filter will only keep constructors with the same amount of parameters.
+     * <br>
+     * The filter will only keep constructors with the same parameter types, or types that are assignable from the
+     * specified parameter types.
+     * <br>
+     * The order of the parameters is important; the filter will only keep constructors with the same parameter order.
+     * <br>
+     * </p>
+     *
+     * @param parameterTypes the parameter types of the constructor
+     * @return this filter
+     */
+    @NotNull ConstructorFilter withParameters(@NotNull Class<?>... parameterTypes);
 
-    private ConstructorFilter() {}
+    /**
+     * Clears the parameters of this filter. The filter will not filter by parameters anymore.
+     *
+     * @return this filter
+     */
+    @NotNull ConstructorFilter clearParameters();
 
-    public static @NotNull ConstructorFilter create() {
-        return new ConstructorFilter();
-    }
+    /**
+     * Adds required annotations to this filter. The constructor filter will only keep constructors with the specified
+     * annotations.
+     * <p>
+     * If the annotations are already set, the new annotations will replace the old ones.
+     * <br>
+     * If the annotations are empty, the filter ignores the annotations.
+     * <br>
+     * If the annotations are not empty, the filter will only keep constructors with the specified annotations.
+     * <br>
+     * The filter will only keep constructors with the specified annotations but ignores all other annotations on the
+     * constructor.
+     * </p>
+     *
+     * @param annotations the annotations of the constructor
+     * @return this filter
+     */
+    @NotNull ConstructorFilter withAnnotations(@NotNull Annotation... annotations);
 
-    public @NotNull ConstructorFilter withParameters(@NotNull Class<?>... parameterTypes) {
-        this.parameterTypes = parameterTypes.clone();
-        return this;
-    }
+    /**
+     * Clears the annotations of this filter. The filter will not filter by annotations anymore.
+     *
+     * @return this filter
+     */
+    @NotNull ConstructorFilter clearAnnotations();
 
-    public @NotNull ConstructorFilter andAnnotations(@NotNull Annotation... annotations) {
-        this.annotations = annotations.clone();
-        return this;
-    }
-
-    @Override
-    public boolean test(@NotNull MConstructor<?> constructor) {
-        // todo: implement
-        return false;
-    }
 }

@@ -3,9 +3,9 @@ package fade.mirror.internal.impl;
 import fade.mirror.MClass;
 import fade.mirror.MConstructor;
 import fade.mirror.MParameter;
-import fade.mirror.exception.InaccessibleException;
-import fade.mirror.exception.InvocationException;
-import fade.mirror.exception.MismatchedArgumentsException;
+import fade.mirror.internal.exception.InaccessibleException;
+import fade.mirror.internal.exception.InvocationException;
+import fade.mirror.internal.exception.MismatchedArgumentsException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -129,6 +129,11 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
         }
 
         return true;
+    }
+
+    @Override
+    public @NotNull Class<T> getReturnType() {
+        return this.getDeclaringClass().getRawClass();
     }
 
     private @NotNull String getPrettyConstructorRepresentation() {
