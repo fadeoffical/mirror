@@ -1,6 +1,6 @@
 package fade.mirror;
 
-import fade.mirror.internal.impl.MConstructorImpl;
+import fade.mirror.internal.impl.BasicMirrorConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -13,7 +13,7 @@ import java.lang.reflect.Constructor;
  */
 public sealed interface MConstructor<T>
         extends Invokable<T>, Accessible<MConstructor<T>>, Parameterized, Annotated, Declared
-        permits MConstructorImpl {
+        permits BasicMirrorConstructor {
 
     /**
      * Returns the raw constructor. This is the constructor that is represented by this object.

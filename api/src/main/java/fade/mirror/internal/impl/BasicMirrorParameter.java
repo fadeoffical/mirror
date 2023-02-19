@@ -11,16 +11,16 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public final class MParameterImpl<T> implements MParameter<T> {
+public final class BasicMirrorParameter<T> implements MParameter<T> {
 
     private final Parameter parameter;
 
-    private MParameterImpl(Parameter parameter) {
+    private BasicMirrorParameter(Parameter parameter) {
         this.parameter = parameter;
     }
 
-    public static @NotNull MParameterImpl<?> from(@NotNull Parameter parameter) {
-        return new MParameterImpl<>(parameter);
+    public static @NotNull BasicMirrorParameter<?> from(@NotNull Parameter parameter) {
+        return new BasicMirrorParameter<>(parameter);
     }
 
     @Override

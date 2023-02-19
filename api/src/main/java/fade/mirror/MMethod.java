@@ -1,6 +1,6 @@
 package fade.mirror;
 
-import fade.mirror.internal.impl.MMethodImpl;
+import fade.mirror.internal.impl.BasicMirrorMethod;
 
 /**
  * Represents a method of a {@link MClass}. A method has a name, a return type, a list of parameters and a list of exceptions.
@@ -18,7 +18,7 @@ public sealed interface MMethod<T>
                 Named,
                 Declared,
                 InstanceBindable
-        permits MMethodImpl {
+        permits BasicMirrorMethod {
 
     // todo: return type
     // todo: exceptions

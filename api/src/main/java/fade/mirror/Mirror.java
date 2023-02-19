@@ -1,9 +1,9 @@
 package fade.mirror;
 
-import fade.mirror.internal.impl.MClassImpl;
-import fade.mirror.internal.impl.MConstructorImpl;
-import fade.mirror.internal.impl.MFieldImpl;
-import fade.mirror.internal.impl.MMethodImpl;
+import fade.mirror.internal.impl.BasicMirrorClass;
+import fade.mirror.internal.impl.BasicMirrorConstructor;
+import fade.mirror.internal.impl.BasicMirrorField;
+import fade.mirror.internal.impl.BasicMirrorMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,7 @@ public final class Mirror {
      * @return the mirror of the given class.
      */
     public static <T> @NotNull MClass<T> mirror(@NotNull Class<T> clazz) {
-        return MClassImpl.from(clazz);
+        return BasicMirrorClass.from(clazz);
     }
 
     /**
@@ -46,7 +46,7 @@ public final class Mirror {
      * @return the mirror of the given constructor.
      */
     public static <T> @NotNull MConstructor<T> mirror(@NotNull Constructor<T> constructor) {
-        return MConstructorImpl.from(constructor);
+        return BasicMirrorConstructor.from(constructor);
     }
 
     /**
@@ -57,7 +57,7 @@ public final class Mirror {
      * @return the mirror of the given field.
      */
     public static <T> @NotNull MField<T> mirror(@NotNull Field field) {
-        return MFieldImpl.from(field);
+        return BasicMirrorField.from(field);
     }
 
     /**
@@ -68,6 +68,6 @@ public final class Mirror {
      * @return the mirror of the given method.
      */
     public static <T> @NotNull MMethod<T> mirror(@NotNull Method method) {
-        return MMethodImpl.from(method);
+        return BasicMirrorMethod.from(method);
     }
 }

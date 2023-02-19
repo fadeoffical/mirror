@@ -19,17 +19,17 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class MMethodImpl<T> implements MMethod<T> {
+public final class BasicMirrorMethod<T> implements MMethod<T> {
 
     private final Method method;
     private Object object;
 
-    private MMethodImpl(@NotNull Method method) {
+    private BasicMirrorMethod(@NotNull Method method) {
         this.method = method;
     }
 
-    public static <T> MMethodImpl<T> from(@NotNull Method method) {
-        return new MMethodImpl<>(method);
+    public static <T> BasicMirrorMethod<T> from(@NotNull Method method) {
+        return new BasicMirrorMethod<>(method);
     }
 
     @Override
@@ -188,7 +188,7 @@ public final class MMethodImpl<T> implements MMethod<T> {
 
     @Override
     public @NotNull Stream<MParameter<?>> getParameters() {
-        return Arrays.stream(this.method.getParameters()).map(MParameterImpl::from);
+        return Arrays.stream(this.method.getParameters()).map(BasicMirrorParameter::from);
     }
 
     @Override
@@ -236,7 +236,7 @@ public final class MMethodImpl<T> implements MMethod<T> {
 
     @Override
     public @NotNull MMethod<T> copy() {
-        return MMethodImpl.from(this.method);
+        return BasicMirrorMethod.from(this.method);
     }
 
     @Override
@@ -246,6 +246,6 @@ public final class MMethodImpl<T> implements MMethod<T> {
 
     @Override
     public @NotNull MClass<?> getDeclaringClass() {
-        return MClassImpl.from(this.method.getDeclaringClass());
+        return BasicMirrorClass.from(this.method.getDeclaringClass());
     }
 }

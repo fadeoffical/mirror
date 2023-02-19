@@ -1,6 +1,6 @@
 package fade.mirror;
 
-import fade.mirror.internal.impl.MClassImpl;
+import fade.mirror.internal.impl.BasicMirrorClass;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  */
 public sealed interface MClass<T>
         extends Annotated, Named
-        permits MClassImpl {
+        permits BasicMirrorClass {
 
     /**
      * Returns the raw class represented by this object.

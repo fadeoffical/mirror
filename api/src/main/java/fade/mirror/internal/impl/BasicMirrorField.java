@@ -15,17 +15,17 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class MFieldImpl<T> implements MField<T> {
+public final class BasicMirrorField<T> implements MField<T> {
 
     private final Field field;
     private Object object;
 
-    private MFieldImpl(@NotNull Field field) {
+    private BasicMirrorField(@NotNull Field field) {
         this.field = field;
     }
 
-    public static <T> @NotNull MFieldImpl<T> from(@NotNull Field field) {
-        return new MFieldImpl<>(field);
+    public static <T> @NotNull BasicMirrorField<T> from(@NotNull Field field) {
+        return new BasicMirrorField<>(field);
     }
 
     @Override
@@ -133,7 +133,7 @@ public final class MFieldImpl<T> implements MField<T> {
 
     @Override
     public @NotNull MClass<?> getDeclaringClass() {
-        return MClassImpl.from(this.field.getDeclaringClass());
+        return BasicMirrorClass.from(this.field.getDeclaringClass());
     }
 
     @Override

@@ -22,16 +22,16 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class MConstructorImpl<T> implements MConstructor<T> {
+public final class BasicMirrorConstructor<T> implements MConstructor<T> {
 
     private final Constructor<T> constructor;
 
-    private MConstructorImpl(@NotNull Constructor<T> constructor) {
+    private BasicMirrorConstructor(@NotNull Constructor<T> constructor) {
         this.constructor = constructor;
     }
 
     public static <T> MConstructor<T> from(@NotNull Constructor<T> constructor) {
-        return new MConstructorImpl<>(constructor);
+        return new BasicMirrorConstructor<>(constructor);
     }
 
     @Override
@@ -149,7 +149,7 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
 
     @Override
     public @NotNull MClass<T> getDeclaringClass() {
-        return MClassImpl.from(this.constructor.getDeclaringClass());
+        return BasicMirrorClass.from(this.constructor.getDeclaringClass());
     }
 
     @Override
@@ -195,7 +195,7 @@ public final class MConstructorImpl<T> implements MConstructor<T> {
 
     @Override
     public @NotNull Stream<MParameter<?>> getParameters() {
-        return Arrays.stream(this.constructor.getParameters()).map(MParameterImpl::from);
+        return Arrays.stream(this.constructor.getParameters()).map(BasicMirrorParameter::from);
     }
 
     @Override

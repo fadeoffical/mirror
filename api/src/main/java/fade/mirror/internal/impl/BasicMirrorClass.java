@@ -16,16 +16,16 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public final class MClassImpl<T> implements MClass<T> {
+public final class BasicMirrorClass<T> implements MClass<T> {
 
     private final @NotNull Class<T> clazz;
 
-    private MClassImpl(@NotNull Class<T> clazz) {
+    private BasicMirrorClass(@NotNull Class<T> clazz) {
         this.clazz = clazz;
     }
 
-    public static <T> @NotNull MClassImpl<T> from(@NotNull Class<T> clazz) {
-        return new MClassImpl<>(clazz);
+    public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
+        return new BasicMirrorClass<>(clazz);
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class MClassImpl<T> implements MClass<T> {
 
     @Override
     public @NotNull Stream<MConstructor<T>> getConstructors() {
-        return this.getRawConstructors().map(MConstructorImpl::from);
+        return this.getRawConstructors().map(BasicMirrorConstructor::from);
     }
 
     @Override
@@ -72,7 +72,7 @@ public final class MClassImpl<T> implements MClass<T> {
 
     @Override
     public @NotNull Stream<MField<?>> getFields() {
-        return this.getRawFields().map(MFieldImpl::from);
+        return this.getRawFields().map(BasicMirrorField::from);
     }
 
     @Override
@@ -102,7 +102,7 @@ public final class MClassImpl<T> implements MClass<T> {
 
     @Override
     public @NotNull Stream<MMethod<?>> getMethods() {
-        return this.getRawMethods().map(MMethodImpl::from);
+        return this.getRawMethods().map(BasicMirrorMethod::from);
     }
 
     @Override
