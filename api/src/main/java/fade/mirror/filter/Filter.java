@@ -47,5 +47,5 @@ public abstract class Filter<T>
         return BasicFieldFilter.create();
     }
 
-    // TODO: Add filters for classes and annotations
+    // TODO: Add filters for parameters
 }
