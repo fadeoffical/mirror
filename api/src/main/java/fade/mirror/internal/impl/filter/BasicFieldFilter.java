@@ -11,6 +11,7 @@ import java.lang.annotation.Annotation;
 /**
  * Basic implementation of {@link FieldFilter}.
  *
+ * @param <T> The type of the field.
  * @author fade
  */
 public final class BasicFieldFilter<T>

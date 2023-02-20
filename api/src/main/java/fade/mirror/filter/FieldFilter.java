@@ -12,6 +12,7 @@ import java.lang.annotation.Annotation;
  * field on an existing filter.
  * </p>
  *
+ * @param <T> the type of the field
  * @author fade
  */
 public interface FieldFilter<T>
@@ -49,6 +50,7 @@ public interface FieldFilter<T>
      * </p>
      *
      * @param type the return type of the field
+     * @param <C>  the type of the field
      * @return this filter
      */
     <C> @NotNull FieldFilter<C> ofType(@NotNull Class<C> type);

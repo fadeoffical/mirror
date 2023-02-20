@@ -9,7 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-
+/**
+ * Represents a filter. A filter can be used to filter elements of a class, method, constructor or parameter.
+ *
+ * @param <T> The type of the element to filter.
+ * @author fade
+ */
 public interface Filter<T>
         extends Predicate<T>, Copyable<Filter<T>> {
 

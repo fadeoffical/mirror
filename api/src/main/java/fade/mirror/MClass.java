@@ -105,6 +105,7 @@ public sealed interface MClass<T>
      * the filter. The stream will never be {@code null}.
      *
      * @param filter the filter to apply.
+     * @param <F>    the type of the field.
      * @return a field stream.
      */
     <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter);
@@ -114,6 +115,7 @@ public sealed interface MClass<T>
      * empty if the class has no fields that match the filter. The optional will never be {@code null}.
      *
      * @param filter the filter to apply.
+     * @param <F>    the type of the field.
      * @return the first field that matches the filter.
      */
     <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter);
