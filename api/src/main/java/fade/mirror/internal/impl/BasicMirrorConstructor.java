@@ -114,6 +114,8 @@ public final class BasicMirrorConstructor<T>
 
     @Override
     public @NotNull T invoke(@Nullable Object... arguments) {
+        this.requireAccessible(); // todo: is the check below necessary?
+
         if (!this.isAccessible())
             throw InaccessibleException.from("Could not invoke constructor '%s' from '%s'; it is inaccessible", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
                     .getName());

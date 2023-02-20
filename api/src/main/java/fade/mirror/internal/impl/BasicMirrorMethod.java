@@ -158,6 +158,8 @@ public final class BasicMirrorMethod<T>
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable T invoke(@Nullable Object... arguments) {
+        this.requireAccessible(); // todo: is the check below necessary?
+
         if (!this.isAccessible())
             throw InaccessibleException.from("Could not invoke method '%s' from '%s'; it is inaccessible", this.getName(), this.getDeclaringClass()
                     .getName());
