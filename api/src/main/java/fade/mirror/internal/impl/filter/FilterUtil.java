@@ -17,7 +17,8 @@ final class FilterUtil {
      * A private constructor to prevent instantiation.
      */
     private FilterUtil() {
-        throw new UnsupportedOperationException("Instantiating '%s' is forbidden!".formatted(FilterUtil.class.getName()));
+        throw new UnsupportedOperationException("Instantiating '%s' is forbidden!".formatted(this.getClass()
+                .getName()));
     }
 
     /**

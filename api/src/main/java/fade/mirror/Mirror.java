@@ -24,7 +24,8 @@ public final class Mirror {
      */
     @Contract(" -> fail")
     private Mirror() {
-        throw new UnsupportedOperationException("Instantiating '%s' is forbidden!".formatted(Mirror.class.getName()));
+        throw new UnsupportedOperationException("Instantiating '%s' is forbidden!".formatted(this.getClass()
+                .getName()));
     }
 
     /**
