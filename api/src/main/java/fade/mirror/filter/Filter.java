@@ -14,13 +14,8 @@ import java.util.function.Predicate;
  * @param <T> the type of the mirror object to be filtered
  * @author fade
  */
-public abstract class Filter<T>
-        implements Predicate<T> {
-
-    /**
-     * Prevents instantiation outside the package.
-     */
-    protected Filter() {}
+public interface Filter<T>
+        extends Predicate<T> {
 
     /**
      * Returns a new method filter. This type of filter can be used to filter methods by name, parameters, return type
@@ -29,7 +24,7 @@ public abstract class Filter<T>
      * @return the method filter
      * @see MethodFilter
      */
-    public static @NotNull MethodFilter forMethods() {
+    static @NotNull MethodFilter forMethods() {
         return BasicMethodFilter.create();
     }
 
@@ -40,7 +35,7 @@ public abstract class Filter<T>
      * @return the constructor filter
      * @see ConstructorFilter
      */
-    public static @NotNull ConstructorFilter forConstructors() {
+    static @NotNull ConstructorFilter forConstructors() {
         return BasicConstructorFilter.create();
     }
 
@@ -50,7 +45,7 @@ public abstract class Filter<T>
      * @return the field filter
      * @see FieldFilter
      */
-    public static @NotNull FieldFilter forFields() {
+    static @NotNull FieldFilter forFields() {
         return BasicFieldFilter.create();
     }
 
@@ -61,9 +56,8 @@ public abstract class Filter<T>
      * @return the parameter filter
      * @see ParameterFilter
      */
-    public static @NotNull ParameterFilter forParameters() {
+    static @NotNull ParameterFilter forParameters() {
         return BasicParameterFilter.create();
     }
 
-    // TODO: Add filters for parameters
 }
