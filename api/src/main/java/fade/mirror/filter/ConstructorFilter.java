@@ -1,6 +1,6 @@
 package fade.mirror.filter;
 
-import fade.mirror.Copyable;
+import fade.mirror.MConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -14,7 +14,7 @@ import java.lang.annotation.Annotation;
  *
  * @author fade
  */
-public interface ConstructorFilter extends Copyable<ConstructorFilter> {
+public interface ConstructorFilter extends Filter<MConstructor<?>> {
 
     /**
      * Adds required parameters to this filter. The filter will only keep constructors with the specified parameters.

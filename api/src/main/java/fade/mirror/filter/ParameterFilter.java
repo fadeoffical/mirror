@@ -1,6 +1,6 @@
 package fade.mirror.filter;
 
-import fade.mirror.Copyable;
+import fade.mirror.MParameter;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -8,14 +8,14 @@ import java.lang.annotation.Annotation;
 /**
  * Represents a filter for parameters. The filter can be used to filter parameters by type, name and annotations.
  * <p>
- * A new filter can be created using {@link Filter#forParameters()} or constructed using the {@link ParameterFilter#copy()}
- * parameter on an existing filter.
+ * A new filter can be created using {@link Filter#forParameters()} or constructed using the
+ * {@link ParameterFilter#copy()} parameter on an existing filter.
  * </p>
  *
  * @author fade
  */
 public interface ParameterFilter
-        extends Copyable<ParameterFilter> {
+        extends Filter<MParameter<?>> {
 
     /**
      * Adds required annotations to this filter. The parameter filter will only keep parameters with the specified
@@ -44,8 +44,8 @@ public interface ParameterFilter
     @NotNull ParameterFilter clearAnnotations();
 
     /**
-     * Adds a required return type to this filter. The parameter filter will only keep parameters with the specified return
-     * type.
+     * Adds a required return type to this filter. The parameter filter will only keep parameters with the specified
+     * return type.
      * <p>
      * If the return type is already set, the new return type will replace the old one.
      * </p>

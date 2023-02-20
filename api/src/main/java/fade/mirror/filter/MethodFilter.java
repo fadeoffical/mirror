@@ -1,6 +1,6 @@
 package fade.mirror.filter;
 
-import fade.mirror.Copyable;
+import fade.mirror.MMethod;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -15,7 +15,7 @@ import java.lang.annotation.Annotation;
  *
  * @author fade
  */
-public interface MethodFilter extends Copyable<MethodFilter> {
+public interface MethodFilter extends Filter<MMethod<?>> {
 
     /**
      * Adds a required name to this filter. The field filter will only keep fields with the specified name.

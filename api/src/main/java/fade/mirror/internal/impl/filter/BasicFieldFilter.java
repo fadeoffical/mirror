@@ -14,7 +14,6 @@ import java.lang.annotation.Annotation;
  * @author fade
  */
 public final class BasicFieldFilter
-        extends Filter<MField<?>>
         implements FieldFilter {
 
     /**

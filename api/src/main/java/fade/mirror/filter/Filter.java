@@ -1,5 +1,6 @@
 package fade.mirror.filter;
 
+import fade.mirror.Copyable;
 import fade.mirror.internal.impl.filter.BasicConstructorFilter;
 import fade.mirror.internal.impl.filter.BasicFieldFilter;
 import fade.mirror.internal.impl.filter.BasicMethodFilter;
@@ -8,14 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-/**
- * A filter is a predicate that can be used to filter mirror objects.
- *
- * @param <T> the type of the mirror object to be filtered
- * @author fade
- */
+
 public interface Filter<T>
-        extends Predicate<T> {
+        extends Predicate<T>, Copyable<Filter<T>> {
 
     /**
      * Returns a new method filter. This type of filter can be used to filter methods by name, parameters, return type

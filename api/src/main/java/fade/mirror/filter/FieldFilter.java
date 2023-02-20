@@ -1,6 +1,6 @@
 package fade.mirror.filter;
 
-import fade.mirror.Copyable;
+import fade.mirror.MField;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -14,11 +14,11 @@ import java.lang.annotation.Annotation;
  *
  * @author fade
  */
-public interface FieldFilter extends Copyable<FieldFilter> {
+public interface FieldFilter
+        extends Filter<MField<?>> {
 
     /**
-     * Adds required annotations to this filter. The field filter will only keep fields with the specified
-     * annotations.
+     * Adds required annotations to this filter. The field filter will only keep fields with the specified annotations.
      * <p>
      * If the annotations are already set, the new annotations will replace the old ones.
      * <br>
@@ -26,8 +26,7 @@ public interface FieldFilter extends Copyable<FieldFilter> {
      * <br>
      * If the annotations are not empty, the filter will only keep fields with the specified annotations.
      * <br>
-     * The filter will only keep fields with the specified annotations but ignores all other annotations on the
-     * field.
+     * The filter will only keep fields with the specified annotations but ignores all other annotations on the field.
      * </p>
      *
      * @param annotations the annotations of the field

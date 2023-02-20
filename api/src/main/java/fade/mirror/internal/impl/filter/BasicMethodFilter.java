@@ -15,7 +15,6 @@ import java.lang.annotation.Annotation;
  * @author fade
  */
 public final class BasicMethodFilter
-        extends Filter<MMethod<?>>
         implements MethodFilter {
 
     /**

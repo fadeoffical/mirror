@@ -1,7 +1,6 @@
 package fade.mirror.internal.impl.filter;
 
 import fade.mirror.MParameter;
-import fade.mirror.filter.Filter;
 import fade.mirror.filter.ParameterFilter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +13,6 @@ import java.lang.annotation.Annotation;
  * @author fade
  */
 public final class BasicParameterFilter
-        extends Filter<MParameter<?>>
         implements ParameterFilter {
 
     /**
