@@ -5,6 +5,7 @@ import fade.mirror.MField;
 import fade.mirror.Mirror;
 import fade.mirror.internal.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -167,5 +168,15 @@ public final class BasicMirrorField<T>
     @SuppressWarnings("unchecked")
     public @NotNull Class<T> getType() {
         return (Class<T>) this.field.getType();
+    }
+
+    @Override
+    public @Nullable T getValue() {
+        return null; // todo: implement
+    }
+
+    @Override
+    public @Nullable T getValue(@NotNull Object object) {
+        return null; // todo: implement
     }
 }
