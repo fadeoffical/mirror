@@ -44,4 +44,17 @@ class MockUserTest {
         assertEquals("bob", user.getUsername(), "'username' did not match");
         assertEquals("bob@example.com", user.getEmail(), "'email' did not match");
     }
+
+    @Test
+    @DisplayName("access package-private field")
+    void testAccessPrivateField() {
+        MockUser user = new MockUser("bob", "bob@example.com");
+
+        MField<?> field = mirror(MockUser.class).getField("username", String.class)
+                .orElseThrow()
+                .requireAccessible();
+
+        assertNotNull(field, "'field' is null");
+        assertEquals("bob", field.getValue(user), "'username' did not match");
+    }
 }
