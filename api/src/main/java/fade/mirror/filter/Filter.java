@@ -41,7 +41,7 @@ public interface Filter<T>
      * @return the field filter
      * @see FieldFilter
      */
-    static @NotNull FieldFilter forFields() {
+    static @NotNull FieldFilter<?> forFields() {
         return BasicFieldFilter.create();
     }
 

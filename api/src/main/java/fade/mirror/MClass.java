@@ -116,7 +116,7 @@ public sealed interface MClass<T>
      * @param filter the filter to apply.
      * @return the first field that matches the filter.
      */
-    @NotNull Optional<MField<?>> getField(@NotNull Predicate<MField<?>> filter);
+    <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter);
 
     /**
      * Returns whether this class has any fields.
