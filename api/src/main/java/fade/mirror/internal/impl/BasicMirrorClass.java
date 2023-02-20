@@ -157,7 +157,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull String getCanonicalName() {
-        return this.clazz.getSimpleName();
+        return this.clazz.getCanonicalName();
     }
 
     @Override
