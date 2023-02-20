@@ -14,8 +14,8 @@ import java.lang.annotation.Annotation;
  *
  * @author fade
  */
-public interface FieldFilter
-        extends Filter<MField<?>> {
+public interface FieldFilter<T>
+        extends Filter<MField<T>> {
 
     /**
      * Adds required annotations to this filter. The field filter will only keep fields with the specified annotations.
@@ -32,14 +32,14 @@ public interface FieldFilter
      * @param annotations the annotations of the field
      * @return this filter
      */
-    @NotNull FieldFilter withAnnotations(@NotNull Annotation... annotations);
+    @NotNull FieldFilter<T> withAnnotations(@NotNull Annotation... annotations);
 
     /**
      * Clears the annotations of this filter. The filter will not filter by annotations anymore.
      *
      * @return this filter
      */
-    @NotNull FieldFilter clearAnnotations();
+    @NotNull FieldFilter<T> clearAnnotations();
 
     /**
      * Adds a required return type to this filter. The field filter will only keep fields with the specified return
@@ -51,14 +51,14 @@ public interface FieldFilter
      * @param type the return type of the field
      * @return this filter
      */
-    @NotNull FieldFilter ofType(@NotNull Class<?> type);
+    <C> @NotNull FieldFilter<C> ofType(@NotNull Class<C> type);
 
     /**
      * Clears the return type of this filter. The filter will not filter by return type anymore.
      *
      * @return this filter
      */
-    @NotNull FieldFilter clearType();
+    @NotNull FieldFilter<T> clearType();
 
     /**
      * Adds a required name to this filter. The field filter will only keep fields with the specified name.
@@ -74,13 +74,13 @@ public interface FieldFilter
      * @param name the name of the field
      * @return this filter
      */
-    @NotNull FieldFilter withName(@NotNull String name);
+    @NotNull FieldFilter<T> withName(@NotNull String name);
 
     /**
      * Clears the name of this filter. The filter will not filter by name anymore.
      *
      * @return this filter
      */
-    @NotNull FieldFilter clearName();
+    @NotNull FieldFilter<T> clearName();
 
 }
