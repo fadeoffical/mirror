@@ -173,9 +173,9 @@ public final class BasicMirrorField<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @Nullable T getValue() {
+    public @NotNull Optional<T> getValue() {
         try {
-            return (T) this.field.get(this.object == null ? null : this.object);
+            return Optional.ofNullable((T) this.field.get(this.object == null ? null : this.object));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -183,9 +183,47 @@ public final class BasicMirrorField<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @Nullable T getValue(@NotNull Object object) {
+    public @NotNull Optional<T> getValue(@NotNull Object object) {
         try {
-            return (T) this.field.get(object);
+            return Optional.ofNullable((T) this.field.get(object));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public @NotNull MField<T> setValue(@Nullable T value) {
+        try {
+            this.field.set(this.object == null ? null : this.object, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public @NotNull MField<T> setValue(@NotNull Object object, @Nullable T value) {
+        try {
+            this.field.set(object, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public boolean hasValue() {
+        try {
+            return this.field.get(this.object == null ? null : this.object) != null;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean hasValue(@NotNull Object object) {
+        try {
+            return this.field.get(object) != null;
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }

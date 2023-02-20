@@ -3,6 +3,8 @@ package fade.mirror;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * Represents a field inside a {@link MClass}. A field has a name, a type and a value. It may also have annotations.
  *
@@ -19,7 +21,15 @@ public interface MField<T>
      */
     @NotNull Class<T> getType();
 
-    @Nullable T getValue();
+    @NotNull Optional<T> getValue();
 
-    @Nullable T getValue(@NotNull Object object);
+    @NotNull Optional<T> getValue(@NotNull Object object);
+
+    @NotNull MField<T> setValue(@Nullable T value);
+
+    @NotNull MField<T> setValue(@NotNull Object object, @Nullable T value);
+
+    boolean hasValue();
+
+    boolean hasValue(@NotNull Object object);
 }
