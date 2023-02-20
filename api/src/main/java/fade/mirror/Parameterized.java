@@ -16,7 +16,8 @@ import java.util.stream.Stream;
  *
  * @author fade
  */
-public sealed interface Parameterized permits MConstructor, MMethod {
+public sealed interface Parameterized
+        permits MConstructor, MMethod {
 
     /**
      * Returns a stream of all parameters of this method or constructor. The stream is ordered by the declaration order

@@ -8,13 +8,14 @@ import java.lang.annotation.Annotation;
 /**
  * Represents a filter for constructors. The filter can be used to filter constructors by parameters and annotations.
  * <p>
- * A new filter can be created using {@link Filter#forConstructors()} or constructed using the {@link ConstructorFilter#copy()}
- * method on an existing filter.
+ * A new filter can be created using {@link Filter#forConstructors()} or constructed using the
+ * {@link ConstructorFilter#copy()} method on an existing filter.
  * </p>
  *
  * @author fade
  */
-public interface ConstructorFilter extends Filter<MConstructor<?>> {
+public interface ConstructorFilter
+        extends Filter<MConstructor<?>> {
 
     /**
      * Adds required parameters to this filter. The filter will only keep constructors with the specified parameters.

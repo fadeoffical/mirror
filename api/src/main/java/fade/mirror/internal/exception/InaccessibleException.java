@@ -7,7 +7,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author fade
  */
-public final class InaccessibleException extends MirrorException {
+public final class InaccessibleException
+        extends MirrorException {
 
     /**
      * Constructs an {@code InaccessibleException} with the specified detail message.

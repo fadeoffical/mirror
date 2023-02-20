@@ -15,7 +15,8 @@ import java.lang.annotation.Annotation;
  *
  * @author fade
  */
-public interface MethodFilter extends Filter<MMethod<?>> {
+public interface MethodFilter
+        extends Filter<MMethod<?>> {
 
     /**
      * Adds a required name to this filter. The field filter will only keep fields with the specified name.

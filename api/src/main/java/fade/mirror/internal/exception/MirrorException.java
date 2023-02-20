@@ -5,7 +5,8 @@ package fade.mirror.internal.exception;
  *
  * @author fade
  */
-public class MirrorException extends RuntimeException {
+public class MirrorException
+        extends RuntimeException {
 
     /**
      * Constructs a new exception with null as its detail message.
@@ -26,7 +27,7 @@ public class MirrorException extends RuntimeException {
      * Constructs a new exception with the specified detail message and cause.
      *
      * @param message the detail message
-     * @param cause the cause
+     * @param cause   the cause
      */
     MirrorException(String message, Throwable cause) {
         super(message, cause);
@@ -45,9 +46,9 @@ public class MirrorException extends RuntimeException {
      * Constructs a new exception with the specified detail message, cause, suppression enabled or disabled, and
      * writable stack trace enabled or disabled.
      *
-     * @param message the detail message
-     * @param cause the cause
-     * @param enableSuppression whether suppression is enabled or disabled
+     * @param message            the detail message
+     * @param cause              the cause
+     * @param enableSuppression  whether suppression is enabled or disabled
      * @param writableStackTrace whether the stack trace should be writable
      */
     MirrorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
