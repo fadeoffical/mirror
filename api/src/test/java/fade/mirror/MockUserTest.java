@@ -57,6 +57,9 @@ class MockUserTest {
                 .requireAccessible();
 
         assertNotNull(field, "'field' is null");
-        assertEquals("bob", field.getValue(user), "'username' did not match");
+
+        Optional<String> value = field.getValue(user);
+        assertTrue(value.isPresent(), "'value' is absent");
+        assertEquals("bob", value.get(), "'username' did not match");
     }
 }
