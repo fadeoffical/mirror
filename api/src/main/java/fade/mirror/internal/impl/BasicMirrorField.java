@@ -172,12 +172,22 @@ public final class BasicMirrorField<T>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public @Nullable T getValue() {
-        return null; // todo: implement
+        try {
+            return (T) this.field.get(this.object == null ? null : this.object);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public @Nullable T getValue(@NotNull Object object) {
-        return null; // todo: implement
+        try {
+            return (T) this.field.get(object);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
