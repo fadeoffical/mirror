@@ -1,10 +1,6 @@
 package fade.mirror.internal.impl;
 
-import fade.mirror.MClass;
-import fade.mirror.MConstructor;
-import fade.mirror.MField;
-import fade.mirror.MMethod;
-import fade.mirror.Mirror;
+import fade.mirror.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -99,12 +95,13 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
-    public @NotNull Stream<MField<?>> getFields(@NotNull Predicate<MField<?>> filter) {
-        return this.getFields().filter(filter);
+    @SuppressWarnings("unchecked")
+    public <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter) {
+        return this.getFields().map(field -> (MField<F>) field).filter(filter);
     }
 
     @Override
-    public @NotNull Optional<MField<?>> getField(@NotNull Predicate<MField<?>> filter) {
+    public <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter) {
         return this.getFields(filter).findFirst();
     }
 

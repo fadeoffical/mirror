@@ -107,7 +107,7 @@ public sealed interface MClass<T>
      * @param filter the filter to apply.
      * @return a field stream.
      */
-    @NotNull Stream<MField<?>> getFields(@NotNull Predicate<MField<?>> filter);
+    <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter);
 
     /**
      * Returns an optional containing the first field of this class that matches the given filter. The optional may be
