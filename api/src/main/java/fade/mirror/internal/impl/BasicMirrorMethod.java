@@ -258,8 +258,9 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public void bindToObject(@NotNull Object object) {
+    public @NotNull MMethod<T> bindToObject(@NotNull Object object) {
         this.object = object;
+        return this;
     }
 
     @Override

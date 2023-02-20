@@ -53,6 +53,7 @@ class MockUserTest {
 
         MField<String> field = mirror(MockUser.class).getField(Filter.forFields().ofType(String.class).withName("username"))
                 .orElseThrow()
+                .bindToObject(user)
                 .requireAccessible();
 
         assertNotNull(field, "'field' is null");

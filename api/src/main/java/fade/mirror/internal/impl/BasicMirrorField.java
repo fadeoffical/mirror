@@ -160,8 +160,9 @@ public final class BasicMirrorField<T>
     }
 
     @Override
-    public void bindToObject(@NotNull Object object) {
+    public @NotNull MField<T> bindToObject(@NotNull Object object) {
         this.object = object;
+        return this;
     }
 
     @Override

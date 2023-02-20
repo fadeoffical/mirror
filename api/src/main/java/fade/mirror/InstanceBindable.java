@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author fade
  */
-public interface InstanceBindable {
+public interface InstanceBindable<T> {
 
     /**
      * Binds this method to the given object.
@@ -21,6 +21,7 @@ public interface InstanceBindable {
      * </p>
      *
      * @param object The object to bind this method to.
+     * @return This instance.
      */
-    void bindToObject(@NotNull Object object);
+    @NotNull T bindToObject(@NotNull Object object);
 }

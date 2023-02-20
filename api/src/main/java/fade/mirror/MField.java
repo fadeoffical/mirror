@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  */
 
 public interface MField<T>
-        extends Accessible<MField<T>>, Annotated, Named, Declared, InstanceBindable {
+        extends Accessible<MField<T>>, InstanceBindable<MField<T>>, Annotated, Named, Declared {
 
     /**
      * Gets the type of the field.
