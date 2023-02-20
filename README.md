@@ -4,11 +4,10 @@ Reflections made easy!
 
 ## DEVELOPMENT STATUS
 
-This project is currently in a very early stage of development. It is not recommended to use
-it in production, as it is not stable and the API is subject to change at any time (and by
-that, I mean it could change completely overnight... I am not kidding, check the commit history).
-
-Also, the README is mentioning stuff that is yet to be implemented. I am working on it ^^
+This project is currently in a somewhat stable stage of development. It is not recommended to use
+it in production tho, as it is not entirely stable and the API is subject to change at any time (and by
+that, I mean it could change completely overnight... I am not kidding, check the commit history. Although, it
+is very unlikely to happen at this stage; I mostly just add new API methods).
 
 ## What is mirror?
 
@@ -47,7 +46,7 @@ But using mirror, it's as simple as:
 
 ```java
 String name = mirror(Person.class)
-    .getField(Filter.forFields().withName("name"))
+    .getField(Filter.forFields().ofType(String.class).withName("name"))
     .getValue(person);
 ```
 
@@ -55,7 +54,7 @@ Et voilà, that's it! You can also set the value of the field, or even invoke me
 
 ```java
 mirror(Person.class)
-    .getMethod(Filter.forFields().withName("name"))
+    .getMethod(Filter.forFields().ofType(String.class).withName("name"))
     .setValue(person, "faden");
 ```
 
