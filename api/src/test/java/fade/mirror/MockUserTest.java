@@ -1,9 +1,11 @@
 package fade.mirror;
 
+import fade.mirror.filter.Filter;
 import fade.mirror.mock.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import static fade.mirror.Mirror.mirror;
@@ -50,7 +52,7 @@ class MockUserTest {
     void testAccessPrivateField() {
         MockUser user = new MockUser("bob", "bob@example.com");
 
-        MField<?> field = mirror(MockUser.class).getField("username", String.class)
+        MField<?> field = mirror(MockUser.class).getField(Filter.forFields().ofType(String.class).withName("username"))
                 .orElseThrow()
                 .requireAccessible();
 
