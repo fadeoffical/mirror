@@ -38,6 +38,13 @@ class MirrorTest {
     }
 
     @Test
+    @DisplayName("mirror of class has fields")
+    void testMirrorOfClassHasFields() {
+        MClass<MockClass> mockClass = mirror(MockClass.class);
+        assertFalse(mockClass.hasFields(), "'mockClass.hasFields()' should return 'false'");
+    }
+
+    @Test
     @DisplayName("mirror of class has correct number of methods")
     void testMirrorOfClassHasCorrectNumberOfMethods() {
         MClass<MockClass> mockClass = mirror(MockClass.class);
@@ -45,10 +52,10 @@ class MirrorTest {
     }
 
     @Test
-    @DisplayName("mirror of class has fields")
-    void testMirrorOfClassHasFields() {
+    @DisplayName("mirror of class has methods")
+    void testMirrorOfClassHasMethods() {
         MClass<MockClass> mockClass = mirror(MockClass.class);
-        assertFalse(mockClass.hasFields(), "'mockClass.hasFields()' should return 'false'");
+        assertTrue(mockClass.hasMethods(), "'mockClass.hasMethods()' should return 'true'");
     }
 
     @Test
