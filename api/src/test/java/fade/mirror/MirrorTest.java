@@ -51,7 +51,7 @@ class MirrorTest {
     @DisplayName("mirror of class has correct number of methods")
     void testMirrorOfClassHasCorrectNumberOfMethods() {
         MClass<MockClass> mockClass = mirror(MockClass.class);
-        assertEquals(5, mockClass.getMethodCount(), "'mockClass.getMethodCount()' should return '5'");
+        assertEquals(6, mockClass.getMethodCount(), "'mockClass.getMethodCount()' should return '6'");
     }
 
     @Test
@@ -85,6 +85,7 @@ class MirrorTest {
     @Test
     @DisplayName("invoke static method with no parameters")
     void testInvokeStaticMethodWithNoParameters() {
+        // todo: execution of non-static methods is still fucky
         Optional<MMethod<Void>> method = mirror(MockClass.class)
                 .getMethod(Filter.forMethods().withName("mockMethodStatic").withReturnType(void.class));
 
