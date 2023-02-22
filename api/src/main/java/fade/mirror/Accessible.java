@@ -95,7 +95,12 @@ public interface Accessible<T extends Accessible<T>> {
      * @param consumer the action to perform.
      * @return the wrapper.
      */
-    @NotNull T ifAccessible(@NotNull Consumer<T> consumer);
+    @NotNull
+    @SuppressWarnings("unchecked")
+    default T ifAccessible(@NotNull Consumer<T> consumer) {
+        if (this.isAccessible()) consumer.accept((T) this);
+        return (T) this;
+    }
 
     /**
      * Checks if the object is not accessible, and if it is not, performs the given action on the object.
@@ -103,5 +108,10 @@ public interface Accessible<T extends Accessible<T>> {
      * @param consumer the action to perform.
      * @return the wrapper.
      */
-    @NotNull T ifNotAccessible(@NotNull Consumer<T> consumer);
+    @NotNull
+    @SuppressWarnings("unchecked")
+    default T ifNotAccessible(@NotNull Consumer<T> consumer) {
+        if (!this.isAccessible()) consumer.accept((T) this);
+        return (T) this;
+    }
 }

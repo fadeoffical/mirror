@@ -17,7 +17,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -91,18 +90,6 @@ public final class BasicMirrorMethod<T>
     @Override
     public @NotNull MMethod<T> requireAccessible() {
         return this.requireAccessible(() -> InaccessibleException.from("Method is not accessible"));
-    }
-
-    @Override
-    public @NotNull MMethod<T> ifAccessible(@NotNull Consumer<MMethod<T>> consumer) {
-        if (this.isAccessible()) consumer.accept(this);
-        return this;
-    }
-
-    @Override
-    public @NotNull MMethod<T> ifNotAccessible(@NotNull Consumer<MMethod<T>> consumer) {
-        if (!this.isAccessible()) consumer.accept(this);
-        return this;
     }
 
     @Override

@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -89,18 +88,6 @@ public final class BasicMirrorConstructor<T>
         if (!this.isAccessible()) {
             this.constructor.trySetAccessible();
         }
-        return this;
-    }
-
-    @Override
-    public @NotNull MConstructor<T> ifAccessible(@NotNull Consumer<MConstructor<T>> consumer) {
-        if (this.isAccessible()) consumer.accept(this);
-        return this;
-    }
-
-    @Override
-    public @NotNull MConstructor<T> ifNotAccessible(@NotNull Consumer<MConstructor<T>> consumer) {
-        if (!this.isAccessible()) consumer.accept(this);
         return this;
     }
 

@@ -12,7 +12,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -87,18 +86,6 @@ public final class BasicMirrorField<T>
     @Override
     public @NotNull MField<T> requireAccessible() {
         return this.requireAccessible(() -> InaccessibleException.from("Field is not accessible"));
-    }
-
-    @Override
-    public @NotNull MField<T> ifAccessible(@NotNull Consumer<MField<T>> consumer) {
-        if (this.isAccessible()) consumer.accept(this);
-        return this;
-    }
-
-    @Override
-    public @NotNull MField<T> ifNotAccessible(@NotNull Consumer<MField<T>> consumer) {
-        if (!this.isAccessible()) consumer.accept(this);
-        return this;
     }
 
     @Override
