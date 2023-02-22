@@ -25,7 +25,7 @@ public interface Filter<T>
      * @return the method filter
      * @see MethodFilter
      */
-    static @NotNull MethodFilter forMethods() {
+    static @NotNull MethodFilter<?> forMethods() {
         return BasicMethodFilter.create();
     }
 
