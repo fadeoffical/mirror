@@ -161,7 +161,7 @@ public sealed interface MClass<T>
      * @param filter the filter to apply.
      * @return a method stream.
      */
-    @NotNull Stream<MMethod<?>> getMethods(@NotNull Predicate<MMethod<?>> filter);
+    <F> @NotNull Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter);
 
     /**
      * Returns an optional containing the first method of this class that matches the given filter. The optional may be
@@ -170,7 +170,7 @@ public sealed interface MClass<T>
      * @param filter the filter to apply.
      * @return the first method that matches the filter.
      */
-    @NotNull Optional<MMethod<?>> getMethod(@NotNull Predicate<MMethod<?>> filter);
+    <F> @NotNull Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter);
 
     /**
      * Returns whether this class has any methods.
