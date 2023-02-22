@@ -94,4 +94,18 @@ class MirrorTest {
                 .makeAccessible() // this is so intellij shuts the fuck up about the method being unused
                 .invoke();
     }
+
+    @Test
+    @DisplayName("invoke method with parameters")
+    void testInvokeMethodWithParameters() {
+        Optional<MMethod<Void>> method = mirror(MockClass.class)
+                .getMethod(Filter.forMethods().withName("mockMethod").withReturnType(void.class));
+
+        assertTrue(method.isPresent(), "'method' should be present");
+        MockClass instance = new MockClass();
+        method.get()
+                .makeAccessible()
+                .bindToObject(instance)
+                .invoke();
+    }
 }
