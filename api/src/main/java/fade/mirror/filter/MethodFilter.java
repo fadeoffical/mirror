@@ -15,8 +15,8 @@ import java.lang.annotation.Annotation;
  *
  * @author fade
  */
-public interface MethodFilter
-        extends Filter<MMethod<?>> {
+public interface MethodFilter<T>
+        extends Filter<MMethod<T>> {
 
     /**
      * Adds a required name to this filter. The field filter will only keep fields with the specified name.
@@ -32,14 +32,14 @@ public interface MethodFilter
      * @param name the name of the method
      * @return this filter
      */
-    @NotNull MethodFilter withName(@NotNull String name);
+    @NotNull MethodFilter<T> withName(@NotNull String name);
 
     /**
      * Clears the name of this filter. The filter will not filter by name anymore.
      *
      * @return this filter
      */
-    @NotNull MethodFilter clearName();
+    @NotNull MethodFilter<T> clearName();
 
     /**
      * Adds required parameters to this filter. The method filter will only keep methods with the specified parameters.
@@ -60,14 +60,14 @@ public interface MethodFilter
      * @param parameterTypes the parameter types of the method
      * @return this filter
      */
-    @NotNull MethodFilter withParameters(@NotNull Class<?>... parameterTypes);
+    @NotNull MethodFilter<T> withParameters(@NotNull Class<?>... parameterTypes);
 
     /**
      * Clears the parameters of this filter. The filter will not filter by parameters anymore.
      *
      * @return this filter
      */
-    @NotNull MethodFilter clearParameters();
+    @NotNull MethodFilter<T> clearParameters();
 
     /**
      * Adds required annotations to this filter. The method filter will only keep methods with the specified
@@ -86,14 +86,14 @@ public interface MethodFilter
      * @param annotations the annotations of the method
      * @return this filter
      */
-    @NotNull MethodFilter withAnnotations(@NotNull Annotation... annotations);
+    @NotNull MethodFilter<T> withAnnotations(@NotNull Annotation... annotations);
 
     /**
      * Clears the annotations of this filter. The filter will not filter by annotations anymore.
      *
      * @return this filter
      */
-    @NotNull MethodFilter clearAnnotations();
+    @NotNull MethodFilter<T> clearAnnotations();
 
     /**
      * Adds a required return type to this filter. The method filter will only keep methods with the specified return
@@ -105,13 +105,13 @@ public interface MethodFilter
      * @param returnType the return type of the method
      * @return this filter
      */
-    @NotNull MethodFilter withReturnType(@NotNull Class<?> returnType);
+    <C> @NotNull MethodFilter<C> withReturnType(@NotNull Class<C> returnType);
 
     /**
      * Clears the return type of this filter. The filter will not filter by return type anymore.
      *
      * @return this filter
      */
-    @NotNull MethodFilter clearReturnType();
+    @NotNull MethodFilter<T> clearReturnType();
 
 }

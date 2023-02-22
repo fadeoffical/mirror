@@ -14,8 +14,8 @@ import java.lang.annotation.Annotation;
  *
  * @author fade
  */
-public final class BasicMethodFilter
-        implements MethodFilter {
+public final class BasicMethodFilter<T>
+        implements MethodFilter<T> {
 
     /**
      * The parameter types to filter by. If {@code null}, no filtering will be done.
@@ -65,60 +65,61 @@ public final class BasicMethodFilter
      *
      * @return The new {@link BasicMethodFilter}.
      */
-    public static BasicMethodFilter create() {
-        return new BasicMethodFilter();
+    public static <T> MethodFilter<T> create() {
+        return new BasicMethodFilter<>();
     }
 
     @Override
-    public @NotNull BasicMethodFilter withParameters(@NotNull Class<?>... parameterTypes) {
+    public @NotNull MethodFilter<T> withParameters(@NotNull Class<?>... parameterTypes) {
         this.parameterTypes = parameterTypes.clone();
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter clearParameters() {
+    public @NotNull MethodFilter<T> clearParameters() {
         this.parameterTypes = null;
         return this;
     }
 
     @Override
-    public @NotNull BasicMethodFilter withAnnotations(@NotNull Annotation... annotations) {
+    public @NotNull MethodFilter<T> withAnnotations(@NotNull Annotation... annotations) {
         this.annotations = annotations.clone();
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter clearAnnotations() {
+    public @NotNull MethodFilter<T> clearAnnotations() {
         this.annotations = null;
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter withReturnType(@NotNull Class<?> returnType) {
+    @SuppressWarnings("unchecked")
+    public <C> @NotNull MethodFilter<C> withReturnType(@NotNull Class<C> returnType) {
         this.returnType = returnType;
-        return this;
+        return (MethodFilter<C>) this;
     }
 
     @Override
-    public @NotNull MethodFilter clearReturnType() {
+    public @NotNull MethodFilter<T> clearReturnType() {
         this.returnType = null;
         return this;
     }
 
     @Override
-    public @NotNull BasicMethodFilter withName(@NotNull String name) {
+    public @NotNull MethodFilter<T> withName(@NotNull String name) {
         this.name = name;
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter clearName() {
+    public @NotNull MethodFilter<T> clearName() {
         this.name = null;
         return this;
     }
 
     @Override
-    public boolean test(MMethod<?> method) {
+    public boolean test(MMethod<T> method) {
         if (this.name != null && !method.getName().equals(this.name)) return false;
         if (this.parameterTypes != null && !method.getParameters()
                 .map(MParameter::getType)
@@ -131,7 +132,7 @@ public final class BasicMethodFilter
     }
 
     @Override
-    public @NotNull MethodFilter copy() {
-        return new BasicMethodFilter(this.parameterTypes, this.annotations, this.name, this.returnType);
+    public @NotNull MethodFilter<T> copy() {
+        return new BasicMethodFilter<>(this.parameterTypes, this.annotations, this.name, this.returnType);
     }
 }
