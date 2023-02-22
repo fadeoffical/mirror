@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * @param <T> The type of the object.
  * @author fade
  */
-public interface Accessible<T> {
+public interface Accessible<T extends Accessible<T>> {
 
     /**
      * Checks if the object is public.
@@ -81,7 +81,13 @@ public interface Accessible<T> {
      * @param exception the supplier of the exception to throw.
      * @return the wrapper.
      */
-    @NotNull T requireAccessible(@NotNull Supplier<? extends RuntimeException> exception);
+    @NotNull
+    @SuppressWarnings("unchecked")
+    default T requireAccessible(@NotNull Supplier<? extends RuntimeException> exception) {
+        this.makeAccessible();
+        if (!this.isAccessible()) throw exception.get();
+        return (T) this;
+    }
 
     /**
      * Checks if the object is accessible, and if it is, performs the given action on the object.

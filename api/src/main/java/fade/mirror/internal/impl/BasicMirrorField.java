@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -88,13 +87,6 @@ public final class BasicMirrorField<T>
     @Override
     public @NotNull MField<T> requireAccessible() {
         return this.requireAccessible(() -> InaccessibleException.from("Field is not accessible"));
-    }
-
-    @Override
-    public @NotNull MField<T> requireAccessible(@NotNull Supplier<? extends RuntimeException> exception) {
-        this.makeAccessible();
-        if (!this.isAccessible()) throw exception.get();
-        return this;
     }
 
     @Override

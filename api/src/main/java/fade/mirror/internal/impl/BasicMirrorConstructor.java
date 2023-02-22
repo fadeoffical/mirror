@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -90,13 +89,6 @@ public final class BasicMirrorConstructor<T>
         if (!this.isAccessible()) {
             this.constructor.trySetAccessible();
         }
-        return this;
-    }
-
-    @Override
-    public @NotNull MConstructor<T> requireAccessible(@NotNull Supplier<? extends RuntimeException> exception) {
-        this.makeAccessible();
-        if (!this.isAccessible()) throw exception.get();
         return this;
     }
 

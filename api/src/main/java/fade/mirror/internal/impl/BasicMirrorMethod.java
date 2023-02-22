@@ -19,7 +19,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -92,13 +91,6 @@ public final class BasicMirrorMethod<T>
     @Override
     public @NotNull MMethod<T> requireAccessible() {
         return this.requireAccessible(() -> InaccessibleException.from("Method is not accessible"));
-    }
-
-    @Override
-    public @NotNull MMethod<T> requireAccessible(@NotNull Supplier<? extends RuntimeException> exception) {
-        this.makeAccessible();
-        if (!this.isAccessible()) throw exception.get();
-        return this;
     }
 
     @Override
