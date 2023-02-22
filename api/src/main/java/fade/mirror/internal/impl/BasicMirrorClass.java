@@ -126,12 +126,13 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
-    public @NotNull Stream<MMethod<?>> getMethods(@NotNull Predicate<MMethod<?>> filter) {
-        return this.getMethods().filter(filter);
+    @SuppressWarnings("unchecked")
+    public <F> @NotNull Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter) {
+        return this.getMethods().map(method -> (MMethod<F>) method).filter(filter);
     }
 
     @Override
-    public @NotNull Optional<MMethod<?>> getMethod(@NotNull Predicate<MMethod<?>> filter) {
+    public <F> @NotNull Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter) {
         return this.getMethods(filter).findFirst();
     }
 
