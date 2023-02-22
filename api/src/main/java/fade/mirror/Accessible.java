@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import fade.mirror.internal.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.AccessibleObject;
@@ -72,7 +73,10 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return the wrapper.
      */
-    @NotNull T requireAccessible();
+    @NotNull
+    default T requireAccessible() {
+        return this.requireAccessible(() -> InaccessibleException.from("Object is not accessible"));
+    }
 
     /**
      * Checks whether the object is accessible, and if it is not, makes it accessible. If the object cannot be made

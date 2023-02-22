@@ -90,6 +90,8 @@ class MirrorTest {
                 .getMethod(Filter.forMethods().withName("mockMethodStatic").withReturnType(void.class));
 
         assertTrue(method.isPresent(), "'method' should be present");
-        method.get().requireAccessible().invoke();
+        method.get()
+                .makeAccessible() // this is so intellij shuts the fuck up about the method being unused
+                .invoke();
     }
 }

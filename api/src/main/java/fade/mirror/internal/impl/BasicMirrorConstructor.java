@@ -79,11 +79,6 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public @NotNull MConstructor<T> requireAccessible() {
-        return this.requireAccessible(() -> InaccessibleException.from("Inaccessible"));
-    }
-
-    @Override
     public @NotNull MConstructor<T> makeAccessible() {
         if (!this.isAccessible()) {
             this.constructor.trySetAccessible();

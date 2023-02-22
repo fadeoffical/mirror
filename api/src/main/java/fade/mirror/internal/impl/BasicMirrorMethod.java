@@ -88,11 +88,6 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public @NotNull MMethod<T> requireAccessible() {
-        return this.requireAccessible(() -> InaccessibleException.from("Method is not accessible"));
-    }
-
-    @Override
     public @NotNull Stream<Annotation> getAnnotations() {
         return Arrays.stream(this.method.getAnnotations());
     }

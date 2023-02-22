@@ -3,7 +3,6 @@ package fade.mirror.internal.impl;
 import fade.mirror.MClass;
 import fade.mirror.MField;
 import fade.mirror.Mirror;
-import fade.mirror.internal.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,11 +80,6 @@ public final class BasicMirrorField<T>
     public @NotNull MField<T> makeAccessible() {
         if (!this.isAccessible()) this.field.trySetAccessible();
         return this;
-    }
-
-    @Override
-    public @NotNull MField<T> requireAccessible() {
-        return this.requireAccessible(() -> InaccessibleException.from("Field is not accessible"));
     }
 
     @Override
