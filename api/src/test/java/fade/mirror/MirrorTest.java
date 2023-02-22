@@ -83,14 +83,12 @@ class MirrorTest {
     }
 
     @Test
-    @DisplayName("invoke method with no parameters")
-    void testInvokeMethodWithNoParameters() {
+    @DisplayName("invoke static method with no parameters")
+    void testInvokeStaticMethodWithNoParameters() {
         Optional<MMethod<Void>> method = mirror(MockClass.class)
-                .getMethod(Filter.forMethods().withName("mockMethod").withReturnType(void.class));
+                .getMethod(Filter.forMethods().withName("mockMethodStatic").withReturnType(void.class));
 
         assertTrue(method.isPresent(), "'method' should be present");
-
-        MockClass mockInstance = new MockClass();
-        method.get().invoke(mockInstance);
+        method.get().requireAccessible().invoke();
     }
 }
