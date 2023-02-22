@@ -1,8 +1,11 @@
 package fade.mirror;
 
+import fade.mirror.filter.Filter;
 import fade.mirror.mock.MockClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static fade.mirror.Mirror.mirror;
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,5 +80,17 @@ class MirrorTest {
     void testMirrorOfClassHasCorrectCanonicalName() {
         MClass<MockClass> mockClass = mirror(MockClass.class);
         assertEquals("fade.mirror.mock.MockClass", mockClass.getCanonicalName(), "'mockClass.getCanonicalName()' should return 'fade.mirror.mock.MockClass'");
+    }
+
+    @Test
+    @DisplayName("invoke method with no parameters")
+    void testInvokeMethodWithNoParameters() {
+        Optional<MMethod<Void>> method = mirror(MockClass.class)
+                .getMethod(Filter.forMethods().withName("mockMethod").withReturnType(void.class));
+
+        assertTrue(method.isPresent(), "'method' should be present");
+
+        MockClass mockInstance = new MockClass();
+        method.get().invoke(mockInstance);
     }
 }
