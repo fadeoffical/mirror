@@ -20,7 +20,7 @@ public final class BasicFieldFilter<T>
     /**
      * The annotations to filter by. If {@code null}, no filtering will be done.
      */
-    private Class<?extends Annotation> @Nullable [] annotations;
+    private Class<? extends Annotation> @Nullable [] annotations;
 
     /**
      * The name to filter by. If {@code null}, no filtering will be done.
@@ -46,7 +46,7 @@ public final class BasicFieldFilter<T>
      * @param name        The name to filter by.
      * @param type        The type to filter by.
      */
-    private BasicFieldFilter(Class<?extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> type) {
+    private BasicFieldFilter(Class<? extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> type) {
         this.annotations = annotations == null ? null : annotations.clone();
         this.name = name;
         this.type = type;
@@ -63,7 +63,7 @@ public final class BasicFieldFilter<T>
     }
 
     @Override
-    public @NotNull FieldFilter<T> withAnnotations(@NotNull Class<?extends Annotation>... annotations) {
+    public @NotNull FieldFilter<T> withAnnotations(@NotNull Class<? extends Annotation>... annotations) {
         this.annotations = annotations.clone();
         return this;
     }

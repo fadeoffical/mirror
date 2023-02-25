@@ -2,7 +2,8 @@ package fade.mirror.exception;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class UnboundException extends MirrorException {
+public final class UnboundException
+        extends MirrorException {
 
     private UnboundException(String message) {
         super(message);

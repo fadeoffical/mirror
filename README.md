@@ -36,7 +36,7 @@ class Person {
     }
 }
 ```
-    
+
 ```java
 Person person = new Person("fade", 17);
 ```

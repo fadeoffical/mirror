@@ -18,7 +18,7 @@ public final class BasicParameterFilter
     /**
      * The annotations to filter by. If {@code null}, no filtering will be done.
      */
-    private Class<?extends Annotation> @Nullable [] annotations;
+    private Class<? extends Annotation> @Nullable [] annotations;
 
     /**
      * The name to filter by. If {@code null}, no filtering will be done.
@@ -44,7 +44,7 @@ public final class BasicParameterFilter
      * @param name        The name to filter by.
      * @param type        The type to filter by.
      */
-    private BasicParameterFilter(Class<?extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> type) {
+    private BasicParameterFilter(Class<? extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> type) {
         super();
         this.annotations = annotations == null ? null : annotations.clone();
         this.name = name;
@@ -61,7 +61,7 @@ public final class BasicParameterFilter
     }
 
     @Override
-    public @NotNull ParameterFilter withAnnotations(@NotNull Class<?extends Annotation>... annotations) {
+    public @NotNull ParameterFilter withAnnotations(@NotNull Class<? extends Annotation>... annotations) {
         this.annotations = annotations.clone();
         return this;
     }

@@ -34,7 +34,7 @@ public interface ParameterFilter
      * @param annotations the annotations of the parameter
      * @return this filter
      */
-    @NotNull ParameterFilter withAnnotations(@NotNull Class<?extends Annotation>... annotations);
+    @NotNull ParameterFilter withAnnotations(@NotNull Class<? extends Annotation>... annotations);
 
     /**
      * Clears the annotations of this filter. The filter will not filter by annotations anymore.

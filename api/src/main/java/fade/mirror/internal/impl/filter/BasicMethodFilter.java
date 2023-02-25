@@ -25,7 +25,7 @@ public final class BasicMethodFilter<T>
     /**
      * The annotations to filter by. If {@code null}, no filtering will be done.
      */
-    private Class<?extends Annotation> @Nullable [] annotations;
+    private Class<? extends Annotation> @Nullable [] annotations;
 
     /**
      * The name to filter by. If {@code null}, no filtering will be done.
@@ -52,7 +52,7 @@ public final class BasicMethodFilter<T>
      * @param name           The name to filter by.
      * @param returnType     The return type to filter by.
      */
-    private BasicMethodFilter(Class<?> @Nullable [] parameterTypes, Class<?extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> returnType) {
+    private BasicMethodFilter(Class<?> @Nullable [] parameterTypes, Class<? extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> returnType) {
         this.parameterTypes = parameterTypes == null ? null : parameterTypes.clone();
         this.annotations = annotations == null ? null : annotations.clone();
         this.name = name;
