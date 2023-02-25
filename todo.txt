@@ -1,0 +1,9 @@
+classes need a getSuperClass method
+
+classes need a recursion api
+    getSuperClassUntil(condition) -> opt<cls>
+    
+    recurses thorugh superclasses until one is found with
+    the condition met or there is no superclass
+
+fix the stupid java reflection inaccessible shit

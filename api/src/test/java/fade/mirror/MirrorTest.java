@@ -85,7 +85,6 @@ class MirrorTest {
     @Test
     @DisplayName("invoke static method with no parameters")
     void testInvokeStaticMethodWithNoParameters() {
-        // todo: execution of non-static methods is still fucky
         Optional<MMethod<Void>> method = mirror(MockClass.class)
                 .getMethod(Filter.forMethods().withName("mockMethodStatic").withReturnType(void.class));
 
