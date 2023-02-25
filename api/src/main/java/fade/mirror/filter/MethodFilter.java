@@ -86,7 +86,7 @@ public interface MethodFilter<T>
      * @param annotations the annotations of the method
      * @return this filter
      */
-    @NotNull MethodFilter<T> withAnnotations(@NotNull Annotation... annotations);
+    @NotNull MethodFilter<T> withAnnotations(@NotNull Class<? extends Annotation>... annotations);
 
     /**
      * Clears the annotations of this filter. The filter will not filter by annotations anymore.

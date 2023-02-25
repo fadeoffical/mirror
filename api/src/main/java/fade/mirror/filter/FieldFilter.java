@@ -33,7 +33,7 @@ public interface FieldFilter<T>
      * @param annotations the annotations of the field
      * @return this filter
      */
-    @NotNull FieldFilter<T> withAnnotations(@NotNull Annotation... annotations);
+    @NotNull FieldFilter<T> withAnnotations(@NotNull Class<?extends Annotation>... annotations);
 
     /**
      * Clears the annotations of this filter. The filter will not filter by annotations anymore.

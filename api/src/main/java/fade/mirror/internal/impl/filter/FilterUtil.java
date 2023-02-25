@@ -42,9 +42,9 @@ final class FilterUtil {
      * @param annotation  the annotation to check
      * @return {@code true} if the given annotation is one of the required annotations, {@code false} otherwise
      */
-    static boolean isAnnotationOneOfRequired(Annotation @NotNull [] annotations, @NotNull Annotation annotation) {
-        for (Annotation filterAnnotations : annotations) {
-            if (filterAnnotations.annotationType().isAssignableFrom(annotation.annotationType())) return true;
+    static boolean isAnnotationOneOfRequired(Class<? extends Annotation> @NotNull [] annotations, @NotNull Annotation annotation) {
+        for (Class<? extends Annotation> annotationType : annotations) {
+            if (annotationType.isAssignableFrom(annotation.annotationType())) return true;
         }
         return false;
     }

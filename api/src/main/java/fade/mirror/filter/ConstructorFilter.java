@@ -62,7 +62,7 @@ public interface ConstructorFilter
      * @param annotations the annotations of the constructor
      * @return this filter
      */
-    @NotNull ConstructorFilter withAnnotations(@NotNull Annotation... annotations);
+    @NotNull ConstructorFilter withAnnotations(@NotNull Class<?extends Annotation>... annotations);
 
     /**
      * Clears the annotations of this filter. The filter will not filter by annotations anymore.

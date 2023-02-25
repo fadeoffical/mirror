@@ -25,7 +25,7 @@ public final class BasicConstructorFilter
     /**
      * The annotations to filter by. If {@code null}, no filtering will be done.
      */
-    private Annotation @Nullable [] annotations;
+    private Class<?extends Annotation> @Nullable [] annotations;
 
     /**
      * Creates a new {@link BasicConstructorFilter}.
@@ -34,7 +34,7 @@ public final class BasicConstructorFilter
         super();
     }
 
-    private BasicConstructorFilter(Class<?> @Nullable [] parameterTypes, Annotation @Nullable [] annotations) {
+    private BasicConstructorFilter(@NotNull Class<?> @Nullable [] parameterTypes, @NotNull Class<?extends Annotation> @Nullable [] annotations) {
         this.parameterTypes = parameterTypes == null ? null : parameterTypes.clone();
         this.annotations = annotations == null ? null : annotations.clone();
     }
@@ -62,7 +62,8 @@ public final class BasicConstructorFilter
     }
 
     @Override
-    public @NotNull ConstructorFilter withAnnotations(@NotNull Annotation... annotations) {
+    @SafeVarargs
+    public final @NotNull ConstructorFilter withAnnotations(@NotNull Class<? extends Annotation>... annotations) {
         this.annotations = annotations.clone();
         return this;
     }
