@@ -103,7 +103,6 @@ class MirrorTest {
         assertTrue(method.isPresent(), "'method' should be present");
         MockClass instance = new MockClass();
         method.get()
-                .makeAccessible()
                 .bindToObject(instance)
                 .invoke();
     }
