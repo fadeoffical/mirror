@@ -1,6 +1,6 @@
 package fade.mirror;
 
-import fade.mirror.internal.exception.InaccessibleException;
+import fade.mirror.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.AccessibleObject;

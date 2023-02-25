@@ -3,6 +3,7 @@ package fade.mirror.internal.impl;
 import fade.mirror.MClass;
 import fade.mirror.MField;
 import fade.mirror.Mirror;
+import fade.mirror.exception.UnboundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,7 +72,7 @@ public final class BasicMirrorField<T>
     @Override
     public boolean isAccessible() {
         if (this.isStatic()) return this.field.canAccess(null);
-        if (this.object == null) return false; // todo: throw exception
+        if (this.object == null) throw UnboundException.from("Method is not static and no object is bound.");
 
         return this.field.canAccess(this.object);
     }

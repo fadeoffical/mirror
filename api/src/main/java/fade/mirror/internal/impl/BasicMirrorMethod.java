@@ -4,9 +4,10 @@ import fade.mirror.MClass;
 import fade.mirror.MMethod;
 import fade.mirror.MParameter;
 import fade.mirror.Mirror;
-import fade.mirror.internal.exception.InaccessibleException;
-import fade.mirror.internal.exception.InvocationException;
-import fade.mirror.internal.exception.MismatchedArgumentsException;
+import fade.mirror.exception.InaccessibleException;
+import fade.mirror.exception.InvocationException;
+import fade.mirror.exception.MismatchedArgumentsException;
+import fade.mirror.exception.UnboundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,14 +77,15 @@ public final class BasicMirrorMethod<T>
     @Override
     public boolean isAccessible() {
         if (this.isStatic()) return this.method.canAccess(null);
-        if (this.object == null) return false; // todo: throw exception
+        if (this.object == null) throw UnboundException.from("Method is not static and no object is bound.");
 
         return this.method.canAccess(this.object);
     }
 
     @Override
     public @NotNull MMethod<T> makeAccessible() {
-        if (!this.isAccessible()) this.method.trySetAccessible();
+        if (!this.isAccessible())
+            this.method.setAccessible(true);
         return this;
     }
 
@@ -144,7 +146,7 @@ public final class BasicMirrorMethod<T>
 
         try {
             if (this.isStatic()) return (T) this.method.invoke(null, arguments);
-            if (this.object == null) return null; // todo: throw exception
+            if (this.object == null) throw UnboundException.from("Method is not static and no object is bound.");
             return (T) this.method.invoke(this.object, arguments);
         } catch (IllegalAccessException | InvocationTargetException exception) {
             throw InvocationException.from(exception, "Could not invoke method '%s' from '%s'", this.getName(), this.getDeclaringClass()

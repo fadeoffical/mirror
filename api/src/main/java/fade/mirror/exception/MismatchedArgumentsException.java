@@ -1,4 +1,4 @@
-package fade.mirror.internal.exception;
+package fade.mirror.exception;
 
 import org.jetbrains.annotations.NotNull;
 
