@@ -141,8 +141,8 @@ public final class BasicMirrorMethod<T>
                     .getName());
 
         if (!this.invokableWith(arguments))
-            throw MismatchedArgumentsException.from("Mismatched argument types for method '%s' from '%s'; provided=%s", this.getName(), this.getDeclaringClass()
-                    .getName(), Arrays.toString(arguments));
+            throw MismatchedArgumentsException.from("Mismatched argument types for method '%s' from '%s'; provided=%s, expected=%s", this.getName(), this.getDeclaringClass()
+                    .getName(), Arrays.toString(arguments), Arrays.toString(this.method.getParameterTypes()));
 
         try {
             if (this.isStatic()) return (T) this.method.invoke(null, arguments);
