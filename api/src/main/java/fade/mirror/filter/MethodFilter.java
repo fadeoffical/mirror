@@ -86,6 +86,7 @@ public interface MethodFilter<T>
      * @param annotations the annotations of the method
      * @return this filter
      */
+    @SuppressWarnings("unchecked")
     @NotNull MethodFilter<T> withAnnotations(@NotNull Class<? extends Annotation>... annotations);
 
     /**

@@ -29,7 +29,9 @@ public sealed interface MClass<T>
 
     @NotNull Optional<MClass<?>> getSuperclass();
 
-    @NotNull Optional<MClass<?>> getSuperclassUntil(@NotNull Predicate<MClass<?>> filter);
+    <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter);
+
+    <C> @NotNull Optional<MClass<C>> getSuperclassUntilIncludingSelf(@NotNull Predicate<MClass<C>> filter);
 
     boolean hasSuperclass();
 

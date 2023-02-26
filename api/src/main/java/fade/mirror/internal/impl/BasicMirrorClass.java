@@ -59,13 +59,31 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
-    public @NotNull Optional<MClass<?>> getSuperclassUntil(@NotNull Predicate<MClass<?>> filter) {
-        Optional<MClass<?>> optionalClass = this.getSuperclass();
-        if (optionalClass.isEmpty()) return Optional.empty();
+    public @NotNull <C> Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter) {
+        return this.getSuperclassUntil(filter, false);
+    }
 
-        MClass<?> clazz = optionalClass.get();
-        if (filter.test(clazz)) return Optional.of(clazz);
-        return clazz.getSuperclassUntil(filter);
+    @Override
+    public @NotNull <C> Optional<MClass<C>> getSuperclassUntilIncludingSelf(@NotNull Predicate<MClass<C>> filter) {
+        return this.getSuperclassUntil(filter, true);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter, boolean includeSelf) {
+        Optional<MClass<?>> optionalClass = includeSelf ? Optional.of(this) : this.getSuperclass();
+
+        do {
+            if (optionalClass.isEmpty())
+                return Optional.empty();
+
+            MClass<C> clazz = (MClass<C>) optionalClass.get();
+
+            if (filter.test(clazz))
+                return Optional.of(clazz);
+
+            optionalClass = clazz.getSuperclass();
+        } while (optionalClass.isPresent() && optionalClass.get().hasSuperclass());
+        return Optional.empty();
     }
 
     @Override
