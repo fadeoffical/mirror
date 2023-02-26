@@ -27,6 +27,12 @@ public sealed interface MClass<T>
      */
     @NotNull Class<T> getRawClass();
 
+    @NotNull Optional<MClass<?>> getSuperclass();
+
+    @NotNull Optional<MClass<?>> getSuperclassUntil(@NotNull Predicate<MClass<?>> filter);
+
+    boolean hasSuperclass();
+
     /**
      * Returns a stream of all constructors of this class. The stream is ordered by the declaration order of the
      * constructors in the source code. The stream may be empty if the class has no constructors. The stream will never

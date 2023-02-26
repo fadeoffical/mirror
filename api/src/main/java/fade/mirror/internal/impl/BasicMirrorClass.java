@@ -53,6 +53,27 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
+    public @NotNull Optional<MClass<?>> getSuperclass() {
+        Class<? super T> superclass = this.clazz.getSuperclass();
+        return Optional.ofNullable(this.hasSuperclass() ? from(superclass) : null);
+    }
+
+    @Override
+    public @NotNull Optional<MClass<?>> getSuperclassUntil(@NotNull Predicate<MClass<?>> filter) {
+        Optional<MClass<?>> optionalClass = this.getSuperclass();
+        if (optionalClass.isEmpty()) return Optional.empty();
+
+        MClass<?> clazz = optionalClass.get();
+        if (filter.test(clazz)) return Optional.of(clazz);
+        return clazz.getSuperclassUntil(filter);
+    }
+
+    @Override
+    public boolean hasSuperclass() {
+        return this.clazz.getSuperclass() != null;
+    }
+
+    @Override
     public @NotNull Stream<MConstructor<T>> getConstructors() {
         return this.getRawConstructors().map(BasicMirrorConstructor::from);
     }
