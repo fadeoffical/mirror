@@ -2,10 +2,13 @@ package fade.mirror.internal.impl.filter;
 
 import fade.mirror.MParameter;
 import fade.mirror.filter.ParameterFilter;
+import fade.mirror.filter.RewriteOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Basic implementation of {@link ParameterFilter}.
@@ -18,7 +21,7 @@ public final class BasicParameterFilter
     /**
      * The annotations to filter by. If {@code null}, no filtering will be done.
      */
-    private Class<? extends Annotation> @Nullable [] annotations;
+    private @Nullable List<Class<? extends Annotation>> annotations;
 
     /**
      * The name to filter by. If {@code null}, no filtering will be done.
@@ -44,9 +47,9 @@ public final class BasicParameterFilter
      * @param name        The name to filter by.
      * @param type        The type to filter by.
      */
-    private BasicParameterFilter(Class<? extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> type) {
+    private BasicParameterFilter(@Nullable List<Class<? extends Annotation>> annotations, @Nullable String name, @Nullable Class<?> type) {
         super();
-        this.annotations = annotations == null ? null : annotations.clone();
+        this.annotations = annotations;
         this.name = name;
         this.type = type;
     }
@@ -61,46 +64,11 @@ public final class BasicParameterFilter
     }
 
     @Override
-    public @NotNull ParameterFilter withAnnotations(@NotNull Class<? extends Annotation>... annotations) {
-        this.annotations = annotations.clone();
-        return this;
-    }
-
-    @Override
-    public @NotNull ParameterFilter clearAnnotations() {
-        this.annotations = null;
-        return this;
-    }
-
-    @Override
-    public @NotNull ParameterFilter ofType(@NotNull Class<?> type) {
-        this.type = type;
-        return this;
-    }
-
-    @Override
-    public @NotNull ParameterFilter clearType() {
-        this.type = null;
-        return this;
-    }
-
-    @Override
-    public @NotNull ParameterFilter withName(@NotNull String name) {
-        this.name = name;
-        return this;
-    }
-
-    @Override
-    public @NotNull ParameterFilter clearName() {
-        this.name = null;
-        return this;
-    }
-
-    @Override
     public boolean test(MParameter<?> parameter) {
         if (this.name != null && !parameter.getName().equals(this.name)) return false;
         if (this.annotations != null && !parameter.getAnnotations()
-                .allMatch(annotation -> FilterUtil.isAnnotationOneOfRequired(this.annotations, annotation)))
+                .allMatch(annotation -> this.annotations.stream()
+                        .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass()))))
             return false;
         return this.type == null || this.type.isAssignableFrom(parameter.getType());
     }
@@ -108,5 +76,45 @@ public final class BasicParameterFilter
     @Override
     public @NotNull ParameterFilter copy() {
         return new BasicParameterFilter(this.annotations, this.name, this.type);
+    }
+
+    @Override
+    public @NotNull ParameterFilter withNoAnnotations() {
+        this.annotations = new ArrayList<>(0);
+        return this;
+    }
+
+    @Override
+    public @NotNull ParameterFilter withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
+        if (this.annotations == null) this.annotations = new ArrayList<>(annotations.size());
+        operation.apply(this.annotations, annotations);
+        return this;
+    }
+
+    @Override
+    public @NotNull ParameterFilter withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
+        return this.withAnnotations(annotations, RewriteOperation.Append);
+    }
+
+    @Override
+    public @NotNull ParameterFilter withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
+        return this.withAnnotations(List.of(annotation), operation);
+    }
+
+    @Override
+    public @NotNull ParameterFilter withAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return this.withAnnotation(annotation, RewriteOperation.Append);
+    }
+
+    @Override
+    public @NotNull <C> ParameterFilter ofType(Class<C> type) {
+        this.type = type;
+        return this;
+    }
+
+    @Override
+    public @NotNull ParameterFilter withName(@NotNull String name) {
+        this.name = name;
+        return this;
     }
 }

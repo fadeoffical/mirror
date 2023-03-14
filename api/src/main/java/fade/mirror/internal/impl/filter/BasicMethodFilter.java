@@ -4,10 +4,13 @@ import fade.mirror.MMethod;
 import fade.mirror.MParameter;
 import fade.mirror.filter.Filter;
 import fade.mirror.filter.MethodFilter;
+import fade.mirror.filter.RewriteOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Basic implementation of {@link MethodFilter}.
@@ -20,12 +23,12 @@ public final class BasicMethodFilter<T>
     /**
      * The parameter types to filter by. If {@code null}, no filtering will be done.
      */
-    private Class<?> @Nullable [] parameterTypes;
+    private @Nullable List<Class<?>> parameterTypes;
 
     /**
      * The annotations to filter by. If {@code null}, no filtering will be done.
      */
-    private Class<? extends Annotation> @Nullable [] annotations;
+    private @Nullable List<Class<? extends Annotation>> annotations;
 
     /**
      * The name to filter by. If {@code null}, no filtering will be done.
@@ -52,9 +55,9 @@ public final class BasicMethodFilter<T>
      * @param name           The name to filter by.
      * @param returnType     The return type to filter by.
      */
-    private BasicMethodFilter(Class<?> @Nullable [] parameterTypes, Class<? extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> returnType) {
-        this.parameterTypes = parameterTypes == null ? null : parameterTypes.clone();
-        this.annotations = annotations == null ? null : annotations.clone();
+    private BasicMethodFilter(@Nullable List<Class<?>> parameterTypes, @Nullable List<Class<? extends Annotation>> annotations, @Nullable String name, @Nullable Class<?> returnType) {
+        this.parameterTypes = parameterTypes;
+        this.annotations = annotations;
         this.name = name;
         this.returnType = returnType;
     }
@@ -70,65 +73,86 @@ public final class BasicMethodFilter<T>
     }
 
     @Override
-    public @NotNull MethodFilter<T> withParameters(@NotNull Class<?>... parameterTypes) {
-        this.parameterTypes = parameterTypes.clone();
-        return this;
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> clearParameters() {
-        this.parameterTypes = null;
-        return this;
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> withAnnotations(@NotNull Class<? extends Annotation>... annotations) {
-        this.annotations = annotations.clone();
-        return this;
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> clearAnnotations() {
-        this.annotations = null;
-        return this;
+    public boolean test(MMethod<T> method) {
+        if (this.name != null && !method.getName().equals(this.name)) return false;
+        if (this.parameterTypes == null && !method.getParameters()
+                .map(MParameter::getType)
+                .allMatch(parameterType -> this.parameterTypes.stream().anyMatch(parameterType::isAssignableFrom)))
+            return false;
+        if (this.annotations == null && !method.getAnnotations()
+                .allMatch(annotation -> this.annotations.stream()
+                        .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass()))))
+            return false;
+        return this.returnType == null || this.returnType.isAssignableFrom(method.getReturnType());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <C> @NotNull MethodFilter<C> withReturnType(@NotNull Class<C> returnType) {
-        this.returnType = returnType;
+    public @NotNull <C> MethodFilter<C> ofType(@NotNull Class<C> type) {
+        this.returnType = type;
         return (MethodFilter<C>) this;
     }
 
     @Override
-    public @NotNull MethodFilter<T> clearReturnType() {
-        this.returnType = null;
+    public @NotNull MethodFilter<T> withNoAnnotations() {
+        this.annotations = new ArrayList<>(0);
         return this;
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
+        if (this.annotations == null) this.annotations = new ArrayList<>(annotations.size());
+        operation.apply(this.annotations, annotations);
+        return this;
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
+        return this.withAnnotations(annotations, RewriteOperation.Append);
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
+        return this.withAnnotations(List.of(annotation), operation);
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return this.withAnnotation(annotation, RewriteOperation.Append);
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withNoParameters() {
+        this.parameterTypes = new ArrayList<>(0);
+        return this;
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withParameters(@NotNull List<Class<?>> parameterTypes, @NotNull RewriteOperation operation) {
+        if (this.parameterTypes == null) this.parameterTypes = new ArrayList<>(parameterTypes.size());
+        operation.apply(this.parameterTypes, parameterTypes);
+        return this;
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withParameters(@NotNull List<Class<?>> parameterTypes) {
+        return this.withParameters(parameterTypes, RewriteOperation.Append);
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withParameter(@NotNull Class<?> parameterType, @NotNull RewriteOperation operation) {
+        return this.withParameters(List.of(parameterType), operation);
+    }
+
+    @Override
+    public @NotNull MethodFilter<T> withParameter(@NotNull Class<?> parameterType) {
+        return this.withParameter(parameterType, RewriteOperation.Append);
     }
 
     @Override
     public @NotNull MethodFilter<T> withName(@NotNull String name) {
         this.name = name;
         return this;
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> clearName() {
-        this.name = null;
-        return this;
-    }
-
-    @Override
-    public boolean test(MMethod<T> method) {
-        if (this.name != null && !method.getName().equals(this.name)) return false;
-        if (this.parameterTypes != null && !method.getParameters()
-                .map(MParameter::getType)
-                .allMatch(parameterType -> FilterUtil.isParameterOneOfRequired(this.parameterTypes, parameterType)))
-            return false;
-        if (this.annotations != null && !method.getAnnotations()
-                .allMatch(annotation -> FilterUtil.isAnnotationOneOfRequired(this.annotations, annotation)))
-            return false;
-        return this.returnType == null || this.returnType.isAssignableFrom(method.getReturnType());
     }
 
     @Override

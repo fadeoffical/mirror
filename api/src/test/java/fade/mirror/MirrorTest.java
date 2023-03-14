@@ -87,7 +87,7 @@ class MirrorTest {
     void testInvokeStaticMethodWithNoParameters() {
         Optional<MMethod<Void>> method = mirror(MockClass.class).getMethod(Filter.forMethods()
                 .withName("mockMethodStatic")
-                .withReturnType(void.class));
+                .ofType(void.class));
 
         assertTrue(method.isPresent(), "'method' should be present");
         method.get().makeAccessible() // this is so intellij shuts the fuck up about the method being unused
@@ -99,8 +99,8 @@ class MirrorTest {
     void testInvokeMethodWithParameters() {
         Optional<MMethod<Void>> method = mirror(MockClass.class).getMethod(Filter.forMethods()
                 .withName("mockMethod")
-                .withParameters() // why the hell was this missing
-                .withReturnType(void.class));
+                .withNoParameters() // why the hell was this missing
+                .ofType(void.class));
 
         assertTrue(method.isPresent(), "'method' should be present");
         MockClass instance = new MockClass();

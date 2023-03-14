@@ -3,10 +3,13 @@ package fade.mirror.internal.impl.filter;
 import fade.mirror.MField;
 import fade.mirror.filter.FieldFilter;
 import fade.mirror.filter.Filter;
+import fade.mirror.filter.RewriteOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Basic implementation of {@link FieldFilter}.
@@ -20,7 +23,7 @@ public final class BasicFieldFilter<T>
     /**
      * The annotations to filter by. If {@code null}, no filtering will be done.
      */
-    private Class<? extends Annotation> @Nullable [] annotations;
+    private @Nullable List<Class<? extends Annotation>> annotations;
 
     /**
      * The name to filter by. If {@code null}, no filtering will be done.
@@ -46,8 +49,8 @@ public final class BasicFieldFilter<T>
      * @param name        The name to filter by.
      * @param type        The type to filter by.
      */
-    private BasicFieldFilter(Class<? extends Annotation> @Nullable [] annotations, @Nullable String name, @Nullable Class<?> type) {
-        this.annotations = annotations == null ? null : annotations.clone();
+    private BasicFieldFilter(@Nullable List<Class<? extends Annotation>> annotations, @Nullable String name, @Nullable Class<?> type) {
+        this.annotations = annotations;
         this.name = name;
         this.type = type;
     }
@@ -63,15 +66,33 @@ public final class BasicFieldFilter<T>
     }
 
     @Override
-    public @NotNull FieldFilter<T> withAnnotations(@NotNull Class<? extends Annotation>... annotations) {
-        this.annotations = annotations.clone();
+    public @NotNull FieldFilter<T> withNoAnnotations() {
+        this.annotations = new ArrayList<>(0);
         return this;
     }
 
     @Override
-    public @NotNull FieldFilter<T> clearAnnotations() {
-        this.annotations = null;
+    public @NotNull FieldFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
+        if (this.annotations == null) this.annotations = new ArrayList<>(annotations.size());
+        operation.apply(this.annotations, annotations);
+        this.annotations.addAll(annotations);
+
         return this;
+    }
+
+    @Override
+    public @NotNull FieldFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
+        return this.withAnnotations(annotations, RewriteOperation.Append);
+    }
+
+    @Override
+    public @NotNull FieldFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
+        return this.withAnnotations(List.of(annotation), operation);
+    }
+
+    @Override
+    public @NotNull FieldFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return this.withAnnotation(annotation, RewriteOperation.Append);
     }
 
     @Override
@@ -82,20 +103,8 @@ public final class BasicFieldFilter<T>
     }
 
     @Override
-    public @NotNull FieldFilter<T> clearType() {
-        this.type = null;
-        return this;
-    }
-
-    @Override
     public @NotNull FieldFilter<T> withName(@NotNull String name) {
         this.name = name;
-        return this;
-    }
-
-    @Override
-    public @NotNull FieldFilter<T> clearName() {
-        this.name = null;
         return this;
     }
 
@@ -103,8 +112,8 @@ public final class BasicFieldFilter<T>
     public boolean test(MField<T> field) {
         if (this.name != null && !field.getName().equals(this.name)) return false;
         if (this.annotations != null && !field.getAnnotations()
-                .allMatch(annotation -> FilterUtil.isAnnotationOneOfRequired(this.annotations, annotation)))
-            return false;
+                .allMatch(annotation -> this.annotations.stream()
+                        .anyMatch(clazz -> clazz.isAssignableFrom(annotation.annotationType())))) return false;
         return this.type == null || this.type.isAssignableFrom(field.getType());
     }
 

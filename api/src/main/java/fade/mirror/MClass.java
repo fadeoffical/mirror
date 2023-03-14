@@ -29,11 +29,21 @@ public sealed interface MClass<T>
 
     @NotNull Optional<MClass<?>> getSuperclass();
 
+    <O extends T> @NotNull T cast(@NotNull O object);
+
+    MClass<T> castSuperclassToThis(@NotNull MClass<?> clazz);
+
+    @NotNull T unsafeCast(@NotNull Object object);
+
     <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter);
 
     <C> @NotNull Optional<MClass<C>> getSuperclassUntilIncludingSelf(@NotNull Predicate<MClass<C>> filter);
 
     boolean hasSuperclass();
+
+    boolean isSuperclassOf(@NotNull MClass<?> clazz);
+
+    boolean isSuperclassOf(@NotNull Class<?> clazz);
 
     /**
      * Returns a stream of all constructors of this class. The stream is ordered by the declaration order of the

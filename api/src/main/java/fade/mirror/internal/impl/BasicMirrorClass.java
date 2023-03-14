@@ -59,6 +59,28 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
+    public <O extends T> @NotNull T cast(@NotNull O object) {
+        if (!this.isSuperclassOf(object.getClass()))
+            // todo: replace with custom exception
+            throw new IllegalArgumentException("The given superclass is not a superclass of this class.");
+
+        // the operation is safe because of the check above, but it's still inherently unsafe
+        return this.unsafeCast(object);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public MClass<T> castSuperclassToThis(@NotNull MClass<?> clazz) {
+        return (MClass<T>) clazz;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull T unsafeCast(@NotNull Object object) {
+        return (T) object;
+    }
+
+    @Override
     public @NotNull <C> Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter) {
         return this.getSuperclassUntil(filter, false);
     }
@@ -89,6 +111,16 @@ public final class BasicMirrorClass<T>
     @Override
     public boolean hasSuperclass() {
         return this.clazz.getSuperclass() != null;
+    }
+
+    @Override
+    public boolean isSuperclassOf(@NotNull MClass<?> clazz) {
+        return clazz.isSuperclassOf(this.clazz);
+    }
+
+    @Override
+    public boolean isSuperclassOf(@NotNull Class<?> clazz) {
+        return clazz.isAssignableFrom(this.clazz);
     }
 
     @Override
