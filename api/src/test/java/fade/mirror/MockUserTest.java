@@ -51,9 +51,7 @@ class MockUserTest {
     void testAccessPackagePrivateField() {
         MockUser user = new MockUser("bob", "bob@example.com");
 
-        MField<String> field = mirror(MockUser.class).getField(Filter.forFields()
-                        .ofType(String.class)
-                        .withName("username"))
+        MField<String> field = mirror(MockUser.class).getField(Filter.forFields().ofType(String.class).withName("username"))
                 .orElseThrow()
                 .bindToObject(user)
                 .requireAccessible();
