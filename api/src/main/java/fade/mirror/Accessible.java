@@ -52,22 +52,6 @@ public interface Accessible<T extends Accessible<T>> {
     boolean isStatic();
 
     /**
-     * Checks if the object is accessible. An object is accessible when
-     * {@link java.lang.reflect.AccessibleObject#canAccess(Object)} returns {@code true} for the wrapped object.
-     *
-     * @return {@code true} if the object is accessible, {@code false} otherwise.
-     */
-    boolean isAccessible();
-
-    /**
-     * Makes the object accessible. This method is equivalent to calling {@link AccessibleObject#trySetAccessible()} on
-     * the wrapped object.
-     *
-     * @return the wrapper.
-     */
-    @NotNull T makeAccessible();
-
-    /**
      * Checks whether the object is accessible, and if it is not, makes it accessible. If the object cannot be made
      * accessible, an exception is thrown.
      *
@@ -92,6 +76,22 @@ public interface Accessible<T extends Accessible<T>> {
         if (!this.isAccessible()) throw exception.get();
         return (T) this;
     }
+
+    /**
+     * Makes the object accessible. This method is equivalent to calling {@link AccessibleObject#trySetAccessible()} on
+     * the wrapped object.
+     *
+     * @return the wrapper.
+     */
+    @NotNull T makeAccessible();
+
+    /**
+     * Checks if the object is accessible. An object is accessible when
+     * {@link java.lang.reflect.AccessibleObject#canAccess(Object)} returns {@code true} for the wrapped object.
+     *
+     * @return {@code true} if the object is accessible, {@code false} otherwise.
+     */
+    boolean isAccessible();
 
     /**
      * Checks if the object is accessible, and if it is, performs the given action on the object.

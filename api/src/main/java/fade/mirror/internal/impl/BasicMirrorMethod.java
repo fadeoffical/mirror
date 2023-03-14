@@ -37,100 +37,6 @@ public final class BasicMirrorMethod<T>
         this.method = method;
     }
 
-    /**
-     * Creates a new {@link BasicMirrorMethod} instance. This method should not be used directly. Instead, use
-     * {@link Mirror#mirror(Method)}.
-     *
-     * @param method The method to create the mirror from.
-     * @param <T>    The return type of the method.
-     * @return The created mirror.
-     */
-    public static <T> BasicMirrorMethod<T> from(@NotNull Method method) {
-        return new BasicMirrorMethod<>(method);
-    }
-
-    @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(this.method.getModifiers());
-    }
-
-    @Override
-    public boolean isProtected() {
-        return Modifier.isProtected(this.method.getModifiers());
-    }
-
-    @Override
-    public boolean isPackagePrivate() {
-        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
-    }
-
-    @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(this.method.getModifiers());
-    }
-
-    @Override
-    public boolean isStatic() {
-        return Modifier.isStatic(this.method.getModifiers());
-    }
-
-    @Override
-    public boolean isAccessible() {
-        if (this.isStatic()) return this.method.canAccess(null);
-        if (this.object == null) throw UnboundException.from("Method is not static and no object is bound.");
-
-        return this.method.canAccess(this.object);
-    }
-
-    @Override
-    public @NotNull MMethod<T> makeAccessible() {
-        if (!this.isAccessible())
-            this.method.setAccessible(true);
-        return this;
-    }
-
-    @Override
-    public @NotNull Stream<Annotation> getAnnotations() {
-        return Arrays.stream(this.method.getAnnotations());
-    }
-
-    @Override
-    public @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations(filter).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
-        return Arrays.stream(annotations).anyMatch(this::isAnnotatedWith);
-//        Set<Class<? extends Annotation>> annotationSet = new HashSet<>(Arrays.asList(annotations));
-//        return this.getAnnotations().anyMatch(annotation -> annotationSet.contains(annotation.annotationType()));
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
-    }
-
-    @Override
-    public @NotNull <C extends Annotation> Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return this.getAnnotations().filter(type::isInstance).map(type::cast).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotated() {
-        return this.getAnnotationCount() > 0;
-    }
-
-    @Override
-    public int getAnnotationCount() {
-        return this.method.getAnnotations().length;
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable T invoke(@Nullable Object... arguments) {
@@ -183,6 +89,116 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
+    public @NotNull MClass<?> getDeclaringClass() {
+        return BasicMirrorClass.from(this.method.getDeclaringClass());
+    }
+
+    @Override
+    public @NotNull MMethod<T> copy() {
+        return BasicMirrorMethod.from(this.method);
+    }
+
+    /**
+     * Creates a new {@link BasicMirrorMethod} instance. This method should not be used directly. Instead, use
+     * {@link Mirror#mirror(Method)}.
+     *
+     * @param method The method to create the mirror from.
+     * @param <T>    The return type of the method.
+     * @return The created mirror.
+     */
+    public static <T> BasicMirrorMethod<T> from(@NotNull Method method) {
+        return new BasicMirrorMethod<>(method);
+    }
+
+    @Override
+    public @NotNull MMethod<T> bindToObject(@NotNull Object object) {
+        this.object = object;
+        return this;
+    }
+
+    @Override
+    public boolean isPublic() {
+        return Modifier.isPublic(this.method.getModifiers());
+    }
+
+    @Override
+    public boolean isProtected() {
+        return Modifier.isProtected(this.method.getModifiers());
+    }
+
+    @Override
+    public boolean isPackagePrivate() {
+        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
+    }
+
+    @Override
+    public boolean isPrivate() {
+        return Modifier.isPrivate(this.method.getModifiers());
+    }
+
+    @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(this.method.getModifiers());
+    }
+
+    @Override
+    public boolean isAccessible() {
+        if (this.isStatic()) return this.method.canAccess(null);
+        if (this.object == null) throw UnboundException.from("Method is not static and no object is bound.");
+
+        return this.method.canAccess(this.object);
+    }
+
+    @Override
+    public @NotNull MMethod<T> makeAccessible() {
+        if (!this.isAccessible()) this.method.setAccessible(true);
+        return this;
+    }
+
+    @Override
+    public @NotNull Stream<Annotation> getAnnotations() {
+        return Arrays.stream(this.method.getAnnotations());
+    }
+
+    @Override
+    public @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
+        return this.getAnnotations().filter(filter);
+    }
+
+    @Override
+    public @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
+        return this.getAnnotations(filter).findFirst();
+    }
+
+    @Override
+    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
+        return Arrays.stream(annotations).anyMatch(this::isAnnotatedWith);
+//        Set<Class<? extends Annotation>> annotationSet = new HashSet<>(Arrays.asList(annotations));
+//        return this.getAnnotations().anyMatch(annotation -> annotationSet.contains(annotation.annotationType()));
+    }
+
+    @Override
+    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
+        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
+    }
+
+    @Override
+    public @NotNull <C extends Annotation> Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
+        return this.getAnnotations().filter(type::isInstance).map(type::cast).findFirst();
+    }
+
+    @Override
+    public boolean isAnnotated() {
+        return this.getAnnotationCount() > 0;
+    }
+
+    @Override
+    public int getAnnotationCount() {
+        return this.method.getAnnotations().length;
+    }
+
+
+    @Override
     public @NotNull Stream<MParameter<?>> getParameters() {
         return Arrays.stream(this.method.getParameters()).map(BasicMirrorParameter::from);
     }
@@ -228,21 +244,5 @@ public final class BasicMirrorMethod<T>
     @Override
     public int getParameterCount() {
         return this.method.getParameterCount();
-    }
-
-    @Override
-    public @NotNull MMethod<T> copy() {
-        return BasicMirrorMethod.from(this.method);
-    }
-
-    @Override
-    public @NotNull MMethod<T> bindToObject(@NotNull Object object) {
-        this.object = object;
-        return this;
-    }
-
-    @Override
-    public @NotNull MClass<?> getDeclaringClass() {
-        return BasicMirrorClass.from(this.method.getDeclaringClass());
     }
 }

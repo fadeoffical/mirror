@@ -49,44 +49,6 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isProtected() {
-        return Modifier.isProtected(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isPackagePrivate() {
-        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
-    }
-
-    @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isStatic() {
-        return Modifier.isStatic(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isAccessible() {
-        return this.constructor.canAccess(null);
-    }
-
-    @Override
-    public @NotNull MConstructor<T> makeAccessible() {
-        if (!this.isAccessible()) {
-            this.constructor.trySetAccessible();
-        }
-        return this;
-    }
-
-    @Override
     public @NotNull T invoke(@Nullable Object... arguments) {
         this.requireAccessible(); // todo: is the check below necessary?
 
@@ -135,13 +97,51 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
+    public @NotNull MClass<T> getDeclaringClass() {
+        return BasicMirrorClass.from(this.constructor.getDeclaringClass());
+    }
+
+    @Override
     public @NotNull Constructor<T> getRawConstructor() {
         return this.constructor;
     }
 
     @Override
-    public @NotNull MClass<T> getDeclaringClass() {
-        return BasicMirrorClass.from(this.constructor.getDeclaringClass());
+    public boolean isPublic() {
+        return Modifier.isPublic(this.constructor.getModifiers());
+    }
+
+    @Override
+    public boolean isProtected() {
+        return Modifier.isProtected(this.constructor.getModifiers());
+    }
+
+    @Override
+    public boolean isPackagePrivate() {
+        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
+    }
+
+    @Override
+    public boolean isPrivate() {
+        return Modifier.isPrivate(this.constructor.getModifiers());
+    }
+
+    @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(this.constructor.getModifiers());
+    }
+
+    @Override
+    public boolean isAccessible() {
+        return this.constructor.canAccess(null);
+    }
+
+    @Override
+    public @NotNull MConstructor<T> makeAccessible() {
+        if (!this.isAccessible()) {
+            this.constructor.trySetAccessible();
+        }
+        return this;
     }
 
     @Override

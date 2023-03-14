@@ -5,9 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public enum RewriteOperation {
-    Append,
-    Prepend,
-    Replace;
+    Append, Prepend, Replace;
 
     public <T> void apply(@NotNull List<T> list, @NotNull List<T> other) {
         switch (this) {

@@ -42,6 +42,17 @@ public final class BasicMirrorParameter<T>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Class<T> getType() {
+        return (Class<T>) this.parameter.getType();
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return this.parameter.getName();
+    }
+
+    @Override
     public @NotNull Stream<Annotation> getAnnotations() {
         return Arrays.stream(this.parameter.getAnnotations());
     }
@@ -81,16 +92,5 @@ public final class BasicMirrorParameter<T>
     @Override
     public int getAnnotationCount() {
         return this.parameter.getAnnotations().length;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Class<T> getType() {
-        return (Class<T>) this.parameter.getType();
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return this.parameter.getName();
     }
 }

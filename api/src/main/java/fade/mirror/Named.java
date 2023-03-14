@@ -11,13 +11,6 @@ import org.jetbrains.annotations.NotNull;
 public interface Named {
 
     /**
-     * Returns the name of the reflection object.
-     *
-     * @return the name.
-     */
-    @NotNull String getName();
-
-    /**
      * Checks if the name of the reflection object is equal to the given name.
      *
      * @param name the name to check.
@@ -26,4 +19,11 @@ public interface Named {
     default boolean isNameEqualTo(@NotNull String name) {
         return this.getName().equals(name);
     }
+
+    /**
+     * Returns the name of the reflection object.
+     *
+     * @return the name.
+     */
+    @NotNull String getName();
 }

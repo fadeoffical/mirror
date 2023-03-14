@@ -27,7 +27,6 @@ public final class BasicMirrorField<T>
     private final Field field;
     private Object object;
 
-
     private BasicMirrorField(@NotNull Field field) {
         this.field = field;
     }
@@ -42,6 +41,92 @@ public final class BasicMirrorField<T>
      */
     public static <T> @NotNull BasicMirrorField<T> from(@NotNull Field field) {
         return new BasicMirrorField<>(field);
+    }
+
+    @Override
+    public @NotNull MClass<?> getDeclaringClass() {
+        return BasicMirrorClass.from(this.field.getDeclaringClass());
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return this.field.getName();
+    }
+
+    @Override
+    public @NotNull MField<T> bindToObject(@NotNull Object object) {
+        this.object = object;
+        return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Class<T> getType() {
+        return (Class<T>) this.field.getType();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Optional<T> getValue() {
+        this.requireAccessible();
+        try {
+            return Optional.ofNullable((T) this.field.get(this.object == null ? null : this.object));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public @NotNull MField<T> setValue(@Nullable T value) {
+        this.requireAccessible();
+        try {
+            this.field.set(this.object == null ? null : this.object, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Optional<T> getValue(@NotNull Object object) {
+        this.requireAccessible();
+        try {
+            return Optional.ofNullable((T) this.field.get(object));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public @NotNull MField<T> setValue(@NotNull Object object, @Nullable T value) {
+        this.requireAccessible();
+        try {
+            this.field.set(object, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public boolean hasValue() {
+        this.requireAccessible();
+        try {
+            return this.field.get(this.object == null ? null : this.object) != null;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean hasValue(@NotNull Object object) {
+        this.requireAccessible();
+        try {
+            return this.field.get(object) != null;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -123,89 +208,4 @@ public final class BasicMirrorField<T>
         return this.field.getAnnotations().length;
     }
 
-    @Override
-    public @NotNull MClass<?> getDeclaringClass() {
-        return BasicMirrorClass.from(this.field.getDeclaringClass());
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return this.field.getName();
-    }
-
-    @Override
-    public @NotNull MField<T> bindToObject(@NotNull Object object) {
-        this.object = object;
-        return this;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Class<T> getType() {
-        return (Class<T>) this.field.getType();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Optional<T> getValue() {
-        this.requireAccessible();
-        try {
-            return Optional.ofNullable((T) this.field.get(this.object == null ? null : this.object));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Optional<T> getValue(@NotNull Object object) {
-        this.requireAccessible();
-        try {
-            return Optional.ofNullable((T) this.field.get(object));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public @NotNull MField<T> setValue(@Nullable T value) {
-        this.requireAccessible();
-        try {
-            this.field.set(this.object == null ? null : this.object, value);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        return this;
-    }
-
-    @Override
-    public @NotNull MField<T> setValue(@NotNull Object object, @Nullable T value) {
-        this.requireAccessible();
-        try {
-            this.field.set(object, value);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        return this;
-    }
-
-    @Override
-    public boolean hasValue() {
-        this.requireAccessible();
-        try {
-            return this.field.get(this.object == null ? null : this.object) != null;
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public boolean hasValue(@NotNull Object object) {
-        this.requireAccessible();
-        try {
-            return this.field.get(object) != null;
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

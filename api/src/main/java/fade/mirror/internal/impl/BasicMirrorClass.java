@@ -35,18 +35,6 @@ public final class BasicMirrorClass<T>
         this.clazz = clazz;
     }
 
-    /**
-     * Creates a new {@link BasicMirrorClass} instance. This method should not be used directly. Use
-     * {@link Mirror#mirror(Class)} instead.
-     *
-     * @param clazz The class.
-     * @param <T>   The type of the class.
-     * @return The new {@link BasicMirrorClass} instance.
-     */
-    public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
-        return new BasicMirrorClass<>(clazz);
-    }
-
     @Override
     public @NotNull Class<T> getRawClass() {
         return this.clazz;
@@ -88,24 +76,6 @@ public final class BasicMirrorClass<T>
     @Override
     public @NotNull <C> Optional<MClass<C>> getSuperclassUntilIncludingSelf(@NotNull Predicate<MClass<C>> filter) {
         return this.getSuperclassUntil(filter, true);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter, boolean includeSelf) {
-        Optional<MClass<?>> optionalClass = includeSelf ? Optional.of(this) : this.getSuperclass();
-
-        do {
-            if (optionalClass.isEmpty())
-                return Optional.empty();
-
-            MClass<C> clazz = (MClass<C>) optionalClass.get();
-
-            if (filter.test(clazz))
-                return Optional.of(clazz);
-
-            optionalClass = clazz.getSuperclass();
-        } while (optionalClass.isPresent() && optionalClass.get().hasSuperclass());
-        return Optional.empty();
     }
 
     @Override
@@ -233,6 +203,39 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
+    public @NotNull String getName() {
+        return this.clazz.getName();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter, boolean includeSelf) {
+        Optional<MClass<?>> optionalClass = includeSelf ? Optional.of(this) : this.getSuperclass();
+
+        do {
+            if (optionalClass.isEmpty()) return Optional.empty();
+
+            MClass<C> clazz = (MClass<C>) optionalClass.get();
+
+            if (filter.test(clazz)) return Optional.of(clazz);
+
+            optionalClass = clazz.getSuperclass();
+        } while (optionalClass.isPresent() && optionalClass.get().hasSuperclass());
+        return Optional.empty();
+    }
+
+    /**
+     * Creates a new {@link BasicMirrorClass} instance. This method should not be used directly. Use
+     * {@link Mirror#mirror(Class)} instead.
+     *
+     * @param clazz The class.
+     * @param <T>   The type of the class.
+     * @return The new {@link BasicMirrorClass} instance.
+     */
+    public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
+        return new BasicMirrorClass<>(clazz);
+    }
+
+    @Override
     public @NotNull Stream<Annotation> getAnnotations() {
         return Arrays.stream(this.clazz.getAnnotations());
     }
@@ -275,10 +278,5 @@ public final class BasicMirrorClass<T>
     @Override
     public int getAnnotationCount() {
         return this.clazz.getAnnotations().length;
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return this.clazz.getName();
     }
 }
