@@ -27,23 +27,27 @@ public sealed interface MClass<T>
      */
     @NotNull Class<T> getRawClass();
 
+    @NotNull Stream<MClass<?>> getSuperclasses();
+
+    @NotNull Stream<MClass<?>> getSuperclasses(@NotNull MClass.IncludeSelf includeSelf);
+
     @NotNull Optional<MClass<?>> getSuperclass();
 
-    <O extends T> @NotNull T cast(@NotNull O object);
-
-    MClass<T> castSuperclassToThis(@NotNull MClass<?> clazz);
-
-    @NotNull T unsafeCast(@NotNull Object object);
+    @NotNull Optional<MClass<T>> getSuperclassAsThis();
 
     <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter);
 
-    <C> @NotNull Optional<MClass<C>> getSuperclassUntilIncludingSelf(@NotNull Predicate<MClass<C>> filter);
+    <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter, @NotNull MClass.IncludeSelf includeSuperclasses);
 
     boolean hasSuperclass();
 
     boolean isSuperclassOf(@NotNull MClass<?> clazz);
 
     boolean isSuperclassOf(@NotNull Class<?> clazz);
+
+    <O extends T> @NotNull T cast(@NotNull O object);
+
+    @NotNull T unsafeCast(@NotNull Object object);
 
     /**
      * Returns a stream of all constructors of this class. The stream is ordered by the declaration order of the
@@ -117,6 +121,8 @@ public sealed interface MClass<T>
      */
     @NotNull Stream<MField<?>> getFields();
 
+    @NotNull Stream<MField<?>> getFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns a stream of all fields of this class that match the given filter. The stream is ordered by the
      * declaration order of the fields in the source code. The stream may be empty if the class has no fields that match
@@ -128,6 +134,8 @@ public sealed interface MClass<T>
      */
     <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter);
 
+    <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns an optional containing the first field of this class that matches the given filter. The optional may be
      * empty if the class has no fields that match the filter. The optional will never be {@code null}.
@@ -138,6 +146,8 @@ public sealed interface MClass<T>
      */
     <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter);
 
+    <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns whether this class has any fields.
      *
@@ -145,12 +155,16 @@ public sealed interface MClass<T>
      */
     boolean hasFields();
 
+    boolean hasFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns the number of fields of this class.
      *
      * @return the number of fields.
      */
     int getFieldCount();
+
+    int getFieldCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns a stream of all raw fields of this class. The stream is ordered by the declaration order of the fields in
@@ -163,6 +177,8 @@ public sealed interface MClass<T>
      */
     @NotNull Stream<Field> getRawFields();
 
+    @NotNull Stream<Field> getRawFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns a stream of all methods of this class. The stream is ordered by the declaration order of the methods in
      * the source code. The stream may be empty if the class has no methods. The stream will never be {@code null}.
@@ -170,6 +186,8 @@ public sealed interface MClass<T>
      * @return a method stream.
      */
     @NotNull Stream<MMethod<?>> getMethods();
+
+    @NotNull Stream<MMethod<?>> getMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns a stream of all methods of this class that match the given filter. The stream is ordered by the
@@ -181,6 +199,8 @@ public sealed interface MClass<T>
      */
     <F> @NotNull Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter);
 
+    <F> @NotNull Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns an optional containing the first method of this class that matches the given filter. The optional may be
      * empty if the class has no methods that match the filter. The optional will never be {@code null}.
@@ -190,6 +210,8 @@ public sealed interface MClass<T>
      */
     <F> @NotNull Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter);
 
+    <F> @NotNull Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns whether this class has any methods.
      *
@@ -197,12 +219,16 @@ public sealed interface MClass<T>
      */
     boolean hasMethods();
 
+    boolean hasMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns the number of methods of this class.
      *
      * @return the number of methods.
      */
     int getMethodCount();
+
+    int getMethodCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns a stream of all raw methods of this class. The stream is ordered by the declaration order of the methods
@@ -214,6 +240,8 @@ public sealed interface MClass<T>
      * @return a raw method stream.
      */
     @NotNull Stream<Method> getRawMethods();
+
+    @NotNull Stream<Method> getRawMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns the simple name of this class. The simple name is the name of the class without the package name.
@@ -246,4 +274,26 @@ public sealed interface MClass<T>
      */
     @Override
     @NotNull String getName();
+
+    enum IncludeSuperclasses implements MClass.Include {
+        Yes, No;
+
+        @Override
+        public boolean include() {
+            return this == Yes;
+        }
+    }
+
+    enum IncludeSelf implements MClass.Include {
+        Yes, No;
+
+        @Override
+        public boolean include() {
+            return this == Yes;
+        }
+    }
+
+    interface Include {
+        boolean include();
+    }
 }
