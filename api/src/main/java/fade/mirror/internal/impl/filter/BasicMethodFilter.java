@@ -75,11 +75,11 @@ public final class BasicMethodFilter<T>
     @Override
     public boolean test(MMethod<T> method) {
         if (this.name != null && !method.getName().equals(this.name)) return false;
-        if (this.parameterTypes == null && !method.getParameters()
+        if (this.parameterTypes != null && !method.getParameters()
                 .map(MParameter::getType)
                 .allMatch(parameterType -> this.parameterTypes.stream().anyMatch(parameterType::isAssignableFrom)))
             return false;
-        if (this.annotations == null && !method.getAnnotations()
+        if (this.annotations != null && !method.getAnnotations()
                 .allMatch(annotation -> this.annotations.stream()
                         .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass()))))
             return false;
