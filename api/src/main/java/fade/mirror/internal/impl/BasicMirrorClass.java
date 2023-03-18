@@ -219,7 +219,8 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull Stream<Field> getRawFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        return Arrays.stream(includeSuperclasses.include() ? this.clazz.getFields() : this.clazz.getDeclaredFields());
+        if (includeSuperclasses.include()) return this.getSuperclasses().flatMap(MClass::getRawFields);
+        return Arrays.stream(this.clazz.getDeclaredFields());
     }
 
     @Override
@@ -285,11 +286,8 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull Stream<Method> getRawMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        return Arrays.stream(
-            includeSuperclasses.include()
-                ? this.clazz.getMethods()
-                : this.clazz.getDeclaredMethods()
-        );
+        if (includeSuperclasses.include()) return this.getSuperclasses().flatMap(MClass::getRawMethods);
+        return Arrays.stream(this.clazz.getDeclaredMethods());
     }
 
     @Override
