@@ -25,7 +25,7 @@ public interface MField<T>
     /**
      * Gets the value of the field in the given instance.
      *
-     * @param object the instance.
+     * @param instance the instance.
      * @return the field value.
      */
     @NotNull Optional<T> getValue(@Nullable Object instance);
