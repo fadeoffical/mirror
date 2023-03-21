@@ -50,11 +50,11 @@ public interface MField<T>
     /**
      * Sets the value of the field in the given instance.
      *
-     * @param object the instance.
+     * @param instance the instance.
      * @param value  the new value.
      * @return this field.
      */
-    @NotNull MField<T> setValue(@Nullable Object object, @Nullable T value);
+    @NotNull MField<T> setValue(@Nullable Object instance, @Nullable T value);
 
     /**
      * Sets the value of the field.

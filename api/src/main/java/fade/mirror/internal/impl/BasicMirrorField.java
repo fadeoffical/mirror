@@ -74,10 +74,10 @@ public final class BasicMirrorField<T>
     }
 
     @Override
-    public @NotNull MField<T> setValue(@Nullable Object object, @Nullable T value) {
-        this.requireAccessible();
+    public @NotNull MField<T> setValue(@Nullable Object instance, @Nullable T value) {
+        this.requireAccessible(instance);
         try {
-            this.field.set(object, value);
+            this.field.set(instance, value);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
