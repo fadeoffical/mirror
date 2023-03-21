@@ -7,7 +7,6 @@ import fade.mirror.Mirror;
 import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
 import fade.mirror.exception.MismatchedArgumentsException;
-import fade.mirror.exception.UnboundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +30,6 @@ public final class BasicMirrorMethod<T>
         implements MMethod<T> {
 
     private final Method method;
-    private Object object;
 
     private BasicMirrorMethod(@NotNull Method method) {
         this.method = method;
@@ -39,10 +37,10 @@ public final class BasicMirrorMethod<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @Nullable T invoke(@Nullable Object... arguments) {
-        this.requireAccessible(); // todo: is the check below necessary?
+    public @Nullable T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments) {
+        this.requireAccessible(instance); // todo: is the check below necessary?
 
-        if (!this.isAccessible())
+        if (!this.isAccessible(instance))
             throw InaccessibleException.from("Could not invoke method '%s' from '%s'; it is inaccessible", this.getName(), this.getDeclaringClass()
                     .getName());
 
@@ -51,9 +49,11 @@ public final class BasicMirrorMethod<T>
                     .getName(), Arrays.toString(arguments), Arrays.toString(this.method.getParameterTypes()));
 
         try {
-            if (this.isStatic()) return (T) this.method.invoke(null, arguments);
-            if (this.object == null) throw UnboundException.from("Method is not static and no object is bound.");
-            return (T) this.method.invoke(this.object, arguments);
+            if (this.isStatic() && instance != null)
+                throw InvocationException.from("Could not invoke method '%s' from '%s'; it is static but an instance was provided", this.getName(), this.getDeclaringClass()
+                        .getName());
+
+            return (T) this.method.invoke(instance, arguments);
         } catch (IllegalAccessException | InvocationTargetException exception) {
             throw InvocationException.from(exception, "Could not invoke method '%s' from '%s'", this.getName(), this.getDeclaringClass()
                     .getName());
@@ -111,12 +111,6 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public @NotNull MMethod<T> bindToObject(@NotNull Object object) {
-        this.object = object;
-        return this;
-    }
-
-    @Override
     public boolean isPublic() {
         return Modifier.isPublic(this.method.getModifiers());
     }
@@ -142,17 +136,16 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public boolean isAccessible() {
-        if (this.isStatic()) return this.method.canAccess(null);
-        if (this.object == null) throw UnboundException.from("Method is not static and no object is bound.");
+    public @NotNull MMethod<T> makeAccessible(@Nullable Object instance) {
+        if (!this.isAccessible(instance))
+            this.method.setAccessible(true);
 
-        return this.method.canAccess(this.object);
+        return this;
     }
 
     @Override
-    public @NotNull MMethod<T> makeAccessible() {
-        if (!this.isAccessible()) this.method.setAccessible(true);
-        return this;
+    public boolean isAccessible(@Nullable Object instance) {
+        return this.method.canAccess(instance);
     }
 
     @Override
@@ -173,8 +166,6 @@ public final class BasicMirrorMethod<T>
     @Override
     public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
         return Arrays.stream(annotations).anyMatch(this::isAnnotatedWith);
-//        Set<Class<? extends Annotation>> annotationSet = new HashSet<>(Arrays.asList(annotations));
-//        return this.getAnnotations().anyMatch(annotation -> annotationSet.contains(annotation.annotationType()));
     }
 
     @Override

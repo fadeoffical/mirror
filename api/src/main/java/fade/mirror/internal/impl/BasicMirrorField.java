@@ -3,7 +3,6 @@ package fade.mirror.internal.impl;
 import fade.mirror.MClass;
 import fade.mirror.MField;
 import fade.mirror.Mirror;
-import fade.mirror.exception.UnboundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +24,6 @@ public final class BasicMirrorField<T>
         implements MField<T> {
 
     private final Field field;
-    private Object object;
 
     private BasicMirrorField(@NotNull Field field) {
         this.field = field;
@@ -54,12 +52,6 @@ public final class BasicMirrorField<T>
     }
 
     @Override
-    public @NotNull MField<T> bindToObject(@NotNull Object object) {
-        this.object = object;
-        return this;
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public @NotNull Class<T> getType() {
         return (Class<T>) this.field.getType();
@@ -67,39 +59,17 @@ public final class BasicMirrorField<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Optional<T> getValue() {
-        this.requireAccessible();
+    public @NotNull Optional<T> getValue(@Nullable Object instance) {
+        this.requireAccessible(instance);
         try {
-            return Optional.ofNullable((T) this.field.get(this.object == null ? null : this.object));
+            return Optional.ofNullable((T) this.field.get(instance));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public @NotNull MField<T> setValue(@Nullable T value) {
-        this.requireAccessible();
-        try {
-            this.field.set(this.object == null ? null : this.object, value);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        return this;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Optional<T> getValue(@NotNull Object object) {
-        this.requireAccessible();
-        try {
-            return Optional.ofNullable((T) this.field.get(object));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public @NotNull MField<T> setValue(@NotNull Object object, @Nullable T value) {
+    public @NotNull MField<T> setValue(@Nullable Object object, @Nullable T value) {
         this.requireAccessible();
         try {
             this.field.set(object, value);
@@ -110,17 +80,7 @@ public final class BasicMirrorField<T>
     }
 
     @Override
-    public boolean hasValue() {
-        this.requireAccessible();
-        try {
-            return this.field.get(this.object == null ? null : this.object) != null;
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public boolean hasValue(@NotNull Object object) {
+    public boolean hasValue(@Nullable Object object) {
         this.requireAccessible();
         try {
             return this.field.get(object) != null;
@@ -155,17 +115,16 @@ public final class BasicMirrorField<T>
     }
 
     @Override
-    public boolean isAccessible() {
-        if (this.isStatic()) return this.field.canAccess(null);
-        if (this.object == null) throw UnboundException.from("Method is not static and no object is bound.");
+    public @NotNull MField<T> makeAccessible(@Nullable Object instance) {
+        if (!this.isAccessible(instance))
+            this.field.trySetAccessible();
 
-        return this.field.canAccess(this.object);
+        return this;
     }
 
     @Override
-    public @NotNull MField<T> makeAccessible() {
-        if (!this.isAccessible()) this.field.trySetAccessible();
-        return this;
+    public boolean isAccessible(@Nullable Object instance) {
+        return this.field.canAccess(instance);
     }
 
     @Override

@@ -10,13 +10,16 @@ import org.jetbrains.annotations.NotNull;
 public final class InvocationException
         extends MirrorException {
 
-    /**
-     * Constructs a new {@link InvocationException} with the specified detail message.
-     *
-     * @param message the detail message
-     */
+    private InvocationException(String message) {
+        super(message);
+    }
+
     private InvocationException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public static InvocationException from(@NotNull String message, @NotNull Object... format) {
+        return new InvocationException(message.formatted(format));
     }
 
     /**

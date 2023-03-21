@@ -2,6 +2,7 @@ package fade.mirror;
 
 import fade.mirror.exception.InaccessibleException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.AccessibleObject;
 import java.util.function.Consumer;
@@ -57,25 +58,18 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return the wrapper.
      */
-    @NotNull
-    default T requireAccessible() {
-        return this.requireAccessible(() -> InaccessibleException.from("Object is not accessible"));
-    }
-
-    /**
-     * Checks whether the object is accessible, and if it is not, makes it accessible. If the object cannot be made
-     * accessible, the exception returned by the supplier is thrown.
-     *
-     * @param exception the supplier of the exception to throw.
-     * @return the wrapper.
-     */
-    @NotNull
     @SuppressWarnings("unchecked")
-    default T requireAccessible(@NotNull Supplier<? extends RuntimeException> exception) {
-        this.makeAccessible();
-        if (!this.isAccessible()) throw exception.get();
+    default @NotNull T requireAccessible() {
+        this.makeAccessible().throwIfInaccessible(() -> InaccessibleException.from("Object is not accessible"));
         return (T) this;
     }
+
+    default void throwIfInaccessible(@NotNull Supplier<? extends RuntimeException> exception) {
+        if (!this.isAccessible()) throw exception.get();
+    }
+
+
+    @NotNull T makeAccessible(@Nullable Object instance);
 
     /**
      * Makes the object accessible. This method is equivalent to calling {@link AccessibleObject#trySetAccessible()} on
@@ -83,7 +77,10 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return the wrapper.
      */
-    @NotNull T makeAccessible();
+    default @NotNull T makeAccessible() {
+        return this.makeAccessible(null);
+    }
+
 
     /**
      * Checks if the object is accessible. An object is accessible when
@@ -91,7 +88,22 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return {@code true} if the object is accessible, {@code false} otherwise.
      */
-    boolean isAccessible();
+    default boolean isAccessible() {
+        return this.isAccessible(null);
+    }
+
+    boolean isAccessible(@Nullable Object instance);
+
+    @SuppressWarnings("unchecked")
+    default @NotNull T requireAccessible(@Nullable Object instance) {
+        this.makeAccessible(instance)
+                .throwIfInaccessible(instance, () -> InaccessibleException.from("Object is not accessible"));
+        return (T) this;
+    }
+
+    default void throwIfInaccessible(@Nullable Object instance, @NotNull Supplier<? extends RuntimeException> exception) {
+        if (!this.isAccessible(instance)) throw exception.get();
+    }
 
     /**
      * Checks if the object is accessible, and if it is, performs the given action on the object.

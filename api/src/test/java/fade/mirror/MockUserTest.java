@@ -40,7 +40,7 @@ class MockUserTest {
         MockUser user = mirror(MockUser.class).getConstructorWithTypes(String.class, String.class)
                 .orElseThrow()
                 .requireAccessible()
-                .invoke("bob", "bob@example.com");
+                .invokeWithoutInstance("bob", "bob@example.com");
 
         assertNotNull(user, "'user' is null");
         assertEquals("bob", user.getUsername(), "'username' did not match");
@@ -54,8 +54,7 @@ class MockUserTest {
 
         MField<String> field = mirror(MockUser.class).getField(Filter.forFields().ofType(String.class).withName("username"))
                 .orElseThrow()
-                .bindToObject(user)
-                .requireAccessible();
+                .requireAccessible(user);
 
         assertNotNull(field, "'field' is null");
 

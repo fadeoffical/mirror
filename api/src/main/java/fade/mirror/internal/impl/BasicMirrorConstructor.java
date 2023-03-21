@@ -49,7 +49,12 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public @NotNull T invoke(@Nullable Object... arguments) {
+    public @Nullable T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments) {
+        return null;
+    }
+
+    @Override
+    public @NotNull T invokeWithoutInstance(@Nullable Object... arguments) {
         this.requireAccessible(); // todo: is the check below necessary?
 
         if (!this.isAccessible())
@@ -132,16 +137,19 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public boolean isAccessible() {
-        return this.constructor.canAccess(null);
-    }
-
-    @Override
-    public @NotNull MConstructor<T> makeAccessible() {
-        if (!this.isAccessible()) {
+    public @NotNull MConstructor<T> makeAccessible(@Nullable Object instance) {
+        if (!this.isAccessible(instance)) {
             this.constructor.trySetAccessible();
         }
         return this;
+    }
+
+    @Override
+    public boolean isAccessible(@Nullable Object instance) {
+        if (instance != null)
+            throw new IllegalArgumentException("Cannot check accessibility of a constructor with an instance; use #isAccessible() instead");
+
+        return this.constructor.canAccess(null);
     }
 
     @Override

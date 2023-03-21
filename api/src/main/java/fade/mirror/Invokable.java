@@ -11,13 +11,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface Invokable<T> {
 
+    @Nullable T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments);
+
     /**
      * Invokes the method or constructor represented by this object.
      *
      * @param arguments the arguments to the method or constructor.
      * @return the result of the method or constructor.
      */
-    @Nullable T invoke(@Nullable Object... arguments);
+    default @Nullable T invokeWithoutInstance(@Nullable Object... arguments) {
+        return this.invokeWithInstance(null, arguments);
+    }
 
     /**
      * Tests whether the method or constructor represented by this object can be invoked with the given arguments.
