@@ -2,6 +2,7 @@ package fade.mirror;
 
 import fade.mirror.filter.Filter;
 import fade.mirror.mock.MockUser;
+import fade.mirror.mock.MockUserSubClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -61,5 +62,18 @@ class MockUserTest {
         Optional<String> value = field.getValue(user);
         assertTrue(value.isPresent(), "'value' is absent");
         assertEquals("bob", value.get(), "'username' did not match");
+    }
+
+    @Test
+    @DisplayName("access inherited fields")
+    void testInheritedFields() {
+        Optional<MField<String>> roleField = mirror(MockUserSubClass.class)
+            .getField(Filter.forFields().withName("role").ofType(String.class), MClass.IncludeSuperclasses.Yes);
+
+        Optional<MField<String>> usernameField = mirror(MockUserSubClass.class)
+            .getField(Filter.forFields().withName("username").ofType(String.class), MClass.IncludeSuperclasses.Yes);
+
+        assertTrue(roleField.isPresent(), "'roleField' is absent"); // test own field
+        assertTrue(usernameField.isPresent(), "'usernameField' is absent"); // test inherited field
     }
 }
