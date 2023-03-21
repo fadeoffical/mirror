@@ -7,7 +7,7 @@
  */
 
 group = "fade"
-version = "0.0.10"
+version = "0.0.11"
 description = "Reflections made easy!"
 
 if (System.getenv().containsKey("CI_GITHUB")) {
@@ -25,8 +25,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains:annotations:23.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
+    implementation("org.jetbrains:annotations:24.0.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 }
 
 java {
