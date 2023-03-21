@@ -40,7 +40,7 @@ class MockUserTest {
         MockUser user = mirror(MockUser.class).getConstructorWithTypes(String.class, String.class)
                 .orElseThrow()
                 .requireAccessible()
-                .invokeWithoutInstance("bob", "bob@example.com");
+                .invokeWithNoInstance("bob", "bob@example.com");
 
         assertNotNull(user, "'user' is null");
         assertEquals("bob", user.getUsername(), "'username' did not match");

@@ -91,7 +91,7 @@ class MirrorTest {
 
         assertTrue(method.isPresent(), "'method' should be present");
         method.get().makeAccessible() // this is so intellij shuts the fuck up about the method being unused
-                .invokeWithoutInstance();
+                .invokeWithNoInstance();
     }
 
     @Test

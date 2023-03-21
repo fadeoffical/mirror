@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,5 +18,6 @@ public interface MParameter<T>
      *
      * @return the type.
      */
+    @Contract(pure = true)
     @NotNull Class<T> getType();
 }

@@ -1,6 +1,7 @@
 package fade.mirror;
 
 import fade.mirror.internal.impl.BasicMirrorConstructor;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -20,6 +21,7 @@ public sealed interface MConstructor<T>
      *
      * @return the raw constructor.
      */
+    @Contract(pure = true)
     @NotNull Constructor<T> getRawConstructor();
 
 }

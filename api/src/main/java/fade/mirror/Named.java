@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,6 +17,7 @@ public interface Named {
      * @param name the name to check.
      * @return {@code true} if the name is equal, {@code false} otherwise.
      */
+    @Contract(pure = true)
     default boolean isNameEqualTo(@NotNull String name) {
         return this.getName().equals(name);
     }
@@ -25,5 +27,6 @@ public interface Named {
      *
      * @return the name.
      */
+    @Contract(pure = true)
     @NotNull String getName();
 }

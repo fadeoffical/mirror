@@ -3,6 +3,8 @@ package fade.mirror.internal.impl;
 import fade.mirror.MClass;
 import fade.mirror.MField;
 import fade.mirror.Mirror;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +27,7 @@ public final class BasicMirrorField<T>
 
     private final Field field;
 
+    @ApiStatus.Internal
     private BasicMirrorField(@NotNull Field field) {
         this.field = field;
     }
@@ -37,6 +40,8 @@ public final class BasicMirrorField<T>
      * @param <T>   The type of the field.
      * @return The created mirror.
      */
+    @ApiStatus.Internal
+    @Contract(value = "_ -> new", pure = true)
     public static <T> @NotNull BasicMirrorField<T> from(@NotNull Field field) {
         return new BasicMirrorField<>(field);
     }

@@ -1,6 +1,7 @@
 package fade.mirror;
 
 import fade.mirror.exception.InaccessibleException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return {@code true} if the object is public, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean isPublic();
 
     /**
@@ -29,6 +31,7 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return {@code true} if the object is protected, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean isProtected();
 
     /**
@@ -36,6 +39,7 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return {@code true} if the object is package-private, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean isPackagePrivate();
 
     /**
@@ -43,6 +47,7 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return {@code true} if the object is private, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean isPrivate();
 
     /**
@@ -50,6 +55,7 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return {@code true} if the object is static, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean isStatic();
 
     /**
@@ -64,12 +70,10 @@ public interface Accessible<T extends Accessible<T>> {
         return (T) this;
     }
 
+    @Contract(pure = true)
     default void throwIfInaccessible(@NotNull Supplier<? extends RuntimeException> exception) {
         if (!this.isAccessible()) throw exception.get();
     }
-
-
-    @NotNull T makeAccessible(@Nullable Object instance);
 
     /**
      * Makes the object accessible. This method is equivalent to calling {@link AccessibleObject#trySetAccessible()} on
@@ -81,17 +85,20 @@ public interface Accessible<T extends Accessible<T>> {
         return this.makeAccessible(null);
     }
 
-
     /**
      * Checks if the object is accessible. An object is accessible when
      * {@link java.lang.reflect.AccessibleObject#canAccess(Object)} returns {@code true} for the wrapped object.
      *
      * @return {@code true} if the object is accessible, {@code false} otherwise.
      */
+    @Contract(pure = true)
     default boolean isAccessible() {
         return this.isAccessible(null);
     }
 
+    @NotNull T makeAccessible(@Nullable Object instance);
+
+    @Contract(pure = true)
     boolean isAccessible(@Nullable Object instance);
 
     @SuppressWarnings("unchecked")
@@ -101,6 +108,7 @@ public interface Accessible<T extends Accessible<T>> {
         return (T) this;
     }
 
+    @Contract(pure = true)
     default void throwIfInaccessible(@Nullable Object instance, @NotNull Supplier<? extends RuntimeException> exception) {
         if (!this.isAccessible(instance)) throw exception.get();
     }
@@ -112,6 +120,7 @@ public interface Accessible<T extends Accessible<T>> {
      * @return the wrapper.
      */
     @NotNull
+    @Contract(pure = true)
     @SuppressWarnings("unchecked")
     default T ifAccessible(@NotNull Consumer<T> consumer) {
         if (this.isAccessible()) consumer.accept((T) this);
@@ -125,6 +134,7 @@ public interface Accessible<T extends Accessible<T>> {
      * @return the wrapper.
      */
     @NotNull
+    @Contract(pure = true)
     @SuppressWarnings("unchecked")
     default T ifNotAccessible(@NotNull Consumer<T> consumer) {
         if (!this.isAccessible()) consumer.accept((T) this);

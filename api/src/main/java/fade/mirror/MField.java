@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +21,7 @@ public interface MField<T>
      *
      * @return the field type.
      */
+    @Contract(pure = true)
     @NotNull Class<T> getType();
 
     /**
@@ -28,6 +30,7 @@ public interface MField<T>
      * @param instance the instance.
      * @return the field value.
      */
+    @Contract(pure = true)
     @NotNull Optional<T> getValue(@Nullable Object instance);
 
     /**
@@ -39,6 +42,7 @@ public interface MField<T>
      *
      * @return the field value.
      */
+    @Contract(pure = true)
     default @NotNull Optional<T> getValue() {
         return this.getValue(null);
     }
@@ -72,6 +76,7 @@ public interface MField<T>
      * @param object the instance.
      * @return {@code true} if the field has a value, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean hasValue(@Nullable Object object);
 
     /**
@@ -79,6 +84,7 @@ public interface MField<T>
      *
      * @return {@code true} if the field has a value, {@code false} otherwise.
      */
+    @Contract(pure = true)
     default boolean hasValue() {
         return this.hasValue(null);
     }

@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,10 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Copyable<T> {
 
-    /**
-     * Copies the mirror wrapper.
-     *
-     * @return the copied mirror wrapper
-     */
+
+    @Contract(pure = true)
     @NotNull T copy();
 }

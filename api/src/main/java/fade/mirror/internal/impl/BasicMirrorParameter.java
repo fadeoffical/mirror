@@ -1,6 +1,8 @@
 package fade.mirror.internal.impl;
 
 import fade.mirror.MParameter;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -26,6 +28,7 @@ public final class BasicMirrorParameter<T>
      *
      * @param parameter The parameter to create the mirror parameter from.
      */
+    @ApiStatus.Internal
     private BasicMirrorParameter(Parameter parameter) {
         this.parameter = parameter;
     }
@@ -37,6 +40,8 @@ public final class BasicMirrorParameter<T>
      * @param parameter The parameter to create the mirror parameter from.
      * @return The created mirror parameter.
      */
+    @ApiStatus.Internal
+    @Contract(value = "_ -> new", pure = true)
     public static @NotNull BasicMirrorParameter<?> from(@NotNull Parameter parameter) {
         return new BasicMirrorParameter<>(parameter);
     }

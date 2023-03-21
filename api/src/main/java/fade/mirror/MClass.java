@@ -1,6 +1,7 @@
 package fade.mirror;
 
 import fade.mirror.internal.impl.BasicMirrorClass;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -25,28 +26,40 @@ public sealed interface MClass<T>
      *
      * @return The raw class.
      */
+    @Contract(pure = true)
     @NotNull Class<T> getRawClass();
 
+    @Contract(pure = true)
     @NotNull Stream<MClass<?>> getSuperclasses();
 
+    @Contract(pure = true)
     @NotNull Stream<MClass<?>> getSuperclasses(@NotNull MClass.IncludeSelf includeSelf);
 
+    @Contract(pure = true)
     @NotNull Optional<MClass<?>> getSuperclass();
 
+    @Contract(pure = true)
     @NotNull Optional<MClass<T>> getSuperclassAsThis();
 
+    @Contract(pure = true)
     <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter);
 
+    @Contract(pure = true)
     <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter, @NotNull MClass.IncludeSelf includeSuperclasses);
 
+    @Contract(pure = true)
     boolean hasSuperclass();
 
+    @Contract(pure = true)
     boolean isSuperclassOf(@NotNull MClass<?> clazz);
 
+    @Contract(pure = true)
     boolean isSuperclassOf(@NotNull Class<?> clazz);
 
+    @Contract(pure = true)
     <O extends T> @NotNull T cast(@NotNull O object);
 
+    @Contract(pure = true)
     @NotNull T unsafeCast(@NotNull Object object);
 
     /**
@@ -56,6 +69,7 @@ public sealed interface MClass<T>
      *
      * @return a constructor stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<MConstructor<T>> getConstructors();
 
     /**
@@ -66,6 +80,7 @@ public sealed interface MClass<T>
      * @param filter the filter to apply.
      * @return a constructor stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<MConstructor<T>> getConstructors(@NotNull Predicate<MConstructor<T>> filter);
 
     /**
@@ -74,6 +89,7 @@ public sealed interface MClass<T>
      *
      * @return the first constructor that matches the filter.
      */
+    @Contract(pure = true)
     @NotNull Optional<MConstructor<T>> getConstructor();
 
     /**
@@ -83,6 +99,7 @@ public sealed interface MClass<T>
      * @param filter the filter to apply.
      * @return the first constructor that matches the filter.
      */
+    @Contract(pure = true)
     @NotNull Optional<MConstructor<T>> getConstructor(@NotNull Predicate<MConstructor<T>> filter);
 
     /**
@@ -92,6 +109,7 @@ public sealed interface MClass<T>
      * @param types the parameter types.
      * @return the constructor with the given parameter types.
      */
+    @Contract(pure = true)
     @NotNull Optional<MConstructor<T>> getConstructorWithTypes(@NotNull Class<?>... types);
 
     /**
@@ -99,6 +117,7 @@ public sealed interface MClass<T>
      *
      * @return the number of constructors.
      */
+    @Contract(pure = true)
     int getConstructorCount();
 
     /**
@@ -111,6 +130,7 @@ public sealed interface MClass<T>
      *
      * @return a raw constructor stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<Constructor<T>> getRawConstructors();
 
     /**
@@ -119,8 +139,10 @@ public sealed interface MClass<T>
      *
      * @return a field stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<MField<?>> getFields();
 
+    @Contract(pure = true)
     @NotNull Stream<MField<?>> getFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -132,8 +154,10 @@ public sealed interface MClass<T>
      * @param <F>    the type of the field.
      * @return a field stream.
      */
+    @Contract(pure = true)
     <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter);
 
+    @Contract(pure = true)
     <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -144,8 +168,10 @@ public sealed interface MClass<T>
      * @param <F>    the type of the field.
      * @return the first field that matches the filter.
      */
+    @Contract(pure = true)
     <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter);
 
+    @Contract(pure = true)
     <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -153,8 +179,10 @@ public sealed interface MClass<T>
      *
      * @return {@code true} if this class has any fields, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean hasFields();
 
+    @Contract(pure = true)
     boolean hasFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -162,8 +190,10 @@ public sealed interface MClass<T>
      *
      * @return the number of fields.
      */
+    @Contract(pure = true)
     int getFieldCount();
 
+    @Contract(pure = true)
     int getFieldCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -175,8 +205,10 @@ public sealed interface MClass<T>
      *
      * @return a raw field stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<Field> getRawFields();
 
+    @Contract(pure = true)
     @NotNull Stream<Field> getRawFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -185,8 +217,10 @@ public sealed interface MClass<T>
      *
      * @return a method stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<MMethod<?>> getMethods();
 
+    @Contract(pure = true)
     @NotNull Stream<MMethod<?>> getMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -197,8 +231,10 @@ public sealed interface MClass<T>
      * @param filter the filter to apply.
      * @return a method stream.
      */
+    @Contract(pure = true)
     <F> @NotNull Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter);
 
+    @Contract(pure = true)
     <F> @NotNull Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -208,8 +244,10 @@ public sealed interface MClass<T>
      * @param filter the filter to apply.
      * @return the first method that matches the filter.
      */
+    @Contract(pure = true)
     <F> @NotNull Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter);
 
+    @Contract(pure = true)
     <F> @NotNull Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -217,8 +255,10 @@ public sealed interface MClass<T>
      *
      * @return {@code true} if this class has any methods, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean hasMethods();
 
+    @Contract(pure = true)
     boolean hasMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -226,8 +266,10 @@ public sealed interface MClass<T>
      *
      * @return the number of methods.
      */
+    @Contract(pure = true)
     int getMethodCount();
 
+    @Contract(pure = true)
     int getMethodCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -239,8 +281,10 @@ public sealed interface MClass<T>
      *
      * @return a raw method stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<Method> getRawMethods();
 
+    @Contract(pure = true)
     @NotNull Stream<Method> getRawMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
@@ -251,6 +295,7 @@ public sealed interface MClass<T>
      *
      * @return the simple name of this class.
      */
+    @Contract(pure = true)
     @NotNull String getSimpleName();
 
     /**
@@ -261,6 +306,7 @@ public sealed interface MClass<T>
      *
      * @return the canonical name of this class.
      */
+    @Contract(pure = true)
     @NotNull String getCanonicalName();
 
     /**
@@ -272,28 +318,35 @@ public sealed interface MClass<T>
      *
      * @return the name of this class.
      */
+    @Contract(pure = true)
     @Override
     @NotNull String getName();
 
-    enum IncludeSuperclasses implements MClass.Include {
+    enum IncludeSuperclasses
+            implements MClass.Include {
         Yes, No;
 
         @Override
+        @Contract(pure = true)
         public boolean include() {
             return this == Yes;
         }
     }
 
-    enum IncludeSelf implements MClass.Include {
+    enum IncludeSelf
+            implements MClass.Include {
         Yes, No;
 
         @Override
+        @Contract(pure = true)
         public boolean include() {
             return this == Yes;
         }
     }
 
     interface Include {
+
+        @Contract(pure = true)
         boolean include();
     }
 }

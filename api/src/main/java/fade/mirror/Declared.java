@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,5 +15,6 @@ public interface Declared {
      *
      * @return the declaring class.
      */
+    @Contract(pure = true)
     @NotNull MClass<?> getDeclaringClass();
 }

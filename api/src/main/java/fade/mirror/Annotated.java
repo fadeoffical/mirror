@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -21,6 +22,7 @@ public interface Annotated {
      *
      * @return all annotations of this element
      */
+    @Contract(pure = true)
     @NotNull Stream<Annotation> getAnnotations();
 
     /**
@@ -31,6 +33,7 @@ public interface Annotated {
      * @param filter the filter to apply.
      * @return all annotations of this element that match the filter.
      */
+    @Contract(pure = true)
     @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter);
 
     /**
@@ -40,6 +43,7 @@ public interface Annotated {
      * @param filter the filter to apply.
      * @return the first annotation of this element that matches the filter.
      */
+    @Contract(pure = true)
     @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter);
 
     /**
@@ -51,6 +55,7 @@ public interface Annotated {
      * @param annotations the annotations to check for.
      * @return {@code true} if this element is annotated with all the given annotations, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations);
 
     /**
@@ -60,6 +65,7 @@ public interface Annotated {
      * @param annotation the annotation to check for.
      * @return {@code true} if this element is annotated with the given annotation, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation);
 
     /**
@@ -70,6 +76,7 @@ public interface Annotated {
      * @param <T>  the type of the annotation.
      * @return the first annotation of this element that matches the type.
      */
+    @Contract(pure = true)
     <T extends Annotation> @NotNull Optional<T> getAnnotationOfType(@NotNull Class<T> type);
 
     /**
@@ -77,6 +84,7 @@ public interface Annotated {
      *
      * @return {@code true} if this element has any annotations, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean isAnnotated();
 
     /**
@@ -84,5 +92,6 @@ public interface Annotated {
      *
      * @return the number of annotations of this element.
      */
+    @Contract(pure = true)
     int getAnnotationCount();
 }

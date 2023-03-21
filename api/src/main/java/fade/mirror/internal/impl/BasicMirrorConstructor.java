@@ -7,6 +7,8 @@ import fade.mirror.Mirror;
 import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
 import fade.mirror.exception.MismatchedArgumentsException;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,24 +46,21 @@ public final class BasicMirrorConstructor<T>
      * @param <T>         The type of the constructor's declaring class.
      * @return The created mirror.
      */
-    public static <T> MConstructor<T> from(@NotNull Constructor<T> constructor) {
+    @ApiStatus.Internal
+    @Contract(value = "_ -> new", pure = true)
+    public static <T> @NotNull MConstructor<T> from(@NotNull Constructor<T> constructor) {
         return new BasicMirrorConstructor<>(constructor);
     }
 
     @Override
-    public @Nullable T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments) {
-        return null;
-    }
-
-    @Override
-    public @NotNull T invokeWithoutInstance(@Nullable Object... arguments) {
+    public @NotNull T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments) {
         this.requireAccessible(); // todo: is the check below necessary?
 
         if (!this.isAccessible())
             throw InaccessibleException.from("Could not invoke constructor '%s' from '%s'; it is inaccessible", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
                     .getName());
 
-        if (!this.invokableWith(arguments))
+        if (!this.isInvokableWith(arguments))
             throw MismatchedArgumentsException.from("Mismatched argument types for constructor '%s' from '%s'; provided=%s", this.getPrettyConstructorRepresentation(), this.getDeclaringClass()
                     .getName(), Arrays.toString(arguments));
 
@@ -74,7 +73,7 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public boolean invokableWith(@Nullable Object... arguments) {
+    public boolean isInvokableWith(@Nullable Object... arguments) {
         Class<?>[] argumentTypes = Arrays.stream(arguments)
                 .map(object -> object == null ? null : object.getClass())
                 .toArray(Class<?>[]::new);

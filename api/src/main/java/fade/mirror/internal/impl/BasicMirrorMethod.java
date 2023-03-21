@@ -7,6 +7,8 @@ import fade.mirror.Mirror;
 import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
 import fade.mirror.exception.MismatchedArgumentsException;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +33,7 @@ public final class BasicMirrorMethod<T>
 
     private final Method method;
 
+    @ApiStatus.Internal
     private BasicMirrorMethod(@NotNull Method method) {
         this.method = method;
     }
@@ -44,7 +47,7 @@ public final class BasicMirrorMethod<T>
             throw InaccessibleException.from("Could not invoke method '%s' from '%s'; it is inaccessible", this.getName(), this.getDeclaringClass()
                     .getName());
 
-        if (!this.invokableWith(arguments))
+        if (!this.isInvokableWith(arguments))
             throw MismatchedArgumentsException.from("Mismatched argument types for method '%s' from '%s'; provided=%s, expected=%s", this.getName(), this.getDeclaringClass()
                     .getName(), Arrays.toString(arguments), Arrays.toString(this.method.getParameterTypes()));
 
@@ -61,7 +64,7 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public boolean invokableWith(@Nullable Object... arguments) {
+    public boolean isInvokableWith(@Nullable Object... arguments) {
         Class<?>[] argumentTypes = Arrays.stream(arguments)
                 .map(object -> object == null ? null : object.getClass())
                 .toArray(Class<?>[]::new);
@@ -106,7 +109,10 @@ public final class BasicMirrorMethod<T>
      * @param <T>    The return type of the method.
      * @return The created mirror.
      */
-    public static <T> BasicMirrorMethod<T> from(@NotNull Method method) {
+
+    @ApiStatus.Internal
+    @Contract(value = "_ -> new", pure = true)
+    public static <T> @NotNull BasicMirrorMethod<T> from(@NotNull Method method) {
         return new BasicMirrorMethod<>(method);
     }
 

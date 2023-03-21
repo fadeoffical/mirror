@@ -1,6 +1,8 @@
 package fade.mirror.internal.impl;
 
 import fade.mirror.*;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -29,6 +31,7 @@ public final class BasicMirrorClass<T>
      *
      * @param clazz The class.
      */
+    @ApiStatus.Internal
     private BasicMirrorClass(@NotNull Class<T> clazz) {
         this.clazz = clazz;
     }
@@ -70,22 +73,6 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
-    public <O extends T> @NotNull T cast(@NotNull O object) {
-        if (!this.isSuperclassOf(object.getClass()))
-            // todo: replace with custom exception
-            throw new IllegalArgumentException("The given superclass is not a superclass of this class.");
-
-        // the operation is safe because of the check above, but it's still inherently unsafe
-        return this.unsafeCast(object);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull T unsafeCast(@NotNull Object object) {
-        return (T) object;
-    }
-
-    @Override
     public @NotNull <C> Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter) {
         return this.getSuperclassUntil(filter, IncludeSelf.No);
     }
@@ -117,6 +104,22 @@ public final class BasicMirrorClass<T>
     @Override
     public boolean isSuperclassOf(@NotNull Class<?> clazz) {
         return clazz.isAssignableFrom(this.clazz);
+    }
+
+    @Override
+    public <O extends T> @NotNull T cast(@NotNull O object) {
+        if (!this.isSuperclassOf(object.getClass()))
+            // todo: replace with custom exception
+            throw new IllegalArgumentException("The given superclass is not a superclass of this class.");
+
+        // the operation is safe because of the check above, but it's still inherently unsafe
+        return this.unsafeCast(object);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull T unsafeCast(@NotNull Object object) {
+        return (T) object;
     }
 
     @Override
@@ -175,7 +178,8 @@ public final class BasicMirrorClass<T>
     @Override
     @SuppressWarnings("unchecked")
     public @NotNull <F> Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).flatMap(clazz -> clazz.getFields(filter));
+        if (includeSuperclasses.include())
+            return this.getSuperclasses(IncludeSelf.Yes).flatMap(clazz -> clazz.getFields(filter));
         return this.getFields().map(field -> (MField<F>) field).filter(filter);
     }
 
@@ -208,7 +212,8 @@ public final class BasicMirrorClass<T>
 
     @Override
     public int getFieldCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).mapToInt(MClass::getFieldCount).sum();
+        if (includeSuperclasses.include())
+            return this.getSuperclasses(IncludeSelf.Yes).mapToInt(MClass::getFieldCount).sum();
         return this.clazz.getDeclaredFields().length;
     }
 
@@ -242,7 +247,8 @@ public final class BasicMirrorClass<T>
     @Override
     @SuppressWarnings("unchecked")
     public @NotNull <F> Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).flatMap(clazz -> clazz.getMethods(filter));
+        if (includeSuperclasses.include())
+            return this.getSuperclasses(IncludeSelf.Yes).flatMap(clazz -> clazz.getMethods(filter));
         return this.getMethods().map(method -> (MMethod<F>) method).filter(filter);
     }
 
@@ -275,7 +281,8 @@ public final class BasicMirrorClass<T>
 
     @Override
     public int getMethodCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).mapToInt(MClass::getMethodCount).sum();
+        if (includeSuperclasses.include())
+            return this.getSuperclasses(IncludeSelf.Yes).mapToInt(MClass::getMethodCount).sum();
         return this.clazz.getDeclaredMethods().length;
     }
 
@@ -313,6 +320,8 @@ public final class BasicMirrorClass<T>
      * @param <T>   The type of the class.
      * @return The new {@link BasicMirrorClass} instance.
      */
+    @ApiStatus.Internal
+    @Contract(value = "_ -> new", pure = true)
     public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
         return new BasicMirrorClass<>(clazz);
     }

@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -26,6 +27,7 @@ public sealed interface Parameterized
      *
      * @return a parameter stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<MParameter<?>> getParameters();
 
     /**
@@ -36,6 +38,7 @@ public sealed interface Parameterized
      * @param filter the filter to apply to the parameters.
      * @return a parameter stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter);
 
     /**
@@ -46,6 +49,7 @@ public sealed interface Parameterized
      * @param filter the filter to apply to the parameters.
      * @return the first parameter that matches the filter.
      */
+    @Contract(pure = true)
     @NotNull Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter);
 
     /**
@@ -57,6 +61,7 @@ public sealed interface Parameterized
      * @param <T>  the type of the parameters.
      * @return a parameter stream.
      */
+    @Contract(pure = true)
     <T> @NotNull Stream<MParameter<T>> getParametersOfType(@NotNull Class<T> type);
 
     /**
@@ -68,6 +73,7 @@ public sealed interface Parameterized
      * @param <T>  the type of the parameter.
      * @return the first parameter of the given type.
      */
+    @Contract(pure = true)
     <T> @NotNull Optional<MParameter<T>> getParameterOfType(@NotNull Class<T> type);
 
     /**
@@ -78,6 +84,7 @@ public sealed interface Parameterized
      * @param annotations the annotations of the parameters.
      * @return a parameter stream.
      */
+    @Contract(pure = true)
     @NotNull Stream<MParameter<?>> getParametersWithAnnotations(@NotNull Class<? extends Annotation>[] annotations);
 
     /**
@@ -88,6 +95,7 @@ public sealed interface Parameterized
      * @param annotations the annotations of the parameter.
      * @return the first parameter with the given annotations.
      */
+    @Contract(pure = true)
     @NotNull Optional<MParameter<?>> getParameterWithAnnotations(@NotNull Class<? extends Annotation>[] annotations);
 
     /**
@@ -95,6 +103,7 @@ public sealed interface Parameterized
      *
      * @return {@code true} if this method or constructor has parameters, {@code false} otherwise.
      */
+    @Contract(pure = true)
     boolean hasParameters();
 
     /**
@@ -102,5 +111,6 @@ public sealed interface Parameterized
      *
      * @return the number of parameters.
      */
+    @Contract(pure = true)
     int getParameterCount();
 }
