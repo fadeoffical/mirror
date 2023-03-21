@@ -346,10 +346,9 @@ public final class BasicMirrorClass<T>
     @Override
     public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
         return this.getAnnotations()
-                .map(Annotation::annotationType)
-                .filter(type::equals)
+                .filter(annotation -> annotation.annotationType().equals(type))
                 .map(type::cast)
-                .findFirst(); // todo: check if this works
+                .findFirst();
     }
 
     @Override

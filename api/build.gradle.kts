@@ -7,7 +7,7 @@
  */
 
 group = "fade"
-version = "0.0.9"
+version = "0.0.10"
 description = "Reflections made easy!"
 
 if (System.getenv().containsKey("CI_GITHUB")) {
