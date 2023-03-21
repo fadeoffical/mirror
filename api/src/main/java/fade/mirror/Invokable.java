@@ -20,7 +20,6 @@ public interface Invokable<T> {
      * @param arguments the arguments to the method or constructor.
      * @return the result of the method or constructor.
      */
-    @Contract(pure = true)
     default @Nullable T invokeWithNoInstance(@Nullable Object... arguments) {
         return this.invokeWithInstance(null, arguments);
     }
