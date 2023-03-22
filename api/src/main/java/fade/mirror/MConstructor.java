@@ -16,6 +16,8 @@ public sealed interface MConstructor<T>
         extends Invokable<T>, Accessible<MConstructor<T>>, Parameterized, Annotated, Declared
         permits BasicMirrorConstructor {
 
+    @NotNull Class<T> getReturnType();
+
     /**
      * Returns the raw constructor. This is the constructor that is represented by this object.
      *

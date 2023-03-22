@@ -1,9 +1,6 @@
 package fade.mirror.internal.impl;
 
-import fade.mirror.MClass;
-import fade.mirror.MMethod;
-import fade.mirror.MParameter;
-import fade.mirror.Mirror;
+import fade.mirror.*;
 import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
 import fade.mirror.exception.MismatchedArgumentsException;
@@ -17,7 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -64,20 +60,11 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public boolean isInvokableWith(@Nullable Object... arguments) {
-        Class<?>[] argumentTypes = Arrays.stream(arguments)
-                .map(object -> object == null ? null : object.getClass())
-                .toArray(Class<?>[]::new);
-        Class<?>[] parameterTypes = this.method.getParameterTypes();
-
-        // copied and adapted from Arrays#equals
-        if (parameterTypes == argumentTypes) return true;
-        if (parameterTypes.length != argumentTypes.length) return false;
-        for (int i = 0; i < parameterTypes.length; i++) {
-            if (argumentTypes[i] != null && !Objects.equals(parameterTypes[i], argumentTypes[i])) return false;
-        }
-
-        return true;
+    @SuppressWarnings("unchecked")
+    public @NotNull Stream<MException<? extends Throwable>> getExceptions() {
+        return Arrays.stream(this.method.getExceptionTypes())
+                .map(method -> (Class<? extends Throwable>) method)
+                .map(BasicMirrorException::from);
     }
 
     @Override

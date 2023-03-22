@@ -1,9 +1,6 @@
 package fade.mirror.internal.impl;
 
-import fade.mirror.MClass;
-import fade.mirror.MConstructor;
-import fade.mirror.MParameter;
-import fade.mirror.Mirror;
+import fade.mirror.*;
 import fade.mirror.exception.InaccessibleException;
 import fade.mirror.exception.InvocationException;
 import fade.mirror.exception.MismatchedArgumentsException;
@@ -17,7 +14,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -73,25 +69,11 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public boolean isInvokableWith(@Nullable Object... arguments) {
-        Class<?>[] argumentTypes = Arrays.stream(arguments)
-                .map(object -> object == null ? null : object.getClass())
-                .toArray(Class<?>[]::new);
-        Class<?>[] parameterTypes = this.constructor.getParameterTypes();
-
-        // copied and adapted from Arrays#equals
-        if (parameterTypes == argumentTypes) return true;
-        if (parameterTypes.length != argumentTypes.length) return false;
-        for (int i = 0; i < parameterTypes.length; i++) {
-            if (argumentTypes[i] != null && !Objects.equals(parameterTypes[i], argumentTypes[i])) return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public @NotNull Class<T> getReturnType() {
-        return this.getDeclaringClass().getRawClass();
+    @SuppressWarnings("unchecked")
+    public @NotNull Stream<MException<? extends Throwable>> getExceptions() {
+        return Arrays.stream(this.constructor.getExceptionTypes())
+                .map(exception -> (Class<? extends Throwable>) exception)
+                .map(BasicMirrorException::from);
     }
 
     private @NotNull String getPrettyConstructorRepresentation() {
@@ -103,6 +85,11 @@ public final class BasicMirrorConstructor<T>
     @Override
     public @NotNull MClass<T> getDeclaringClass() {
         return BasicMirrorClass.from(this.constructor.getDeclaringClass());
+    }
+
+    @Override
+    public @NotNull Class<T> getReturnType() {
+        return this.getDeclaringClass().getRawClass();
     }
 
     @Override
