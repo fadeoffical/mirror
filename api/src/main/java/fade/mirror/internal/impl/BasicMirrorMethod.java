@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -74,7 +73,7 @@ public final class BasicMirrorMethod<T>
         if (parameterTypes == argumentTypes) return true;
         if (parameterTypes.length != argumentTypes.length) return false;
         for (int i = 0; i < parameterTypes.length; i++) {
-            if (argumentTypes[i] != null && !Objects.equals(parameterTypes[i], argumentTypes[i])) return false;
+            if (argumentTypes[i] != null && !parameterTypes[i].isAssignableFrom(argumentTypes[i])) return false;
         }
 
         return true;

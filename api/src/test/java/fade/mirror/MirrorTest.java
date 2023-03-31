@@ -2,6 +2,8 @@ package fade.mirror;
 
 import fade.mirror.filter.Filter;
 import fade.mirror.mock.MockClass;
+import fade.mirror.mock.MockUser;
+import fade.mirror.mock.MockUserSubClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -106,5 +108,14 @@ class MirrorTest {
 
         MockClass instance = new MockClass();
         method.get().invokeWithInstance(instance);
+    }
+
+    @Test
+    @DisplayName("allow subclasses of restricted types to be used")
+    void testWithParametersAllowsSubclasses() {
+        mirror(MockClass.class).getMethod(Filter.forMethods()
+            .withName("mockMethodWithClassParameter")
+            .withParameter(MockUser.class)
+        ).ifPresent(m -> m.invokeWithNoInstance(new MockUserSubClass()));
     }
 }
