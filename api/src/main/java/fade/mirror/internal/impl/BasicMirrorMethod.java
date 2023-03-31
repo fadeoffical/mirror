@@ -63,26 +63,14 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public boolean isInvokableWith(@Nullable Object... arguments) {
-        Class<?>[] argumentTypes = Arrays.stream(arguments)
-                .map(object -> object == null ? null : object.getClass())
-                .toArray(Class<?>[]::new);
-        Class<?>[] parameterTypes = this.method.getParameterTypes();
-
-        // copied and adapted from Arrays#equals
-        if (parameterTypes == argumentTypes) return true;
-        if (parameterTypes.length != argumentTypes.length) return false;
-        for (int i = 0; i < parameterTypes.length; i++) {
-            if (argumentTypes[i] != null && !parameterTypes[i].isAssignableFrom(argumentTypes[i])) return false;
-        }
-
-        return true;
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public @NotNull Class<T> getReturnType() {
         return (Class<T>) this.method.getReturnType();
+    }
+
+    @Override
+    public Class<?>[] getParameterTypes() {
+        return this.method.getParameterTypes();
     }
 
     @Override
