@@ -82,17 +82,6 @@ public final class BasicMirrorClass<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Optional<MClass<T>> getSuperclassAsThis() {
-        return this.getSuperclass().map(clazz -> (MClass<T>) clazz);
-    }
-
-    @Override
-    public @NotNull <C> Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter) {
-        return this.getSuperclassUntil(filter, IncludeSelf.No);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
     public @NotNull <C> Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter, @NotNull MClass.IncludeSelf includeSelf) {
         Optional<MClass<?>> optionalClass = includeSelf.include() ? Optional.of(this) : this.getSuperclass();
 
@@ -122,18 +111,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public <O extends T> @NotNull T cast(@NotNull O object) {
-        if (!this.isSuperclassOf(object.getClass()))
-            // todo: replace with custom exception
-            throw new IllegalArgumentException("The given superclass is not a superclass of this class.");
-
-        // the operation is safe because of the check above, but it's still inherently unsafe
-        return this.unsafeCast(object);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull T unsafeCast(@NotNull Object object) {
-        return (T) object;
+        return this.clazz.cast(object);
     }
 
     @Override
@@ -142,21 +120,7 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
-    public @NotNull Stream<MConstructor<T>> getConstructors(@NotNull Predicate<MConstructor<T>> filter) {
-        return this.getConstructors().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<MConstructor<T>> getConstructor() {
-        return this.getConstructors().findFirst();
-    }
-
-    @Override
-    public @NotNull Optional<MConstructor<T>> getConstructor(@NotNull Predicate<MConstructor<T>> filter) {
-        return this.getConstructors(filter).findFirst();
-    }
-
-    @Override
+    @Deprecated
     public @NotNull Optional<MConstructor<T>> getConstructorWithTypes(@NotNull Class<?>... types) {
         return this.getConstructor(constructor -> Arrays.equals(constructor.getRawConstructor()
                 .getParameterTypes(), types));
@@ -174,19 +138,11 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
-    public @NotNull Stream<MField<?>> getFields() {
-        return this.getRawFields().map(BasicMirrorField::from);
-    }
-
-    @Override
     public @NotNull Stream<MField<?>> getFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).flatMap(MClass::getFields);
-        return this.getFields();
-    }
+        if (includeSuperclasses.include())
+            return this.getSuperclasses(IncludeSelf.Yes).flatMap(MClass::getFields);
 
-    @Override
-    public <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter) {
-        return this.getFields(filter, IncludeSuperclasses.No);
+        return this.getRawFields().map(BasicMirrorField::from);
     }
 
     @Override
@@ -198,30 +154,15 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
-    public <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter) {
-        return this.getField(filter, IncludeSuperclasses.No);
-    }
-
-    @Override
     public @NotNull <F> Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
         if (includeSuperclasses.include()) return this.getFields(filter, includeSuperclasses).findFirst();
         return this.getFields(filter).findFirst();
     }
 
     @Override
-    public boolean hasFields() {
-        return this.hasFields(IncludeSuperclasses.No);
-    }
-
-    @Override
     public boolean hasFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
         if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).anyMatch(MClass::hasFields);
         return this.getFieldCount() > 0;
-    }
-
-    @Override
-    public int getFieldCount() {
-        return this.getFieldCount(IncludeSuperclasses.No);
     }
 
     @Override
