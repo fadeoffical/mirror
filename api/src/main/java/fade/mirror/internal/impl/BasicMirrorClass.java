@@ -36,6 +36,20 @@ public final class BasicMirrorClass<T>
         this.clazz = clazz;
     }
 
+    /**
+     * Creates a new {@link BasicMirrorClass} instance. This method should not be used directly. Use
+     * {@link Mirror#mirror(Class)} instead.
+     *
+     * @param clazz The class.
+     * @param <T>   The type of the class.
+     * @return The new {@link BasicMirrorClass} instance.
+     */
+    @ApiStatus.Internal
+    @Contract(value = "_ -> new", pure = true)
+    public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
+        return new BasicMirrorClass<>(clazz);
+    }
+
     @Override
     public @NotNull Class<T> getRawClass() {
         return this.clazz;
@@ -312,57 +326,9 @@ public final class BasicMirrorClass<T>
         return this.clazz.getName();
     }
 
-    /**
-     * Creates a new {@link BasicMirrorClass} instance. This method should not be used directly. Use
-     * {@link Mirror#mirror(Class)} instead.
-     *
-     * @param clazz The class.
-     * @param <T>   The type of the class.
-     * @return The new {@link BasicMirrorClass} instance.
-     */
-    @ApiStatus.Internal
-    @Contract(value = "_ -> new", pure = true)
-    public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
-        return new BasicMirrorClass<>(clazz);
-    }
-
     @Override
     public @NotNull Stream<Annotation> getAnnotations() {
         return Arrays.stream(this.clazz.getAnnotations());
-    }
-
-    @Override
-    public @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations(filter).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
-        Set<Class<? extends Annotation>> annotationList = Set.of(annotations);
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotationList::contains);
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
-    }
-
-    @Override
-    public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return this.getAnnotations()
-                .filter(annotation -> annotation.annotationType().equals(type))
-                .map(type::cast)
-                .findFirst();
-    }
-
-    @Override
-    public boolean isAnnotated() {
-        return this.getAnnotationCount() > 0;
     }
 
     @Override

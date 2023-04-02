@@ -19,7 +19,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -154,37 +153,6 @@ public final class BasicMirrorConstructor<T>
     @Override
     public @NotNull Stream<Annotation> getAnnotations() {
         return Arrays.stream(this.constructor.getAnnotations());
-    }
-
-    @Override
-    public @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations(filter).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
-        Set<Class<? extends Annotation>> annotationList = Set.of(annotations);
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotationList::contains);
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
-    }
-
-    @Override
-    public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return this.getAnnotations().filter(type::isInstance).map(type::cast).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotated() {
-        return this.getAnnotationCount() > 0;
     }
 
     @Override

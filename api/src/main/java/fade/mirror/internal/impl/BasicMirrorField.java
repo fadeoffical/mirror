@@ -13,7 +13,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -135,36 +134,6 @@ public final class BasicMirrorField<T>
     @Override
     public @NotNull Stream<Annotation> getAnnotations() {
         return Arrays.stream(this.field.getAnnotations());
-    }
-
-    @Override
-    public @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations(filter).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
-        return Arrays.stream(annotations).anyMatch(this::isAnnotatedWith);
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
-    }
-
-    @Override
-    public @NotNull <C extends Annotation> Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return this.getAnnotations().filter(type::isInstance).map(type::cast).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotated() {
-        return this.getAnnotationCount() > 0;
     }
 
     @Override
