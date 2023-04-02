@@ -124,20 +124,20 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull Stream<MClass<?>> getSubclasses(@NotNull RecurseSubclasses recurseSubclasses, @NotNull IncludeSelf includeSelf) {
-        List<MClass<?>> classes = new ArrayList<>(this.clazz.getDeclaredClasses().length + (includeSelf.include() ? 1 : 0));
-        if (includeSelf.include()) classes.add(this);
+        Class<?>[] subClasses = this.clazz.getDeclaredClasses();
 
-        for (Class<?> declaredClass : this.clazz.getDeclaredClasses()) {
-            MClass<?> mClass = from(declaredClass);
+        return new ArrayList<MClass<?>>(subClasses.length + (includeSelf.include() ? 1 : 0)) {{
+            if (includeSelf.include())
+                this.add(BasicMirrorClass.this);
 
-            classes.add(mClass);
-
-            if (recurseSubclasses.include()) {
-                classes.addAll(mClass.getSubclasses(recurseSubclasses).toList());
-            }
-        }
-
-        return classes.stream();
+            Arrays.stream(subClasses)
+                .map(BasicMirrorClass::from)
+                .forEach(mClass -> {
+                    this.add(mClass);
+                    if (recurseSubclasses.include())
+                        this.addAll(mClass.getSubclasses(recurseSubclasses).toList());
+                });
+        }}.stream();
     }
 
     @Override
