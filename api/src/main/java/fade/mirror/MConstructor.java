@@ -13,7 +13,7 @@ import java.lang.reflect.Constructor;
  * @author fade
  */
 public sealed interface MConstructor<T>
-        extends Invokable<T>, Accessible<MConstructor<T>>, Parameterized, Annotated, Declared
+        extends Invokable<T>, Accessible<MConstructor<T>>, Annotated, Declared
         permits BasicMirrorConstructor {
 
     /**

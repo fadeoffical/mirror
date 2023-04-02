@@ -2,6 +2,8 @@ package fade.mirror;
 
 import fade.mirror.filter.Filter;
 import fade.mirror.mock.MockClass;
+import fade.mirror.mock.MockUser;
+import fade.mirror.mock.MockUserSubClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -50,8 +52,9 @@ class MirrorTest {
     @Test
     @DisplayName("mirror of class has correct number of methods")
     void testMirrorOfClassHasCorrectNumberOfMethods() {
+        int expected = 7;
         MClass<MockClass> mockClass = mirror(MockClass.class);
-        assertEquals(6, mockClass.getMethodCount(), "'mockClass.getMethodCount()' should return '6'");
+        assertEquals(expected, mockClass.getMethodCount(), "'mockClass.getMethodCount()' should return '" + expected + "'");
     }
 
     @Test
@@ -106,5 +109,14 @@ class MirrorTest {
 
         MockClass instance = new MockClass();
         method.get().invokeWithInstance(instance);
+    }
+
+    @Test
+    @DisplayName("allow subclasses of restricted types to be used")
+    void testWithParametersAllowsSubclasses() {
+        mirror(MockClass.class).getMethod(Filter.forMethods()
+            .withName("mockMethodWithClassParameter")
+            .withParameter(MockUser.class)
+        ).ifPresent(m -> m.invokeWithNoInstance(new MockUserSubClass()));
     }
 }

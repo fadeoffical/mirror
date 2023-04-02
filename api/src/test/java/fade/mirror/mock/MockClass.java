@@ -32,4 +32,8 @@ public class MockClass {
     public int mockMethodWithReturn() {
         return 0;
     }
+
+    public static void mockMethodWithClassParameter(MockUser user) {
+        System.out.println(user.getUsername());
+    }
 }
