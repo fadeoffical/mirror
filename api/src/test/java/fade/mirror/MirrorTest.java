@@ -52,8 +52,9 @@ class MirrorTest {
     @Test
     @DisplayName("mirror of class has correct number of methods")
     void testMirrorOfClassHasCorrectNumberOfMethods() {
+        int expected = 7;
         MClass<MockClass> mockClass = mirror(MockClass.class);
-        assertEquals(7, mockClass.getMethodCount(), "'mockClass.getMethodCount()' should return '6'");
+        assertEquals(expected, mockClass.getMethodCount(), "'mockClass.getMethodCount()' should return '" + expected + "'");
     }
 
     @Test

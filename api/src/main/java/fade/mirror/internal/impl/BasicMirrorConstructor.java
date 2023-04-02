@@ -71,7 +71,6 @@ public final class BasicMirrorConstructor<T>
         }
     }
 
-    @Override
     public Class<?>[] getParameterTypes() {
         return this.constructor.getParameterTypes();
     }

@@ -69,11 +69,6 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public Class<?>[] getParameterTypes() {
-        return this.method.getParameterTypes();
-    }
-
-    @Override
     public @NotNull String getName() {
         return this.method.getName();
     }
