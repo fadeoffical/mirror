@@ -1,10 +1,13 @@
 package fade.mirror;
 
 import fade.mirror.filter.Filter;
+import fade.mirror.mock.MockAnnotation;
 import fade.mirror.mock.MockClass;
+import fade.mirror.mock.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static fade.mirror.Mirror.mirror;
@@ -106,5 +109,21 @@ class MirrorTest {
 
         MockClass instance = new MockClass();
         method.get().invokeWithInstance(instance);
+    }
+
+    @Test
+    @DisplayName("Filter for annotation does not included elements without annotations")
+    void testNonAnnotated() {
+        List<? extends MMethod<?>> userMethods = mirror(MockUser.class)
+                .getMethods(Filter.forMethods().withAnnotation(MockAnnotation.class))
+                .toList();
+
+        assertTrue(userMethods.isEmpty(), "'userMethods' should include MMethods");
+
+        List<? extends MMethod<?>> mockClassMethods = mirror(MockClass.class)
+                .getMethods(Filter.forMethods().withAnnotation(MockAnnotation.class))
+                .toList();
+
+        assertFalse(mockClassMethods.isEmpty(), "'mockClassMethods' should not include any MMethods");
     }
 }

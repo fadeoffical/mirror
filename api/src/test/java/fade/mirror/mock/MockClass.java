@@ -23,6 +23,7 @@ public class MockClass {
     public void mockMethod(int mockInt) {
     }
 
+    @MockAnnotation
     public void mockMethod(String mockString) {
     }
 
