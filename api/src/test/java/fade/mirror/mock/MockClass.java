@@ -8,6 +8,7 @@ public class MockClass {
     public MockClass(int mockInt) {
     }
 
+    @MockAnnotation
     public MockClass(String mockString) {
     }
 

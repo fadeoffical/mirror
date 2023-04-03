@@ -114,16 +114,31 @@ class MirrorTest {
     @Test
     @DisplayName("Filter for annotation does not included elements without annotations")
     void testNonAnnotated() {
+        // Methods
         List<? extends MMethod<?>> userMethods = mirror(MockUser.class)
                 .getMethods(Filter.forMethods().withAnnotation(MockAnnotation.class))
                 .toList();
 
-        assertTrue(userMethods.isEmpty(), "'userMethods' should include MMethods");
+        assertTrue(userMethods.isEmpty(), "'userMethods' should not include any MMethods");
 
         List<? extends MMethod<?>> mockClassMethods = mirror(MockClass.class)
                 .getMethods(Filter.forMethods().withAnnotation(MockAnnotation.class))
                 .toList();
 
-        assertFalse(mockClassMethods.isEmpty(), "'mockClassMethods' should not include any MMethods");
+        assertFalse(mockClassMethods.isEmpty(), "'mockClassMethods' should include MMethods");
+
+        // Constructors
+        List<? extends MConstructor<?>> userConstructors = mirror(MockUser.class)
+            .getConstructors(Filter.forConstructors().withAnnotation(MockAnnotation.class)::test)
+            .toList();
+
+        assertTrue(userConstructors.isEmpty(), "'userConstructors' should not include any MConstructors");
+
+        List<? extends MConstructor<?>> mockClassConstructors = mirror(MockClass.class)
+            .getConstructors(Filter.forConstructors().withAnnotation(MockAnnotation.class)::test)
+            .toList();
+
+        assertFalse(mockClassConstructors.isEmpty(), "'mockClassConstructors' should include MConstructors");
+
     }
 }
