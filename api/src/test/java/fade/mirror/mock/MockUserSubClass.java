@@ -9,6 +9,10 @@ public class MockUserSubClass extends MockUser {
 		this.role = role;
 	}
 
+	public MockUserSubClass() {
+		this("username", "email", "role");
+	}
+
 	public String getRole() {
 		return this.role;
 	}

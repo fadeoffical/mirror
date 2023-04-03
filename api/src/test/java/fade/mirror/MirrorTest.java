@@ -4,6 +4,7 @@ import fade.mirror.filter.Filter;
 import fade.mirror.mock.MockAnnotation;
 import fade.mirror.mock.MockClass;
 import fade.mirror.mock.MockUser;
+import fade.mirror.mock.MockUserSubClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -53,8 +54,9 @@ class MirrorTest {
     @Test
     @DisplayName("mirror of class has correct number of methods")
     void testMirrorOfClassHasCorrectNumberOfMethods() {
+        int expected = 7;
         MClass<MockClass> mockClass = mirror(MockClass.class);
-        assertEquals(6, mockClass.getMethodCount(), "'mockClass.getMethodCount()' should return '6'");
+        assertEquals(expected, mockClass.getMethodCount(), "'mockClass.getMethodCount()' should return '" + expected + "'");
     }
 
     @Test
@@ -112,7 +114,7 @@ class MirrorTest {
     }
 
     @Test
-    @DisplayName("Filter for annotation does not included elements without annotations")
+    @DisplayName("Filter for annotation does not include elements without annotations")
     void testNonAnnotated() {
         // Methods
         List<? extends MMethod<?>> userMethods = mirror(MockUser.class)
@@ -140,5 +142,14 @@ class MirrorTest {
 
         assertFalse(mockClassConstructors.isEmpty(), "'mockClassConstructors' should include MConstructors");
 
+    }
+
+    @Test
+    @DisplayName("allow subclasses of restricted types to be used")
+    void testWithParametersAllowsSubclasses() {
+        mirror(MockClass.class).getMethod(Filter.forMethods()
+            .withName("mockMethodWithClassParameter")
+            .withParameter(MockUser.class)
+        ).ifPresent(m -> m.invokeWithNoInstance(new MockUserSubClass()));
     }
 }
