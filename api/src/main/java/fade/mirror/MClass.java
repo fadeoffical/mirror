@@ -62,43 +62,6 @@ public sealed interface MClass<T>
     @Contract(pure = true)
     @NotNull T unsafeCast(@NotNull Object object);
 
-    @Contract(pure = true)
-    @NotNull Stream<MClass<?>> getSubclasses(@NotNull MClass.RecurseSubclasses recurseSubclasses, @NotNull MClass.IncludeSelf includeSelf);
-
-    @NotNull
-    default Stream<MClass<?>> getSubclasses(@NotNull MClass.RecurseSubclasses recurseSubclasses) {
-        return this.getSubclasses(recurseSubclasses, IncludeSelf.No);
-    }
-
-    @NotNull
-    default Stream<MClass<?>> getSubclasses(@NotNull MClass.IncludeSelf includeSelf) {
-        return this.getSubclasses(RecurseSubclasses.No, includeSelf);
-    }
-
-    default @NotNull Stream<MClass<?>> getSubclasses() {
-        return this.getSubclasses(RecurseSubclasses.No, IncludeSelf.No);
-    }
-
-    default @NotNull Optional<MClass<?>> getSubclass() {
-        return this.getSubclasses().findFirst();
-    }
-
-    default @NotNull Optional<MClass<?>> getSubclass(@NotNull Predicate<MClass<?>> filter) {
-        return this.getSubclasses().filter(filter).findFirst();
-    }
-
-    default @NotNull Optional<MClass<?>> getSubclass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseSubclasses recurseSubclasses) {
-        return this.getSubclasses(recurseSubclasses).filter(filter).findFirst();
-    }
-
-    default @NotNull Optional<MClass<?>> getSubclass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.IncludeSelf includeSelf) {
-        return this.getSubclasses(includeSelf).filter(filter).findFirst();
-    }
-
-    default @NotNull Optional<MClass<?>> getSubclass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseSubclasses recurseSubclasses, @NotNull MClass.IncludeSelf includeSelf) {
-        return this.getSubclasses(recurseSubclasses, includeSelf).filter(filter).findFirst();
-    }
-
     /**
      * Returns a stream of all constructors of this class. The stream is ordered by the declaration order of the
      * constructors in the source code. The stream may be empty if the class has no constructors. The stream will never
@@ -371,17 +334,6 @@ public sealed interface MClass<T>
     }
 
     enum IncludeSelf
-            implements MClass.Include {
-        Yes, No;
-
-        @Override
-        @Contract(pure = true)
-        public boolean include() {
-            return this == Yes;
-        }
-    }
-
-    enum RecurseSubclasses
             implements MClass.Include {
         Yes, No;
 
