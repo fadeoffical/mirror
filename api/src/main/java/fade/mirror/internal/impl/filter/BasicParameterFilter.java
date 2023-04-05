@@ -66,9 +66,9 @@ public final class BasicParameterFilter
     @Override
     public boolean test(MParameter<?> parameter) {
         if (this.name != null && !parameter.getName().equals(this.name)) return false;
-        if (this.annotations != null && !parameter.getAnnotations()
+        if (this.annotations != null && (parameter.getAnnotations().findAny().isEmpty() || !parameter.getAnnotations()
                 .allMatch(annotation -> this.annotations.stream()
-                        .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass()))))
+                        .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass())))))
             return false;
         return this.type == null || this.type.isAssignableFrom(parameter.getType());
     }

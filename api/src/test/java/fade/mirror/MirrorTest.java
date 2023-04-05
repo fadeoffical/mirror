@@ -114,9 +114,8 @@ class MirrorTest {
     }
 
     @Test
-    @DisplayName("Filter for annotation does not include elements without annotations")
-    void testNonAnnotated() {
-        // Methods
+    @DisplayName("Filter for annotation does not include elements without annotations -- Methods")
+    void testNonAnnotatedMethods() {
         List<? extends MMethod<?>> userMethods = mirror(MockUser.class)
                 .getMethods(Filter.forMethods().withAnnotation(MockAnnotation.class))
                 .toList();
@@ -128,8 +127,11 @@ class MirrorTest {
                 .toList();
 
         assertFalse(mockClassMethods.isEmpty(), "'mockClassMethods' should include MMethods");
+    }
 
-        // Constructors
+    @Test
+    @DisplayName("Filter for annotation does not include elements without annotations -- Constructors")
+    void testNonAnnotatedConstructors() {
         List<? extends MConstructor<?>> userConstructors = mirror(MockUser.class)
             .getConstructors(Filter.forConstructors().withAnnotation(MockAnnotation.class)::test)
             .toList();
@@ -141,7 +143,22 @@ class MirrorTest {
             .toList();
 
         assertFalse(mockClassConstructors.isEmpty(), "'mockClassConstructors' should include MConstructors");
+    }
 
+    @Test
+    @DisplayName("Filter for annotation does not include elements without annotations -- Fields")
+    void testNonAnnotatedFields() {
+        List<? extends MField<?>> userFields = mirror(MockUser.class)
+            .getFields(Filter.forFields().withAnnotation(MockAnnotation.class))
+            .toList();
+
+        assertTrue(userFields.isEmpty(), "'userFields' should not include any MFields");
+
+        List<? extends MField<?>> mockClassFields = mirror(MockUserSubClass.class)
+            .getFields(Filter.forFields().withAnnotation(MockAnnotation.class))
+            .toList();
+
+        assertFalse(mockClassFields.isEmpty(), "'mockClassFields' should include MFields");
     }
 
     @Test

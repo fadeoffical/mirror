@@ -28,7 +28,7 @@ public class MockClass {
     public void mockMethod(String mockString) {
     }
 
-    public void mockMethod(int mockInt, String mockString) {
+    public void mockMethod(int mockInt, @MockAnnotation String mockString) {
     }
 
     public int mockMethodWithReturn() {
