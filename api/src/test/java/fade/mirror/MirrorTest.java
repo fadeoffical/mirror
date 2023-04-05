@@ -162,6 +162,26 @@ class MirrorTest {
     }
 
     @Test
+    @DisplayName("Filter for annotation does not include elements without annotations -- Parameters")
+    void testNonAnnotatedParameters() {
+        List<? extends MParameter<?>> userParameters = mirror(MockUser.class)
+            .getMethods(Filter.forMethods().withName("getUsername"))
+            .flatMap(MMethod::getParameters)
+            .filter(Filter.forParameters().withAnnotation(MockAnnotation.class))
+            .toList();
+
+        assertTrue(userParameters.isEmpty(), "'userParameters' should not include any MParameters");
+
+        List<? extends MParameter<?>> mockClassParameters = mirror(MockClass.class)
+            .getMethods(Filter.forMethods().withName("mockMethod").withParameters(List.of(Integer.class, String.class)))
+            .flatMap(MMethod::getParameters)
+            .filter(Filter.forParameters().withAnnotation(MockAnnotation.class))
+            .toList();
+
+        assertFalse(mockClassParameters.isEmpty(), "'mockClassParameters' should include MParameters");
+    }
+
+    @Test
     @DisplayName("allow subclasses of restricted types to be used")
     void testWithParametersAllowsSubclasses() {
         mirror(MockClass.class).getMethod(Filter.forMethods()
