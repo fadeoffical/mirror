@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author fade
  */
-public final class BasicConstructorFilter
-        implements ConstructorFilter {
+public final class BasicConstructorFilter<T>
+        implements ConstructorFilter<T> {
 
     /**
      * The parameter types to filter by. If {@code null}, no filtering will be done.
@@ -48,68 +48,68 @@ public final class BasicConstructorFilter
      *
      * @return The new {@link BasicConstructorFilter}.
      */
-    public static @NotNull BasicConstructorFilter create() {
-        return new BasicConstructorFilter();
+    public static <T> @NotNull BasicConstructorFilter<T> create() {
+        return new BasicConstructorFilter<>();
     }
 
     @Override
-    public @NotNull ConstructorFilter withNoParameters() {
+    public @NotNull ConstructorFilter<T> withNoParameters() {
         this.parameterTypes = new ArrayList<>(0);
         return this;
     }
 
     @Override
-    public @NotNull ConstructorFilter withParameters(@NotNull List<Class<?>> parameterTypes, @NotNull RewriteOperation operation) {
+    public @NotNull ConstructorFilter<T> withParameters(@NotNull List<Class<?>> parameterTypes, @NotNull RewriteOperation operation) {
         if (this.parameterTypes == null) this.parameterTypes = new ArrayList<>(parameterTypes.size());
         operation.apply(this.parameterTypes, parameterTypes);
         return this;
     }
 
     @Override
-    public @NotNull ConstructorFilter withParameters(@NotNull List<Class<?>> parameterTypes) {
+    public @NotNull ConstructorFilter<T> withParameters(@NotNull List<Class<?>> parameterTypes) {
         return this.withParameters(parameterTypes, RewriteOperation.Append);
     }
 
     @Override
-    public @NotNull ConstructorFilter withParameter(@NotNull Class<?> parameterType, @NotNull RewriteOperation operation) {
+    public @NotNull ConstructorFilter<T> withParameter(@NotNull Class<?> parameterType, @NotNull RewriteOperation operation) {
         return this.withParameters(List.of(parameterType), operation);
     }
 
     @Override
-    public @NotNull ConstructorFilter withParameter(@NotNull Class<?> parameterType) {
+    public @NotNull ConstructorFilter<T> withParameter(@NotNull Class<?> parameterType) {
         return this.withParameter(parameterType, RewriteOperation.Append);
     }
 
     @Override
-    public @NotNull ConstructorFilter withNoAnnotations() {
+    public @NotNull ConstructorFilter<T> withNoAnnotations() {
         this.annotations = new ArrayList<>(0);
         return this;
     }
 
     @Override
-    public @NotNull ConstructorFilter withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
+    public @NotNull ConstructorFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
         if (this.annotations == null) this.annotations = new ArrayList<>(annotations.size());
         operation.apply(this.annotations, annotations);
         return this;
     }
 
     @Override
-    public @NotNull ConstructorFilter withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
+    public @NotNull ConstructorFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
         return this.withAnnotations(annotations, RewriteOperation.Append);
     }
 
     @Override
-    public @NotNull ConstructorFilter withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
+    public @NotNull ConstructorFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
         return this.withAnnotations(List.of(annotation), operation);
     }
 
     @Override
-    public @NotNull ConstructorFilter withAnnotation(@NotNull Class<? extends Annotation> annotation) {
+    public @NotNull ConstructorFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation) {
         return this.withAnnotation(annotation, RewriteOperation.Append);
     }
 
     @Override
-    public boolean test(MConstructor<?> constructor) {
+    public boolean test(@NotNull MConstructor<T> constructor) {
         if (this.parameterTypes != null && !constructor.getParameters()
                 .map(MParameter::getType)
                 .allMatch(parameterType -> this.parameterTypes.stream().anyMatch(parameterType::isAssignableFrom)))
@@ -121,7 +121,7 @@ public final class BasicConstructorFilter
     }
 
     @Override
-    public @NotNull ConstructorFilter copy() {
-        return new BasicConstructorFilter(this.parameterTypes, this.annotations);
+    public @NotNull ConstructorFilter<T> copy() {
+        return new BasicConstructorFilter<T>(this.parameterTypes, this.annotations);
     }
 }

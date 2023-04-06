@@ -132,14 +132,15 @@ class MirrorTest {
     @Test
     @DisplayName("Filter for annotation does not include elements without annotations -- Constructors")
     void testNonAnnotatedConstructors() {
+
         List<? extends MConstructor<?>> userConstructors = mirror(MockUser.class)
-            .getConstructors(Filter.forConstructors().withAnnotation(MockAnnotation.class)::test)
+            .getConstructors(Filter.<MockUser>forConstructors().withAnnotation(MockAnnotation.class))
             .toList();
 
         assertTrue(userConstructors.isEmpty(), "'userConstructors' should not include any MConstructors");
 
         List<? extends MConstructor<?>> mockClassConstructors = mirror(MockClass.class)
-            .getConstructors(Filter.forConstructors().withAnnotation(MockAnnotation.class)::test)
+            .getConstructors(Filter.<MockClass>forConstructors().withAnnotation(MockAnnotation.class))
             .toList();
 
         assertFalse(mockClassConstructors.isEmpty(), "'mockClassConstructors' should include MConstructors");
@@ -188,5 +189,12 @@ class MirrorTest {
             .withName("mockMethodWithClassParameter")
             .withParameter(MockUser.class)
         ).ifPresent(m -> m.invokeWithNoInstance(new MockUserSubClass()));
+    }
+
+    @Test
+    @DisplayName("test if constructor filter compiles")
+    void testConstructorFilterCompiles() {
+        @SuppressWarnings("unused") // this just has to compile
+        var unused = mirror(MockClass.class).getConstructors(Filter.<MockClass>forConstructors().withParameter(int.class));
     }
 }

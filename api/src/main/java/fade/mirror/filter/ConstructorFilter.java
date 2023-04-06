@@ -13,6 +13,8 @@ import fade.mirror.filter.by.Parameters;
  *
  * @author fade
  */
-public interface ConstructorFilter
-        extends Filter<MConstructor<?>>, Parameters<ConstructorFilter>, Annotations<ConstructorFilter> {
+public interface ConstructorFilter<T>
+        extends Filter<MConstructor<T>>,
+                Parameters<ConstructorFilter<T>>,
+                Annotations<ConstructorFilter<T>> {
 }

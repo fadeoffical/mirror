@@ -36,7 +36,7 @@ public interface Filter<T>
      * @return the constructor filter
      * @see ConstructorFilter
      */
-    static @NotNull ConstructorFilter forConstructors() {
+    static <T> @NotNull ConstructorFilter<T> forConstructors() {
         return BasicConstructorFilter.create();
     }
 
