@@ -68,40 +68,40 @@ public sealed interface MClass<T>
     @NotNull T unsafeCast(@NotNull Object object);
 
     @Contract(pure = true)
-    @NotNull Stream<MClass<?>> getSubclasses(@NotNull MClass.RecurseSubclasses recurseSubclasses, @NotNull MClass.IncludeSelf includeSelf);
+    @NotNull Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf);
 
     @NotNull
-    default Stream<MClass<?>> getSubclasses(@NotNull MClass.RecurseSubclasses recurseSubclasses) {
-        return this.getSubclasses(recurseSubclasses, IncludeSelf.No);
+    default Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses) {
+        return this.getInnerClasses(recurseInnerClasses, IncludeSelf.No);
     }
 
     @NotNull
-    default Stream<MClass<?>> getSubclasses(@NotNull MClass.IncludeSelf includeSelf) {
-        return this.getSubclasses(RecurseSubclasses.No, includeSelf);
+    default Stream<MClass<?>> getInnerClasses(@NotNull MClass.IncludeSelf includeSelf) {
+        return this.getInnerClasses(RecurseInnerClasses.No, includeSelf);
     }
 
-    default @NotNull Stream<MClass<?>> getSubclasses() {
-        return this.getSubclasses(RecurseSubclasses.No, IncludeSelf.No);
+    default @NotNull Stream<MClass<?>> getInnerClasses() {
+        return this.getInnerClasses(RecurseInnerClasses.No, IncludeSelf.No);
     }
 
-    default @NotNull Optional<MClass<?>> getSubclass() {
-        return this.getSubclasses().findFirst();
+    default @NotNull Optional<MClass<?>> getInnerClass() { // todo: is this method of any use?
+        return this.getInnerClasses().findFirst();
     }
 
-    default @NotNull Optional<MClass<?>> getSubclass(@NotNull Predicate<MClass<?>> filter) {
-        return this.getSubclasses().filter(filter).findFirst();
+    default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter) {
+        return this.getInnerClasses().filter(filter).findFirst();
     }
 
-    default @NotNull Optional<MClass<?>> getSubclass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseSubclasses recurseSubclasses) {
-        return this.getSubclasses(recurseSubclasses).filter(filter).findFirst();
+    default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseInnerClasses recurseInnerClasses) {
+        return this.getInnerClasses(recurseInnerClasses).filter(filter).findFirst();
     }
 
-    default @NotNull Optional<MClass<?>> getSubclass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.IncludeSelf includeSelf) {
-        return this.getSubclasses(includeSelf).filter(filter).findFirst();
+    default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.IncludeSelf includeSelf) {
+        return this.getInnerClasses(includeSelf).filter(filter).findFirst();
     }
 
-    default @NotNull Optional<MClass<?>> getSubclass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseSubclasses recurseSubclasses, @NotNull MClass.IncludeSelf includeSelf) {
-        return this.getSubclasses(recurseSubclasses, includeSelf).filter(filter).findFirst();
+    default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf) {
+        return this.getInnerClasses(recurseInnerClasses, includeSelf).filter(filter).findFirst();
     }
 
     /**
@@ -392,7 +392,7 @@ public sealed interface MClass<T>
         }
     }
 
-    enum RecurseSubclasses
+    enum RecurseInnerClasses
             implements MClass.Include {
         Yes, No;
 
