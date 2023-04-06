@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Modifier;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -18,13 +19,18 @@ import java.util.function.Supplier;
  */
 public interface Accessible<T extends Accessible<T>> {
 
+    @Contract(pure = true)
+    int getModifiers();
+
     /**
      * Checks if the object is public.
      *
      * @return {@code true} if the object is public, {@code false} otherwise.
      */
     @Contract(pure = true)
-    boolean isPublic(); // todo
+    default boolean isPublic() {
+        return Modifier.isPublic(this.getModifiers());
+    }
 
     /**
      * Checks if the object is protected.
@@ -32,7 +38,9 @@ public interface Accessible<T extends Accessible<T>> {
      * @return {@code true} if the object is protected, {@code false} otherwise.
      */
     @Contract(pure = true)
-    boolean isProtected();
+    default boolean isProtected() {
+        return Modifier.isProtected(this.getModifiers());
+    }
 
     /**
      * Checks if the object is package-private.
@@ -40,7 +48,9 @@ public interface Accessible<T extends Accessible<T>> {
      * @return {@code true} if the object is package-private, {@code false} otherwise.
      */
     @Contract(pure = true)
-    boolean isPackagePrivate();
+    default boolean isPackagePrivate() {
+        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
+    }
 
     /**
      * Checks if the object is private.
@@ -48,7 +58,9 @@ public interface Accessible<T extends Accessible<T>> {
      * @return {@code true} if the object is private, {@code false} otherwise.
      */
     @Contract(pure = true)
-    boolean isPrivate();
+    default boolean isPrivate() {
+        return Modifier.isPrivate(this.getModifiers());
+    }
 
     /**
      * Checks if the object is static.
@@ -56,7 +68,9 @@ public interface Accessible<T extends Accessible<T>> {
      * @return {@code true} if the object is static, {@code false} otherwise.
      */
     @Contract(pure = true)
-    boolean isStatic();
+    default boolean isStatic() {
+        return Modifier.isStatic(this.getModifiers());
+    }
 
     /**
      * Checks whether the object is accessible, and if it is not, makes it accessible. If the object cannot be made

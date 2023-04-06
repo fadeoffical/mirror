@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -69,15 +68,6 @@ public final class BasicMirrorConstructor<T>
         }
     }
 
-    public Class<?>[] getParameterTypes() {
-        return this.constructor.getParameterTypes();
-    }
-
-    @Override
-    public @NotNull Class<T> getReturnType() {
-        return this.getDeclaringClass().getRawClass();
-    }
-
     private @NotNull String getPrettyConstructorRepresentation() {
         StringBuilder builder = new StringBuilder().append(this.constructor.getName()).append('(');
         for (Class<?> type : this.constructor.getParameterTypes()) builder.append(type.getSimpleName()).append(", ");
@@ -90,64 +80,13 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public @NotNull Constructor<T> getRawConstructor() {
-        return this.constructor;
-    }
-
-    @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isProtected() {
-        return Modifier.isProtected(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isPackagePrivate() {
-        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
-    }
-
-    @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isStatic() {
-        return Modifier.isStatic(this.constructor.getModifiers());
-    }
-
-    @Override
-    public @NotNull MConstructor<T> makeAccessible(@Nullable Object instance) {
-        if (!this.isAccessible(instance)) {
-            this.constructor.trySetAccessible();
-        }
-        return this;
-    }
-
-    @Override
-    public boolean isAccessible(@Nullable Object instance) {
-        if (instance != null)
-            throw new IllegalArgumentException("Cannot check accessibility of a constructor with an instance; use #isAccessible() instead");
-
-        return this.constructor.canAccess(null);
-    }
-
-    @Override
-    public @NotNull Stream<Annotation> getAnnotations() {
-        return Arrays.stream(this.constructor.getAnnotations());
-    }
-
-    @Override
-    public int getAnnotationCount() {
-        return this.constructor.getAnnotations().length;
-    }
-
-    @Override
     public @NotNull Stream<MParameter<?>> getParameters() {
         return Arrays.stream(this.constructor.getParameters()).map(BasicMirrorParameter::from);
+    }
+
+    @Override
+    public @NotNull Class<T> getReturnType() {
+        return this.getDeclaringClass().getRawClass();
     }
 
     @Override
@@ -175,5 +114,45 @@ public final class BasicMirrorConstructor<T>
     @Override
     public int getParameterCount() {
         return this.constructor.getParameterCount();
+    }
+
+    public Class<?>[] getParameterTypes() {
+        return this.constructor.getParameterTypes();
+    }
+
+    @Override
+    public @NotNull Constructor<T> getRawConstructor() {
+        return this.constructor;
+    }
+
+    @Override
+    public int getModifiers() {
+        return this.constructor.getModifiers();
+    }
+
+    @Override
+    public @NotNull MConstructor<T> makeAccessible(@Nullable Object instance) {
+        if (!this.isAccessible(instance)) {
+            this.constructor.trySetAccessible();
+        }
+        return this;
+    }
+
+    @Override
+    public boolean isAccessible(@Nullable Object instance) {
+        if (instance != null)
+            throw new IllegalArgumentException("Cannot check accessibility of a constructor with an instance; use #isAccessible() instead");
+
+        return this.constructor.canAccess(null);
+    }
+
+    @Override
+    public @NotNull Stream<Annotation> getAnnotations() {
+        return Arrays.stream(this.constructor.getAnnotations());
+    }
+
+    @Override
+    public int getAnnotationCount() {
+        return this.constructor.getAnnotations().length;
     }
 }

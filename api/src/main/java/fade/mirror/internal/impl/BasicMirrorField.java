@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -94,28 +93,8 @@ public final class BasicMirrorField<T>
     }
 
     @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(this.field.getModifiers());
-    }
-
-    @Override
-    public boolean isProtected() {
-        return Modifier.isProtected(this.field.getModifiers());
-    }
-
-    @Override
-    public boolean isPackagePrivate() {
-        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
-    }
-
-    @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(this.field.getModifiers());
-    }
-
-    @Override
-    public boolean isStatic() {
-        return Modifier.isStatic(this.field.getModifiers());
+    public int getModifiers() {
+        return this.field.getModifiers();
     }
 
     @Override
