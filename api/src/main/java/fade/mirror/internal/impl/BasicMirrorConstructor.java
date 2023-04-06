@@ -16,7 +16,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -87,28 +86,6 @@ public final class BasicMirrorConstructor<T>
     @Override
     public @NotNull Class<T> getReturnType() {
         return this.getDeclaringClass().getRawClass();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull <C> Stream<MParameter<C>> getParametersOfType(@NotNull Class<C> type) {
-        return this.getParameters(parameter -> parameter.getType().equals(type))
-                .map(parameter -> (MParameter<C>) parameter);
-    }
-
-    @Override
-    public @NotNull <C> Optional<MParameter<C>> getParameterOfType(@NotNull Class<C> type) {
-        return this.getParametersOfType(type).findFirst();
-    }
-
-    @Override
-    public @NotNull Stream<MParameter<?>> getParametersWithAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
-        return this.getParameters(parameter -> parameter.isAnnotatedWith(annotations));
-    }
-
-    @Override
-    public @NotNull Optional<MParameter<?>> getParameterWithAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
-        return this.getParametersWithAnnotations(annotations).findFirst();
     }
 
     @Override
