@@ -81,21 +81,6 @@ public final class BasicFieldFilter<T>
     }
 
     @Override
-    public @NotNull FieldFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
-        return this.withAnnotations(annotations, RewriteOperation.Append);
-    }
-
-    @Override
-    public @NotNull FieldFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
-        return this.withAnnotations(List.of(annotation), operation);
-    }
-
-    @Override
-    public @NotNull FieldFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation) {
-        return this.withAnnotation(annotation, RewriteOperation.Append);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public <C> @NotNull FieldFilter<C> ofType(@NotNull Class<C> type) {
         this.type = type;
@@ -111,9 +96,10 @@ public final class BasicFieldFilter<T>
     @Override
     public boolean test(MField<T> field) {
         if (this.name != null && !field.getName().equals(this.name)) return false;
-        if (this.annotations != null && !field.getAnnotations()
+        if (this.annotations != null && (field.getAnnotations().findAny().isEmpty() || !field.getAnnotations()
                 .allMatch(annotation -> this.annotations.stream()
-                        .anyMatch(clazz -> clazz.isAssignableFrom(annotation.annotationType())))) return false;
+                        .anyMatch(clazz -> clazz.isAssignableFrom(annotation.annotationType())))))
+            return false;
         return this.type == null || this.type.isAssignableFrom(field.getType());
     }
 

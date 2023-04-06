@@ -15,12 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -72,28 +67,6 @@ public final class BasicMirrorConstructor<T>
         }
     }
 
-    @Override
-    public boolean isInvokableWith(@Nullable Object... arguments) {
-        Class<?>[] argumentTypes = Arrays.stream(arguments)
-                .map(object -> object == null ? null : object.getClass())
-                .toArray(Class<?>[]::new);
-        Class<?>[] parameterTypes = this.constructor.getParameterTypes();
-
-        // copied and adapted from Arrays#equals
-        if (parameterTypes == argumentTypes) return true;
-        if (parameterTypes.length != argumentTypes.length) return false;
-        for (int i = 0; i < parameterTypes.length; i++) {
-            if (argumentTypes[i] != null && !Objects.equals(parameterTypes[i], argumentTypes[i])) return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public @NotNull Class<T> getReturnType() {
-        return this.getDeclaringClass().getRawClass();
-    }
-
     private @NotNull String getPrettyConstructorRepresentation() {
         StringBuilder builder = new StringBuilder().append(this.constructor.getName()).append('(');
         for (Class<?> type : this.constructor.getParameterTypes()) builder.append(type.getSimpleName()).append(", ");
@@ -106,33 +79,32 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
+    public @NotNull Stream<MParameter<?>> getParameters() {
+        return Arrays.stream(this.constructor.getParameters()).map(BasicMirrorParameter::from);
+    }
+
+    @Override
+    public @NotNull Class<T> getReturnType() {
+        return this.getDeclaringClass().getRawClass();
+    }
+
+    @Override
+    public int getParameterCount() {
+        return this.constructor.getParameterCount();
+    }
+
+    public Class<?>[] getParameterTypes() {
+        return this.constructor.getParameterTypes();
+    }
+
+    @Override
     public @NotNull Constructor<T> getRawConstructor() {
         return this.constructor;
     }
 
     @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isProtected() {
-        return Modifier.isProtected(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isPackagePrivate() {
-        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
-    }
-
-    @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(this.constructor.getModifiers());
-    }
-
-    @Override
-    public boolean isStatic() {
-        return Modifier.isStatic(this.constructor.getModifiers());
+    public int getModifiers() {
+        return this.constructor.getModifiers();
     }
 
     @Override
@@ -157,85 +129,7 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations(filter).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
-        Set<Class<? extends Annotation>> annotationList = Set.of(annotations);
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotationList::contains);
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
-    }
-
-    @Override
-    public <C extends Annotation> @NotNull Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return this.getAnnotations().filter(type::isInstance).map(type::cast).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotated() {
-        return this.getAnnotationCount() > 0;
-    }
-
-    @Override
     public int getAnnotationCount() {
         return this.constructor.getAnnotations().length;
-    }
-
-    @Override
-    public @NotNull Stream<MParameter<?>> getParameters() {
-        return Arrays.stream(this.constructor.getParameters()).map(BasicMirrorParameter::from);
-    }
-
-    @Override
-    public @NotNull Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter) {
-        return this.getParameters().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter) {
-        return this.getParameters(filter).findFirst();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull <C> Stream<MParameter<C>> getParametersOfType(@NotNull Class<C> type) {
-        return this.getParameters(parameter -> parameter.getType().equals(type))
-                .map(parameter -> (MParameter<C>) parameter);
-    }
-
-    @Override
-    public @NotNull <C> Optional<MParameter<C>> getParameterOfType(@NotNull Class<C> type) {
-        return this.getParametersOfType(type).findFirst();
-    }
-
-    @Override
-    public @NotNull Stream<MParameter<?>> getParametersWithAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
-        return this.getParameters(parameter -> parameter.isAnnotatedWith(annotations));
-    }
-
-    @Override
-    public @NotNull Optional<MParameter<?>> getParameterWithAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
-        return this.getParametersWithAnnotations(annotations).findFirst();
-    }
-
-    @Override
-    public boolean hasParameters() {
-        return this.getParameterCount() > 0;
-    }
-
-    @Override
-    public int getParameterCount() {
-        return this.constructor.getParameterCount();
     }
 }

@@ -66,21 +66,6 @@ public final class BasicConstructorFilter
     }
 
     @Override
-    public @NotNull ConstructorFilter withParameters(@NotNull List<Class<?>> parameterTypes) {
-        return this.withParameters(parameterTypes, RewriteOperation.Append);
-    }
-
-    @Override
-    public @NotNull ConstructorFilter withParameter(@NotNull Class<?> parameterType, @NotNull RewriteOperation operation) {
-        return this.withParameters(List.of(parameterType), operation);
-    }
-
-    @Override
-    public @NotNull ConstructorFilter withParameter(@NotNull Class<?> parameterType) {
-        return this.withParameter(parameterType, RewriteOperation.Append);
-    }
-
-    @Override
     public @NotNull ConstructorFilter withNoAnnotations() {
         this.annotations = new ArrayList<>(0);
         return this;
@@ -94,29 +79,15 @@ public final class BasicConstructorFilter
     }
 
     @Override
-    public @NotNull ConstructorFilter withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
-        return this.withAnnotations(annotations, RewriteOperation.Append);
-    }
-
-    @Override
-    public @NotNull ConstructorFilter withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
-        return this.withAnnotations(List.of(annotation), operation);
-    }
-
-    @Override
-    public @NotNull ConstructorFilter withAnnotation(@NotNull Class<? extends Annotation> annotation) {
-        return this.withAnnotation(annotation, RewriteOperation.Append);
-    }
-
-    @Override
     public boolean test(MConstructor<?> constructor) {
         if (this.parameterTypes != null && !constructor.getParameters()
                 .map(MParameter::getType)
                 .allMatch(parameterType -> this.parameterTypes.stream().anyMatch(parameterType::isAssignableFrom)))
             return false;
-        return this.annotations != null || constructor.getAnnotations()
-                .allMatch(annotation -> this.annotations.stream()
-                        .anyMatch(clazz -> clazz.isAssignableFrom(annotation.annotationType())));
+
+        return this.annotations == null || (constructor.getAnnotations().findAny().isPresent() && constructor.getAnnotations()
+            .allMatch(annotation -> this.annotations.stream()
+                .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass()))));
     }
 
     @Override
