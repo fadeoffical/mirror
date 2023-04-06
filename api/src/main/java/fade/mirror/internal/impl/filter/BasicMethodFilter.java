@@ -79,9 +79,10 @@ public final class BasicMethodFilter<T>
                 .map(MParameter::getType)
                 .allMatch(parameterType -> this.parameterTypes.stream().anyMatch(parameterType::isAssignableFrom)))
             return false;
-        if (this.annotations != null && !method.getAnnotations()
+
+        if (this.annotations != null && (method.getAnnotations().findAny().isEmpty() || !method.getAnnotations()
                 .allMatch(annotation -> this.annotations.stream()
-                        .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass()))))
+                        .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass())))))
             return false;
         return this.returnType == null || this.returnType.isAssignableFrom(method.getReturnType());
     }

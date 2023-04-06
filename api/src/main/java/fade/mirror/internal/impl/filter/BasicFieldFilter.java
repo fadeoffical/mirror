@@ -111,9 +111,10 @@ public final class BasicFieldFilter<T>
     @Override
     public boolean test(MField<T> field) {
         if (this.name != null && !field.getName().equals(this.name)) return false;
-        if (this.annotations != null && !field.getAnnotations()
+        if (this.annotations != null && (field.getAnnotations().findAny().isEmpty() || !field.getAnnotations()
                 .allMatch(annotation -> this.annotations.stream()
-                        .anyMatch(clazz -> clazz.isAssignableFrom(annotation.annotationType())))) return false;
+                        .anyMatch(clazz -> clazz.isAssignableFrom(annotation.annotationType())))))
+            return false;
         return this.type == null || this.type.isAssignableFrom(field.getType());
     }
 
