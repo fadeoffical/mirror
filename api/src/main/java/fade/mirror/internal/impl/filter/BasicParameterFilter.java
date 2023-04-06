@@ -92,21 +92,6 @@ public final class BasicParameterFilter
     }
 
     @Override
-    public @NotNull ParameterFilter withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
-        return this.withAnnotations(annotations, RewriteOperation.Append);
-    }
-
-    @Override
-    public @NotNull ParameterFilter withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
-        return this.withAnnotations(List.of(annotation), operation);
-    }
-
-    @Override
-    public @NotNull ParameterFilter withAnnotation(@NotNull Class<? extends Annotation> annotation) {
-        return this.withAnnotation(annotation, RewriteOperation.Append);
-    }
-
-    @Override
     public @NotNull <C> ParameterFilter ofType(Class<C> type) {
         this.type = type;
         return this;

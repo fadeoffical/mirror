@@ -108,21 +108,6 @@ public final class BasicMethodFilter<T>
     }
 
     @Override
-    public @NotNull MethodFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations) {
-        return this.withAnnotations(annotations, RewriteOperation.Append);
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull RewriteOperation operation) {
-        return this.withAnnotations(List.of(annotation), operation);
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> withAnnotation(@NotNull Class<? extends Annotation> annotation) {
-        return this.withAnnotation(annotation, RewriteOperation.Append);
-    }
-
-    @Override
     public @NotNull MethodFilter<T> withNoParameters() {
         this.parameterTypes = new ArrayList<>(0);
         return this;
@@ -133,21 +118,6 @@ public final class BasicMethodFilter<T>
         if (this.parameterTypes == null) this.parameterTypes = new ArrayList<>(parameterTypes.size());
         operation.apply(this.parameterTypes, parameterTypes);
         return this;
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> withParameters(@NotNull List<Class<?>> parameterTypes) {
-        return this.withParameters(parameterTypes, RewriteOperation.Append);
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> withParameter(@NotNull Class<?> parameterType, @NotNull RewriteOperation operation) {
-        return this.withParameters(List.of(parameterType), operation);
-    }
-
-    @Override
-    public @NotNull MethodFilter<T> withParameter(@NotNull Class<?> parameterType) {
-        return this.withParameter(parameterType, RewriteOperation.Append);
     }
 
     @Override
