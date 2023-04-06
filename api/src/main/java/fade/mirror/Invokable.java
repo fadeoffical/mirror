@@ -4,7 +4,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -18,8 +17,6 @@ import java.util.stream.Stream;
  */
 public interface Invokable<T> {
 
-    @Nullable T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments);
-
     /**
      * Invokes the method or constructor represented by this object.
      *
@@ -30,6 +27,8 @@ public interface Invokable<T> {
         return this.invokeWithInstance(null, arguments);
     }
 
+    @Nullable T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments);
+
     /**
      * Tests whether the method or constructor represented by this object can be invoked with the given arguments.
      *
@@ -39,8 +38,8 @@ public interface Invokable<T> {
     @Contract(pure = true)
     default boolean isInvokableWith(@Nullable Object... arguments) {
         Class<?>[] argumentTypes = Arrays.stream(arguments)
-            .map(object -> object == null ? null : object.getClass())
-            .toArray(Class<?>[]::new);
+                .map(object -> object == null ? null : object.getClass())
+                .toArray(Class<?>[]::new);
         Class<?>[] parameterTypes = this.getParameters().map(MParameter::getType).toArray(Class<?>[]::new);
 
         // copied and adapted from Arrays#equals
@@ -53,15 +52,6 @@ public interface Invokable<T> {
     }
 
     /**
-     * Gets the return type of the method or constructor represented by this object.
-     *
-     * @return the return type.
-     */
-    @Contract(pure = true)
-    @NotNull Class<T> getReturnType();
-
-
-    /**
      * Returns a stream of all parameters of this method or constructor. The stream is ordered by the declaration order
      * of the parameters in the source code. The stream may be empty if the method or constructor has no parameters. The
      * stream will never be {@code null}.
@@ -72,15 +62,12 @@ public interface Invokable<T> {
     @NotNull Stream<MParameter<?>> getParameters();
 
     /**
-     * Returns a stream of all parameters of this method or constructor that match the given filter. The stream is
-     * ordered by the declaration order of the parameters in the source code. The stream may be empty if the method or
-     * constructor has no parameters that match the filter. The stream will never be {@code null}.
+     * Gets the return type of the method or constructor represented by this object.
      *
-     * @param filter the filter to apply to the parameters.
-     * @return a parameter stream.
+     * @return the return type.
      */
     @Contract(pure = true)
-    @NotNull Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter);
+    @NotNull Class<T> getReturnType();
 
     /**
      * Returns an optional containing the first parameter of this method or constructor that matches the given filter.
@@ -91,61 +78,22 @@ public interface Invokable<T> {
      * @return the first parameter that matches the filter.
      */
     @Contract(pure = true)
-    @NotNull Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter);
+    default @NotNull Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter) {
+        return this.getParameters(filter).findFirst();
+    }
 
     /**
-     * Returns a stream of all parameters of this method or constructor that are of the given type. The stream is
+     * Returns a stream of all parameters of this method or constructor that match the given filter. The stream is
      * ordered by the declaration order of the parameters in the source code. The stream may be empty if the method or
-     * constructor has no parameters of the given type. The stream will never be {@code null}.
+     * constructor has no parameters that match the filter. The stream will never be {@code null}.
      *
-     * @param type the type of the parameters.
-     * @param <P>  the type of the parameters.
+     * @param filter the filter to apply to the parameters.
      * @return a parameter stream.
      */
     @Contract(pure = true)
-    <P> @NotNull Stream<MParameter<P>> getParametersOfType(@NotNull Class<P> type);
-
-    /**
-     * Returns an optional containing the first parameter of this method or constructor that is of the given type. The
-     * optional may be empty if the method or constructor has no parameters of the given type. The optional will never
-     * be {@code null}.
-     *
-     * @param type the type of the parameter.
-     * @param <P>  the type of the parameter.
-     * @return the first parameter of the given type.
-     */
-    @Contract(pure = true)
-    <P> @NotNull Optional<MParameter<P>> getParameterOfType(@NotNull Class<P> type);
-
-    /**
-     * Returns a stream of all parameters of this method or constructor that have the given annotations. The stream is
-     * ordered by the declaration order of the parameters in the source code. The stream may be empty if the method or
-     * constructor has no parameters with the given annotations. The stream will never be {@code null}.
-     *
-     * @param annotations the annotations of the parameters.
-     * @return a parameter stream.
-     */
-    @Contract(pure = true)
-    @NotNull Stream<MParameter<?>> getParametersWithAnnotations(@NotNull Class<? extends Annotation>[] annotations);
-
-    /**
-     * Returns an optional containing the first parameter of this method or constructor that has the given annotations.
-     * The optional may be empty if the method or constructor has no parameters with the given annotations. The optional
-     * will never be {@code null}.
-     *
-     * @param annotations the annotations of the parameter.
-     * @return the first parameter with the given annotations.
-     */
-    @Contract(pure = true)
-    @NotNull Optional<MParameter<?>> getParameterWithAnnotations(@NotNull Class<? extends Annotation>[] annotations);
-
-    /**
-     * Returns whether this method or constructor has parameters.
-     *
-     * @return {@code true} if this method or constructor has parameters, {@code false} otherwise.
-     */
-    @Contract(pure = true)
-    boolean hasParameters();
+    default @NotNull Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter) {
+        return this.getParameters().filter(filter);
+    }
 
     /**
      * Returns the number of parameters of this method or constructor.
@@ -154,4 +102,14 @@ public interface Invokable<T> {
      */
     @Contract(pure = true)
     int getParameterCount();
+
+    /**
+     * Returns whether this method or constructor has parameters.
+     *
+     * @return {@code true} if this method or constructor has parameters, {@code false} otherwise.
+     */
+    @Contract(pure = true)
+    default boolean hasParameters() {
+        return this.getParameterCount() > 0;
+    }
 }

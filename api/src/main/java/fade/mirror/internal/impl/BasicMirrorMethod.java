@@ -15,10 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -99,28 +96,8 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(this.method.getModifiers());
-    }
-
-    @Override
-    public boolean isProtected() {
-        return Modifier.isProtected(this.method.getModifiers());
-    }
-
-    @Override
-    public boolean isPackagePrivate() {
-        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
-    }
-
-    @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(this.method.getModifiers());
-    }
-
-    @Override
-    public boolean isStatic() {
-        return Modifier.isStatic(this.method.getModifiers());
+    public int getModifiers() {
+        return this.method.getModifiers();
     }
 
     @Override
@@ -142,36 +119,6 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations(filter).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation>[] annotations) {
-        return Arrays.stream(annotations).anyMatch(this::isAnnotatedWith);
-    }
-
-    @Override
-    public boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
-    }
-
-    @Override
-    public @NotNull <C extends Annotation> Optional<C> getAnnotationOfType(@NotNull Class<C> type) {
-        return this.getAnnotations().filter(type::isInstance).map(type::cast).findFirst();
-    }
-
-    @Override
-    public boolean isAnnotated() {
-        return this.getAnnotationCount() > 0;
-    }
-
-    @Override
     public int getAnnotationCount() {
         return this.method.getAnnotations().length;
     }
@@ -180,44 +127,6 @@ public final class BasicMirrorMethod<T>
     @Override
     public @NotNull Stream<MParameter<?>> getParameters() {
         return Arrays.stream(this.method.getParameters()).map(BasicMirrorParameter::from);
-    }
-
-    @Override
-    public @NotNull Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter) {
-        return this.getParameters().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter) {
-        return this.getParameters(filter).findFirst();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull <C> Stream<MParameter<C>> getParametersOfType(@NotNull Class<C> type) {
-        return this.getParameters()
-                .filter(parameter -> parameter.getType().equals(type))
-                .map(parameter -> (MParameter<C>) parameter);
-    }
-
-    @Override
-    public @NotNull <C> Optional<MParameter<C>> getParameterOfType(@NotNull Class<C> type) {
-        return this.getParametersOfType(type).findFirst();
-    }
-
-    @Override
-    public @NotNull Stream<MParameter<?>> getParametersWithAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
-        return this.getParameters().filter(parameter -> parameter.isAnnotatedWith(annotations));
-    }
-
-    @Override
-    public @NotNull Optional<MParameter<?>> getParameterWithAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
-        return this.getParametersWithAnnotations(annotations).findFirst();
-    }
-
-    @Override
-    public boolean hasParameters() {
-        return this.getParameterCount() > 0;
     }
 
     @Override

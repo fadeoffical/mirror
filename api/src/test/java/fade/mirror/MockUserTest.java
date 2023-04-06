@@ -6,6 +6,7 @@ import fade.mirror.mock.MockUserSubClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static fade.mirror.Mirror.mirror;
@@ -37,7 +38,8 @@ class MockUserTest {
     @Test
     @DisplayName("instantiate user with username and email")
     void testAccessDefaultConstructorAndInstantiate() {
-        MockUser user = mirror(MockUser.class).getConstructorWithTypes(String.class, String.class)
+        MockUser user = mirror(MockUser.class)
+                .getConstructor(Filter.forConstructors().withParameters(List.of(String.class, String.class))::test)
                 .orElseThrow()
                 .requireAccessible()
                 .invokeWithNoInstance("bob", "bob@example.com");
