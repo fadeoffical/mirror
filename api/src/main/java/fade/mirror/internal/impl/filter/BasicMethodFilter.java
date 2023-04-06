@@ -1,6 +1,5 @@
 package fade.mirror.internal.impl.filter;
 
-import fade.mirror.MConstructor;
 import fade.mirror.MMethod;
 import fade.mirror.MParameter;
 import fade.mirror.filter.Filter;
@@ -12,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Basic implementation of {@link MethodFilter}.
@@ -148,7 +146,7 @@ public final class BasicMethodFilter<T>
     }
 
     @Override
-    public @NotNull Predicate<MConstructor<fade.mirror.mock.MockClass>> withParameter(@NotNull Class<?> parameterType) {
+    public @NotNull MethodFilter<T> withParameter(@NotNull Class<?> parameterType) {
         return this.withParameter(parameterType, RewriteOperation.Append);
     }
 
