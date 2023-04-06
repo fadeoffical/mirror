@@ -18,7 +18,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -153,16 +152,6 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public @NotNull Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter) {
-        return this.getParameters().filter(filter);
-    }
-
-    @Override
-    public @NotNull Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter) {
-        return this.getParameters(filter).findFirst();
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public @NotNull <C> Stream<MParameter<C>> getParametersOfType(@NotNull Class<C> type) {
         return this.getParameters()
@@ -183,11 +172,6 @@ public final class BasicMirrorMethod<T>
     @Override
     public @NotNull Optional<MParameter<?>> getParameterWithAnnotations(@NotNull Class<? extends Annotation>[] annotations) {
         return this.getParametersWithAnnotations(annotations).findFirst();
-    }
-
-    @Override
-    public boolean hasParameters() {
-        return this.getParameterCount() > 0;
     }
 
     @Override

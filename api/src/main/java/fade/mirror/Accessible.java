@@ -24,7 +24,7 @@ public interface Accessible<T extends Accessible<T>> {
      * @return {@code true} if the object is public, {@code false} otherwise.
      */
     @Contract(pure = true)
-    boolean isPublic();
+    boolean isPublic(); // todo
 
     /**
      * Checks if the object is protected.
