@@ -1,11 +1,9 @@
 package fade.mirror;
 
-import fade.mirror.filter.Filter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -98,60 +96,6 @@ public interface Invokable<T> {
     default Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter) {
         return this.getParameters().filter(filter);
     }
-
-    /**
-     * Returns a stream of all parameters of this method or constructor that are of the given type. The stream is
-     * ordered by the declaration order of the parameters in the source code. The stream may be empty if the method or
-     * constructor has no parameters of the given type. The stream will never be {@code null}.
-     *
-     * @param type the type of the parameters.
-     * @param <P>  the type of the parameters.
-     * @return a parameter stream.
-     * @deprecated use {@link #getParameters(Predicate)} & {@link Filter}s instead.
-     */
-    @Contract(pure = true)
-    @Deprecated(forRemoval = true)
-    <P> @NotNull Stream<MParameter<P>> getParametersOfType(@NotNull Class<P> type);
-
-    /**
-     * Returns an optional containing the first parameter of this method or constructor that is of the given type. The
-     * optional may be empty if the method or constructor has no parameters of the given type. The optional will never
-     * be {@code null}.
-     *
-     * @param type the type of the parameter.
-     * @param <P>  the type of the parameter.
-     * @return the first parameter of the given type.
-     * @deprecated use {@link #getParameter(Predicate)} & {@link Filter}s instead.
-     */
-    @Contract(pure = true)
-    @Deprecated(forRemoval = true)
-    <P> @NotNull Optional<MParameter<P>> getParameterOfType(@NotNull Class<P> type);
-
-    /**
-     * Returns a stream of all parameters of this method or constructor that have the given annotations. The stream is
-     * ordered by the declaration order of the parameters in the source code. The stream may be empty if the method or
-     * constructor has no parameters with the given annotations. The stream will never be {@code null}.
-     *
-     * @param annotations the annotations of the parameters.
-     * @return a parameter stream.
-     * @deprecated use {@link #getParameters(Predicate)} & {@link Filter}s instead.
-     */
-    @Contract(pure = true)
-    @Deprecated(forRemoval = true)
-    @NotNull Stream<MParameter<?>> getParametersWithAnnotations(@NotNull Class<? extends Annotation>[] annotations);
-
-    /**
-     * Returns an optional containing the first parameter of this method or constructor that has the given annotations.
-     * The optional may be empty if the method or constructor has no parameters with the given annotations. The optional
-     * will never be {@code null}.
-     *
-     * @param annotations the annotations of the parameter.
-     * @return the first parameter with the given annotations.
-     * @deprecated use {@link #getParameter(Predicate)} & {@link Filter}s instead.
-     */
-    @Contract(pure = true)
-    @Deprecated(forRemoval = true)
-    @NotNull Optional<MParameter<?>> getParameterWithAnnotations(@NotNull Class<? extends Annotation>[] annotations);
 
     /**
      * Returns the number of parameters of this method or constructor.

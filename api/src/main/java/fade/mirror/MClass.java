@@ -114,19 +114,6 @@ public sealed interface MClass<T>
     }
 
     /**
-     * Returns an optional containing the constructor of this class that has the given parameter types. The optional may
-     * be empty if the class has no constructors that match the filter. The optional will never be {@code null}.
-     *
-     * @deprecated Filters have superseded this method. Use {@link #getConstructor(Predicate)} instead.
-     *
-     * @param types the parameter types.
-     * @return the constructor with the given parameter types.
-     */
-    @Contract(pure = true)
-    @Deprecated(forRemoval = true)
-    @NotNull Optional<MConstructor<T>> getConstructorWithTypes(@NotNull Class<?>... types);
-
-    /**
      * Returns the number of constructors of this class.
      *
      * @return the number of constructors.

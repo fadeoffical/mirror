@@ -120,13 +120,6 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
-    @Deprecated
-    public @NotNull Optional<MConstructor<T>> getConstructorWithTypes(@NotNull Class<?>... types) {
-        return this.getConstructor(constructor -> Arrays.equals(constructor.getRawConstructor()
-                .getParameterTypes(), types));
-    }
-
-    @Override
     public int getConstructorCount() {
         return this.clazz.getConstructors().length;
     }
