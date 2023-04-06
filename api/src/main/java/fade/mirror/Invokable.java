@@ -78,8 +78,7 @@ public interface Invokable<T> {
      * @return the first parameter that matches the filter.
      */
     @Contract(pure = true)
-    @NotNull
-    default Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter) {
+    default @NotNull Optional<MParameter<?>> getParameter(@NotNull Predicate<MParameter<?>> filter) {
         return this.getParameters(filter).findFirst();
     }
 
@@ -92,8 +91,7 @@ public interface Invokable<T> {
      * @return a parameter stream.
      */
     @Contract(pure = true)
-    @NotNull
-    default Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter) {
+    default @NotNull Stream<MParameter<?>> getParameters(@NotNull Predicate<MParameter<?>> filter) {
         return this.getParameters().filter(filter);
     }
 

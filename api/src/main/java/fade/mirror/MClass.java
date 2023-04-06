@@ -83,8 +83,7 @@ public sealed interface MClass<T>
      * @return a constructor stream.
      */
     @Contract(pure = true)
-    @NotNull
-    default Stream<MConstructor<T>> getConstructors(@NotNull Predicate<MConstructor<T>> filter) {
+    default @NotNull Stream<MConstructor<T>> getConstructors(@NotNull Predicate<MConstructor<T>> filter) {
         return this.getConstructors().filter(filter);
     }
 
@@ -95,8 +94,7 @@ public sealed interface MClass<T>
      * @return the first constructor that matches the filter.
      */
     @Contract(pure = true)
-    @NotNull
-    default Optional<MConstructor<T>> getConstructor() {
+    default @NotNull Optional<MConstructor<T>> getConstructor() {
         return this.getConstructors().findFirst();
     }
 
@@ -108,8 +106,7 @@ public sealed interface MClass<T>
      * @return the first constructor that matches the filter.
      */
     @Contract(pure = true)
-    @NotNull
-    default Optional<MConstructor<T>> getConstructor(@NotNull Predicate<MConstructor<T>> filter) {
+    default @NotNull Optional<MConstructor<T>> getConstructor(@NotNull Predicate<MConstructor<T>> filter) {
         return this.getConstructors(filter).findFirst();
     }
 
@@ -144,8 +141,7 @@ public sealed interface MClass<T>
      * @return a field stream.
      */
     @Contract(pure = true)
-    @NotNull
-    default Stream<MField<?>> getFields() {
+    default @NotNull Stream<MField<?>> getFields() {
         return this.getFields(MClass.IncludeSuperclasses.No);
     }
 

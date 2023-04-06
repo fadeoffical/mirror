@@ -35,8 +35,7 @@ public interface Annotated {
      * @return all annotations of this element that match the filter.
      */
     @Contract(pure = true)
-    @NotNull
-    default Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
+    default @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
         return this.getAnnotations().filter(filter);
     }
 
@@ -48,8 +47,7 @@ public interface Annotated {
      * @return the first annotation of this element that matches the filter.
      */
     @Contract(pure = true)
-    @NotNull
-    default Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
+    default @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
         return this.getAnnotations(filter).findFirst();
     }
 
