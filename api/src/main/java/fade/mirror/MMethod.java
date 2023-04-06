@@ -10,7 +10,7 @@ import fade.mirror.internal.impl.BasicMirrorMethod;
  * @author fade
  */
 public sealed interface MMethod<T>
-        extends Invokable<T>, Accessible<MMethod<T>>, Copyable<MMethod<T>>, Parameterized, Annotated, Named, Declared
+        extends Invokable<T>, Accessible<MMethod<T>>, Copyable<MMethod<T>>, Annotated, Named, Declared
         permits BasicMirrorMethod {
 
     // todo: return type

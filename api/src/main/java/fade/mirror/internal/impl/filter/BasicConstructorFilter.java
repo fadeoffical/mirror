@@ -114,9 +114,10 @@ public final class BasicConstructorFilter
                 .map(MParameter::getType)
                 .allMatch(parameterType -> this.parameterTypes.stream().anyMatch(parameterType::isAssignableFrom)))
             return false;
-        return this.annotations != null || constructor.getAnnotations()
-                .allMatch(annotation -> this.annotations.stream()
-                        .anyMatch(clazz -> clazz.isAssignableFrom(annotation.annotationType())));
+
+        return this.annotations == null || (constructor.getAnnotations().findAny().isPresent() && constructor.getAnnotations()
+            .allMatch(annotation -> this.annotations.stream()
+                .anyMatch(annotationType -> annotationType.isAssignableFrom(annotation.getClass()))));
     }
 
     @Override
