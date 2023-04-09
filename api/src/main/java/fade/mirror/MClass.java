@@ -65,9 +65,6 @@ public sealed interface MClass<T>
     <O extends T> @NotNull T cast(@NotNull O object);
 
     @Contract(pure = true)
-    @NotNull T unsafeCast(@NotNull Object object);
-
-    @Contract(pure = true)
     @NotNull Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf);
 
     @NotNull
