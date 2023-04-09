@@ -115,6 +115,24 @@ public final class BasicMirrorClass<T>
     }
 
     @Override
+    public @NotNull Stream<MClass<?>> getSubclasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull IncludeSelf includeSelf) {
+        Class<?>[] subClasses = this.clazz.getDeclaredClasses();
+
+        return new ArrayList<MClass<?>>(subClasses.length + (includeSelf.include() ? 1 : 0)) {{
+            if (includeSelf.include())
+                this.add(BasicMirrorClass.this);
+
+            Arrays.stream(subClasses)
+                .map(BasicMirrorClass::from)
+                .forEach(mClass -> {
+                    this.add(mClass);
+                    if (recurseInnerClasses.include())
+                        this.addAll(mClass.getSubclasses(recurseInnerClasses).toList());
+                });
+        }}.stream();
+    }
+
+    @Override
     public @NotNull Stream<MConstructor<T>> getConstructors() {
         return this.getRawConstructors().map(BasicMirrorConstructor::from);
     }

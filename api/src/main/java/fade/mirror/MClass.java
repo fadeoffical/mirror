@@ -64,6 +64,46 @@ public sealed interface MClass<T>
     @Contract(pure = true)
     <O extends T> @NotNull T cast(@NotNull O object);
 
+    @Contract(pure = true)
+    @NotNull T unsafeCast(@NotNull Object object);
+
+    @Contract(pure = true)
+    @NotNull Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf);
+
+    @NotNull
+    default Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses) {
+        return this.getInnerClasses(recurseInnerClasses, IncludeSelf.No);
+    }
+
+    @NotNull
+    default Stream<MClass<?>> getInnerClasses(@NotNull MClass.IncludeSelf includeSelf) {
+        return this.getInnerClasses(RecurseInnerClasses.No, includeSelf);
+    }
+
+    default @NotNull Stream<MClass<?>> getInnerClasses() {
+        return this.getInnerClasses(RecurseInnerClasses.No, IncludeSelf.No);
+    }
+
+    default @NotNull Optional<MClass<?>> getInnerClass() { // todo: is this method of any use?
+        return this.getInnerClasses().findFirst();
+    }
+
+    default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter) {
+        return this.getInnerClasses().filter(filter).findFirst();
+    }
+
+    default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseInnerClasses recurseInnerClasses) {
+        return this.getInnerClasses(recurseInnerClasses).filter(filter).findFirst();
+    }
+
+    default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.IncludeSelf includeSelf) {
+        return this.getInnerClasses(includeSelf).filter(filter).findFirst();
+    }
+
+    default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf) {
+        return this.getInnerClasses(recurseInnerClasses, includeSelf).filter(filter).findFirst();
+    }
+
     /**
      * Returns a stream of all constructors of this class. The stream is ordered by the declaration order of the
      * constructors in the source code. The stream may be empty if the class has no constructors. The stream will never
@@ -342,6 +382,17 @@ public sealed interface MClass<T>
     }
 
     enum IncludeSelf
+            implements MClass.Include {
+        Yes, No;
+
+        @Override
+        @Contract(pure = true)
+        public boolean include() {
+            return this == Yes;
+        }
+    }
+
+    enum RecurseInnerClasses
             implements MClass.Include {
         Yes, No;
 
