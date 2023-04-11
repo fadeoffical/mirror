@@ -222,7 +222,7 @@ public final class BasicMirrorClass<Type>
     }
 
     @Override
-    public @NotNull <F> Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
+    public @NotNull <MethodType> Optional<MMethod<MethodType>> getMethod(@NotNull Predicate<MMethod<MethodType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
         if (includeSuperclasses.asBoolean()) return this.getMethods(filter, includeSuperclasses).findFirst();
         return this.getMethods(filter).findFirst();
     }
