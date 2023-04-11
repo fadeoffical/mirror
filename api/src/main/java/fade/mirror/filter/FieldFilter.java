@@ -1,9 +1,9 @@
 package fade.mirror.filter;
 
 import fade.mirror.MField;
-import fade.mirror.filter.by.Annotations;
-import fade.mirror.filter.by.Name;
-import fade.mirror.filter.by.Type;
+import fade.mirror.filter.by.ByAnnotations;
+import fade.mirror.filter.by.ByName;
+import fade.mirror.filter.by.ByType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,11 +13,14 @@ import org.jetbrains.annotations.NotNull;
  * field on an existing filter.
  * </p>
  *
- * @param <T> the type of the field
+ * @param <Type> the type of the field
  * @author fade
  */
-public interface FieldFilter<T>
-        extends Filter<MField<T>>, Annotations<FieldFilter<T>>, Name<FieldFilter<T>>, Type<FieldFilter<T>> {
+public interface FieldFilter<Type>
+        extends Filter<MField<Type>>,
+                ByAnnotations<FieldFilter<Type>>,
+                ByName<FieldFilter<Type>>,
+                ByType<FieldFilter<Type>> {
 
-    <C> @NotNull FieldFilter<C> ofType(@NotNull Class<C> type);
+    <ClassType> @NotNull FieldFilter<ClassType> ofType(@NotNull Class<ClassType> type);
 }

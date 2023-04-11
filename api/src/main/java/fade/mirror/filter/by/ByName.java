@@ -2,7 +2,7 @@ package fade.mirror.filter.by;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface Name<R> {
+public interface ByName<Self extends ByName<Self>> {
 
     /**
      * Adds a required name to this filter. The field filter will only keep fields with the specified name.
@@ -18,5 +18,5 @@ public interface Name<R> {
      * @param name the name of the field
      * @return this filter
      */
-    @NotNull R withName(@NotNull String name);
+    @NotNull Self withName(@NotNull String name);
 }

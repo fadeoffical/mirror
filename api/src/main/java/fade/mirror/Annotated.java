@@ -83,11 +83,11 @@ public interface Annotated {
      * be empty if the element has no annotation that match the type. The optional will never be {@code null}.
      *
      * @param type the annotation type to match.
-     * @param <T>  the type of the annotation.
+     * @param <ClassType>  the type of the annotation.
      * @return the first annotation of this element that matches the type.
      */
     @Contract(pure = true)
-    default <T extends Annotation> @NotNull Optional<T> getAnnotationOfType(@NotNull Class<T> type) {
+    default <ClassType extends Annotation> @NotNull Optional<ClassType> getAnnotationOfType(@NotNull Class<ClassType> type) {
         return this.getAnnotation(annotation -> type.isAssignableFrom(annotation.annotationType()))
                 .map(type::cast);
     }

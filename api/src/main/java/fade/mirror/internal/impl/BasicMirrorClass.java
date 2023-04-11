@@ -63,7 +63,7 @@ public final class BasicMirrorClass<T>
     @Override
     public @NotNull Stream<MClass<?>> getSuperclasses(@NotNull IncludeSelf includeSelf) {
         List<MClass<?>> classes = new ArrayList<>(1);
-        Optional<MClass<?>> optionalClass = includeSelf.include() ? Optional.of(this) : this.getSuperclass();
+        Optional<MClass<?>> optionalClass = includeSelf.asBoolean() ? Optional.of(this) : this.getSuperclass();
 
         do {
             if (optionalClass.isEmpty()) break;
@@ -83,7 +83,7 @@ public final class BasicMirrorClass<T>
     @Override
     @SuppressWarnings("unchecked")
     public @NotNull <C> Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter, @NotNull MClass.IncludeSelf includeSelf) {
-        Optional<MClass<?>> optionalClass = includeSelf.include() ? Optional.of(this) : this.getSuperclass();
+        Optional<MClass<?>> optionalClass = includeSelf.asBoolean() ? Optional.of(this) : this.getSuperclass();
 
         do {
             if (optionalClass.isEmpty()) return Optional.empty();
@@ -118,15 +118,15 @@ public final class BasicMirrorClass<T>
     public @NotNull Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull IncludeSelf includeSelf) {
         Class<?>[] subClasses = this.clazz.getDeclaredClasses();
 
-        return new ArrayList<MClass<?>>(subClasses.length + (includeSelf.include() ? 1 : 0)) {{
-            if (includeSelf.include())
+        return new ArrayList<MClass<?>>(subClasses.length + (includeSelf.asBoolean() ? 1 : 0)) {{
+            if (includeSelf.asBoolean())
                 this.add(BasicMirrorClass.this);
 
             Arrays.stream(subClasses)
                 .map(BasicMirrorClass::from)
                 .forEach(mClass -> {
                     this.add(mClass);
-                    if (recurseInnerClasses.include())
+                    if (recurseInnerClasses.asBoolean())
                         this.addAll(mClass.getInnerClasses(recurseInnerClasses).toList());
                 });
         }}.stream();
@@ -150,7 +150,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull Stream<MField<?>> getFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include())
+        if (includeSuperclasses.asBoolean())
             return this.getSuperclasses(IncludeSelf.Yes).flatMap(MClass::getFields);
 
         return this.getRawFields().map(BasicMirrorField::from);
@@ -159,26 +159,26 @@ public final class BasicMirrorClass<T>
     @Override
     @SuppressWarnings("unchecked")
     public @NotNull <F> Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include())
+        if (includeSuperclasses.asBoolean())
             return this.getSuperclasses(IncludeSelf.Yes).flatMap(clazz -> clazz.getFields(filter));
         return this.getFields().map(field -> (MField<F>) field).filter(filter);
     }
 
     @Override
     public @NotNull <F> Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getFields(filter, includeSuperclasses).findFirst();
+        if (includeSuperclasses.asBoolean()) return this.getFields(filter, includeSuperclasses).findFirst();
         return this.getFields(filter).findFirst();
     }
 
     @Override
     public boolean hasFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).anyMatch(MClass::hasFields);
+        if (includeSuperclasses.asBoolean()) return this.getSuperclasses(IncludeSelf.Yes).anyMatch(MClass::hasFields);
         return this.getFieldCount() > 0;
     }
 
     @Override
     public int getFieldCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include())
+        if (includeSuperclasses.asBoolean())
             return this.getSuperclasses(IncludeSelf.Yes).mapToInt(MClass::getFieldCount).sum();
         return this.clazz.getDeclaredFields().length;
     }
@@ -190,7 +190,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull Stream<Field> getRawFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses().flatMap(MClass::getRawFields);
+        if (includeSuperclasses.asBoolean()) return this.getSuperclasses().flatMap(MClass::getRawFields);
         return Arrays.stream(this.clazz.getDeclaredFields());
     }
 
@@ -201,7 +201,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull Stream<MMethod<?>> getMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).flatMap(MClass::getMethods);
+        if (includeSuperclasses.asBoolean()) return this.getSuperclasses(IncludeSelf.Yes).flatMap(MClass::getMethods);
         return this.getRawMethods().map(BasicMirrorMethod::from);
     }
 
@@ -213,7 +213,7 @@ public final class BasicMirrorClass<T>
     @Override
     @SuppressWarnings("unchecked")
     public @NotNull <F> Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include())
+        if (includeSuperclasses.asBoolean())
             return this.getSuperclasses(IncludeSelf.Yes).flatMap(clazz -> clazz.getMethods(filter));
         return this.getMethods().map(method -> (MMethod<F>) method).filter(filter);
     }
@@ -225,7 +225,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull <F> Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getMethods(filter, includeSuperclasses).findFirst();
+        if (includeSuperclasses.asBoolean()) return this.getMethods(filter, includeSuperclasses).findFirst();
         return this.getMethods(filter).findFirst();
     }
 
@@ -236,7 +236,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public boolean hasMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses(IncludeSelf.Yes).anyMatch(MClass::hasMethods);
+        if (includeSuperclasses.asBoolean()) return this.getSuperclasses(IncludeSelf.Yes).anyMatch(MClass::hasMethods);
         return this.getMethodCount() > 0;
     }
 
@@ -247,7 +247,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public int getMethodCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include())
+        if (includeSuperclasses.asBoolean())
             return this.getSuperclasses(IncludeSelf.Yes).mapToInt(MClass::getMethodCount).sum();
         return this.clazz.getDeclaredMethods().length;
     }
@@ -259,7 +259,7 @@ public final class BasicMirrorClass<T>
 
     @Override
     public @NotNull Stream<Method> getRawMethods(@NotNull MClass.IncludeSuperclasses includeSuperclasses) {
-        if (includeSuperclasses.include()) return this.getSuperclasses().flatMap(MClass::getRawMethods);
+        if (includeSuperclasses.asBoolean()) return this.getSuperclasses().flatMap(MClass::getRawMethods);
         return Arrays.stream(this.clazz.getDeclaredMethods());
     }
 

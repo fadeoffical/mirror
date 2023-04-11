@@ -9,12 +9,12 @@ import java.util.Optional;
 /**
  * Represents a field inside a {@link MClass}. A field has a name, a type and a value. It may also have annotations.
  *
- * @param <T> the type of the class.
+ * @param <Type> the type of the class.
  * @author fade
  */
 
-public interface MField<T>
-        extends Accessible<MField<T>>, Annotated, Named, Declared {
+public interface MField<Type>
+        extends Accessible<MField<Type>>, Annotated, Named, Declared {
 
     /**
      * Gets the type of the field.
@@ -22,7 +22,7 @@ public interface MField<T>
      * @return the field type.
      */
     @Contract(pure = true)
-    @NotNull Class<T> getType();
+    @NotNull Class<Type> getType();
 
     /**
      * Gets the value of the field in the given instance.
@@ -31,7 +31,7 @@ public interface MField<T>
      * @return the field value.
      */
     @Contract(pure = true)
-    @NotNull Optional<T> getValue(@Nullable Object instance);
+    @NotNull Optional<Type> getValue(@Nullable Object instance);
 
     /**
      * Gets the value of the field. If the field is static, the value will be the same for all instances of the class.
@@ -43,7 +43,7 @@ public interface MField<T>
      * @return the field value.
      */
     @Contract(pure = true)
-    default @NotNull Optional<T> getValue() {
+    default @NotNull Optional<Type> getValue() {
         return this.getValue(null);
     }
 
@@ -54,7 +54,7 @@ public interface MField<T>
      * @param value  the new value.
      * @return this field.
      */
-    @NotNull MField<T> setValue(@Nullable Object instance, @Nullable T value);
+    @NotNull MField<Type> setValue(@Nullable Object instance, @Nullable Type value);
 
     /**
      * Sets the value of the field.
@@ -65,7 +65,7 @@ public interface MField<T>
      * @param value the new value.
      * @return this field.
      */
-    default @NotNull MField<T> setValue(@Nullable T value) {
+    default @NotNull MField<Type> setValue(@Nullable Type value) {
         return this.setValue(null, value);
     }
 

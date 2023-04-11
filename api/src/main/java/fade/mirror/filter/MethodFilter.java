@@ -1,10 +1,10 @@
 package fade.mirror.filter;
 
 import fade.mirror.MMethod;
-import fade.mirror.filter.by.Annotations;
-import fade.mirror.filter.by.Name;
+import fade.mirror.filter.by.ByAnnotations;
+import fade.mirror.filter.by.ByName;
 import fade.mirror.filter.by.Parameters;
-import fade.mirror.filter.by.Type;
+import fade.mirror.filter.by.ByType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,12 +17,12 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author fade
  */
-public interface MethodFilter<T>
-        extends Filter<MMethod<T>>,
-                Annotations<MethodFilter<T>>,
-                Parameters<MethodFilter<T>>,
-                Type<MethodFilter<T>>,
-                Name<MethodFilter<T>> {
+public interface MethodFilter<Type>
+        extends Filter<MMethod<Type>>,
+                ByAnnotations<MethodFilter<Type>>,
+                Parameters<MethodFilter<Type>>,
+                ByType<MethodFilter<Type>>,
+                ByName<MethodFilter<Type>> {
 
-    <C> @NotNull MethodFilter<C> ofType(@NotNull Class<C> type);
+    <ClassType> @NotNull MethodFilter<ClassType> ofType(@NotNull Class<ClassType> type);
 }
