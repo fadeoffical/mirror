@@ -99,7 +99,7 @@ public final class BasicParameterFilter
     }
 
     @Override
-    public @NotNull <C> ParameterFilter ofType(Class<C> type) {
+    public @NotNull <ClassType> ParameterFilter ofType(Class<ClassType> type) {
         this.type = type;
         return this;
     }

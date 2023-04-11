@@ -168,8 +168,8 @@ class MirrorTest {
 
         List<? extends MParameter<?>> mockClassParameters = mirror(MockClass.class)
                 .getMethods(Filter.forMethods()
-                        .withName("mockMethod")
-                        .withParameters(List.of(int.class, String.class)))
+                .withName("mockMethod")
+                .withParameters(List.of(int.class, String.class)))
                 .flatMap(MMethod::getParameters)
                 .toList();
 

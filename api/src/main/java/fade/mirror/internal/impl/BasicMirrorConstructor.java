@@ -21,15 +21,15 @@ import java.util.stream.Stream;
 /**
  * A basic implementation of {@link MConstructor}.
  *
- * @param <T> The type of the constructor's declaring class.
+ * @param <Type> The type of the constructor's declaring class.
  * @author fade
  */
-public final class BasicMirrorConstructor<T>
-        implements MConstructor<T> {
+public final class BasicMirrorConstructor<Type>
+        implements MConstructor<Type> {
 
-    private final Constructor<T> constructor;
+    private final Constructor<Type> constructor;
 
-    private BasicMirrorConstructor(@NotNull Constructor<T> constructor) {
+    private BasicMirrorConstructor(@NotNull Constructor<Type> constructor) {
         this.constructor = constructor;
     }
 
@@ -38,17 +38,17 @@ public final class BasicMirrorConstructor<T>
      * Instead, use {@link Mirror#mirror(Constructor)}.
      *
      * @param constructor The constructor to create the mirror from.
-     * @param <T>         The type of the constructor's declaring class.
+     * @param <Type>         The type of the constructor's declaring class.
      * @return The created mirror.
      */
     @ApiStatus.Internal
     @Contract(value = "_ -> new", pure = true)
-    public static <T> @NotNull MConstructor<T> from(@NotNull Constructor<T> constructor) {
+    public static <Type> @NotNull MConstructor<Type> from(@NotNull Constructor<Type> constructor) {
         return new BasicMirrorConstructor<>(constructor);
     }
 
     @Override
-    public @NotNull T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments) {
+    public @NotNull Type invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments) {
         this.requireAccessible(); // todo: is the check below necessary?
 
         if (!this.isAccessible())
@@ -74,7 +74,7 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public @NotNull MClass<T> getDeclaringClass() {
+    public @NotNull MClass<Type> getDeclaringClass() {
         return BasicMirrorClass.from(this.constructor.getDeclaringClass());
     }
 
@@ -84,7 +84,7 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public @NotNull Class<T> getReturnType() {
+    public @NotNull Class<Type> getReturnType() {
         return this.getDeclaringClass().getRawClass();
     }
 
@@ -98,7 +98,7 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public @NotNull Constructor<T> getRawConstructor() {
+    public @NotNull Constructor<Type> getRawConstructor() {
         return this.constructor;
     }
 
@@ -108,7 +108,7 @@ public final class BasicMirrorConstructor<T>
     }
 
     @Override
-    public @NotNull MConstructor<T> makeAccessible(@Nullable Object instance) {
+    public @NotNull MConstructor<Type> makeAccessible(@Nullable Object instance) {
         if (!this.isAccessible(instance)) {
             this.constructor.trySetAccessible();
         }

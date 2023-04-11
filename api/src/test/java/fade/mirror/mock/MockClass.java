@@ -18,10 +18,6 @@ public class MockClass {
     public static void mockMethodStatic() {
     }
 
-    public static void mockMethodWithClassParameter(MockUser user) {
-        System.out.println(user.getUsername());
-    }
-
     public void mockMethod() {
     }
 
@@ -37,5 +33,9 @@ public class MockClass {
 
     public int mockMethodWithReturn() {
         return 0;
+    }
+
+    public static void mockMethodWithClassParameter(MockUser user) {
+        System.out.println(user.getUsername());
     }
 }

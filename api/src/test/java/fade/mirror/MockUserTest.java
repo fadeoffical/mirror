@@ -54,9 +54,7 @@ class MockUserTest {
     void testAccessPackagePrivateField() {
         MockUser user = new MockUser("bob", "bob@example.com");
 
-        MField<String> field = mirror(MockUser.class).getField(Filter.forFields()
-                        .ofType(String.class)
-                        .withName("username"))
+        MField<String> field = mirror(MockUser.class).getField(Filter.forFields().ofType(String.class).withName("username"))
                 .orElseThrow()
                 .requireAccessible(user);
 
@@ -71,10 +69,10 @@ class MockUserTest {
     @DisplayName("access inherited fields")
     void testInheritedFields() {
         Optional<MField<String>> roleField = mirror(MockUserSubClass.class)
-                .getField(Filter.forFields().withName("role").ofType(String.class), MClass.IncludeSuperclasses.Yes);
+            .getField(Filter.forFields().withName("role").ofType(String.class), MClass.IncludeSuperclasses.Yes);
 
         Optional<MField<String>> usernameField = mirror(MockUserSubClass.class)
-                .getField(Filter.forFields().withName("username").ofType(String.class), MClass.IncludeSuperclasses.Yes);
+            .getField(Filter.forFields().withName("username").ofType(String.class), MClass.IncludeSuperclasses.Yes);
 
         assertTrue(roleField.isPresent(), "'roleField' is absent"); // test own field
         assertTrue(usernameField.isPresent(), "'usernameField' is absent"); // test inherited field

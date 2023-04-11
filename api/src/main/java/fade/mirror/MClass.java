@@ -182,6 +182,9 @@ public sealed interface MClass<Type>
     @Contract(pure = true)
     @NotNull Stream<MField<?>> getFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
+    @Contract(pure = true)
+    <FieldType> @NotNull Stream<MField<FieldType>> getFields(@NotNull Predicate<MField<FieldType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
     /**
      * Returns a stream of all fields of this class that match the given filter. The stream is ordered by the
      * declaration order of the fields in the source code. The stream may be empty if the class has no fields that match
@@ -197,7 +200,7 @@ public sealed interface MClass<Type>
     }
 
     @Contract(pure = true)
-    <FieldType> @NotNull Stream<MField<FieldType>> getFields(@NotNull Predicate<MField<FieldType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+    <FieldType> @NotNull Optional<MField<FieldType>> getField(@NotNull Predicate<MField<FieldType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns an optional containing the first field of this class that matches the given filter. The optional may be
@@ -211,9 +214,6 @@ public sealed interface MClass<Type>
     default <FieldType> @NotNull Optional<MField<FieldType>> getField(@NotNull Predicate<MField<FieldType>> filter) {
         return this.getField(filter, MClass.IncludeSuperclasses.No);
     }
-
-    @Contract(pure = true)
-    <FieldType> @NotNull Optional<MField<FieldType>> getField(@NotNull Predicate<MField<FieldType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns whether this class has any fields.
