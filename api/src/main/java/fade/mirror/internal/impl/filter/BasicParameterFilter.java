@@ -70,7 +70,9 @@ public final class BasicParameterFilter
 
         if (this.annotations != null) {
             boolean hasNoParameters = parameter.getAnnotations().findAny().isEmpty();
-            boolean noneMatch = parameter.getAnnotations().map(Annotation::annotationType).noneMatch(this.annotations::contains);
+            boolean noneMatch = parameter.getAnnotations()
+                    .map(Annotation::annotationType)
+                    .noneMatch(this.annotations::contains);
 
             if (hasNoParameters || noneMatch) return false;
         }

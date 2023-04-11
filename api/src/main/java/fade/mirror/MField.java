@@ -25,15 +25,6 @@ public interface MField<Type>
     @NotNull Class<Type> getType();
 
     /**
-     * Gets the value of the field in the given instance.
-     *
-     * @param instance the instance.
-     * @return the field value.
-     */
-    @Contract(pure = true)
-    @NotNull Optional<Type> getValue(@Nullable Object instance);
-
-    /**
      * Gets the value of the field. If the field is static, the value will be the same for all instances of the class.
      * Otherwise, the value will be dependent on the instance.
      * <p>
@@ -48,13 +39,13 @@ public interface MField<Type>
     }
 
     /**
-     * Sets the value of the field in the given instance.
+     * Gets the value of the field in the given instance.
      *
      * @param instance the instance.
-     * @param value  the new value.
-     * @return this field.
+     * @return the field value.
      */
-    @NotNull MField<Type> setValue(@Nullable Object instance, @Nullable Type value);
+    @Contract(pure = true)
+    @NotNull Optional<Type> getValue(@Nullable Object instance);
 
     /**
      * Sets the value of the field.
@@ -70,14 +61,13 @@ public interface MField<Type>
     }
 
     /**
-     * Checks if the field has a value in the given instance. A value is considered to be present if it is not
-     * {@code null}.
+     * Sets the value of the field in the given instance.
      *
-     * @param object the instance.
-     * @return {@code true} if the field has a value, {@code false} otherwise.
+     * @param instance the instance.
+     * @param value    the new value.
+     * @return this field.
      */
-    @Contract(pure = true)
-    boolean hasValue(@Nullable Object object);
+    @NotNull MField<Type> setValue(@Nullable Object instance, @Nullable Type value);
 
     /**
      * Checks if the field has a value. A value is considered to be present if it is not {@code null}.
@@ -88,4 +78,14 @@ public interface MField<Type>
     default boolean hasValue() {
         return this.hasValue(null);
     }
+
+    /**
+     * Checks if the field has a value in the given instance. A value is considered to be present if it is not
+     * {@code null}.
+     *
+     * @param object the instance.
+     * @return {@code true} if the field has a value, {@code false} otherwise.
+     */
+    @Contract(pure = true)
+    boolean hasValue(@Nullable Object object);
 }

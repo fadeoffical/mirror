@@ -60,12 +60,6 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Class<T> getReturnType() {
-        return (Class<T>) this.method.getReturnType();
-    }
-
-    @Override
     public @NotNull String getName() {
         return this.method.getName();
     }
@@ -73,6 +67,22 @@ public final class BasicMirrorMethod<T>
     @Override
     public @NotNull MClass<?> getDeclaringClass() {
         return BasicMirrorClass.from(this.method.getDeclaringClass());
+    }
+
+    @Override
+    public @NotNull Stream<MParameter<?>> getParameters() {
+        return Arrays.stream(this.method.getParameters()).map(BasicMirrorParameter::from);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Class<T> getReturnType() {
+        return (Class<T>) this.method.getReturnType();
+    }
+
+    @Override
+    public int getParameterCount() {
+        return this.method.getParameterCount();
     }
 
     @Override
@@ -121,16 +131,5 @@ public final class BasicMirrorMethod<T>
     @Override
     public int getAnnotationCount() {
         return this.method.getAnnotations().length;
-    }
-
-
-    @Override
-    public @NotNull Stream<MParameter<?>> getParameters() {
-        return Arrays.stream(this.method.getParameters()).map(BasicMirrorParameter::from);
-    }
-
-    @Override
-    public int getParameterCount() {
-        return this.method.getParameterCount();
     }
 }

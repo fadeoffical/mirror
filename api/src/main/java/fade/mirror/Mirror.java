@@ -31,8 +31,8 @@ public final class Mirror {
     /**
      * Creates a new {@link MClass} instance from the given {@link Class}.
      *
-     * @param clazz the class to create the mirror from.
-     * @param <Type>   the type of the class.
+     * @param clazz  the class to create the mirror from.
+     * @param <Type> the type of the class.
      * @return the mirror of the given class.
      */
     public static <Type> @NotNull MClass<Type> mirror(@NotNull Class<Type> clazz) {
@@ -43,7 +43,7 @@ public final class Mirror {
      * Creates a new {@link MConstructor} instance from the given {@link Constructor}.
      *
      * @param constructor the constructor to create the mirror from.
-     * @param <Type>         the type of the class.
+     * @param <Type>      the type of the class.
      * @return the mirror of the given constructor.
      */
     public static <Type> @NotNull MConstructor<Type> mirror(@NotNull Constructor<Type> constructor) {
@@ -53,8 +53,8 @@ public final class Mirror {
     /**
      * Creates a new {@link MField} instance from the given {@link Field}.
      *
-     * @param field the field to create the mirror from.
-     * @param <Type>   the type of the class.
+     * @param field  the field to create the mirror from.
+     * @param <Type> the type of the class.
      * @return the mirror of the given field.
      */
     public static <Type> @NotNull MField<Type> mirror(@NotNull Field field) {
@@ -65,7 +65,7 @@ public final class Mirror {
      * Creates a new {@link MMethod} instance from the given {@link Method}.
      *
      * @param method the method to create the mirror from.
-     * @param <Type>    the type of the class.
+     * @param <Type> the type of the class.
      * @return the mirror of the given method.
      */
     public static <Type> @NotNull MMethod<Type> mirror(@NotNull Method method) {

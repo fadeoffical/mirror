@@ -19,8 +19,15 @@ import java.util.function.Supplier;
  */
 public interface Accessible<Self extends Accessible<Self>> {
 
+    /**
+     * Checks if the object is package-private.
+     *
+     * @return {@code true} if the object is package-private, {@code false} otherwise.
+     */
     @Contract(pure = true)
-    int getModifiers();
+    default boolean isPackagePrivate() {
+        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
+    }
 
     /**
      * Checks if the object is public.
@@ -43,16 +50,6 @@ public interface Accessible<Self extends Accessible<Self>> {
     }
 
     /**
-     * Checks if the object is package-private.
-     *
-     * @return {@code true} if the object is package-private, {@code false} otherwise.
-     */
-    @Contract(pure = true)
-    default boolean isPackagePrivate() {
-        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
-    }
-
-    /**
      * Checks if the object is private.
      *
      * @return {@code true} if the object is private, {@code false} otherwise.
@@ -61,6 +58,9 @@ public interface Accessible<Self extends Accessible<Self>> {
     default boolean isPrivate() {
         return Modifier.isPrivate(this.getModifiers());
     }
+
+    @Contract(pure = true)
+    int getModifiers();
 
     /**
      * Checks if the object is static.
@@ -100,8 +100,8 @@ public interface Accessible<Self extends Accessible<Self>> {
     }
 
     /**
-     * Checks if the object is accessible. An object is accessible when
-     * {@link AccessibleObject#canAccess(Object)} returns {@code true} for the wrapped object.
+     * Checks if the object is accessible. An object is accessible when {@link AccessibleObject#canAccess(Object)}
+     * returns {@code true} for the wrapped object.
      *
      * @return {@code true} if the object is accessible, {@code false} otherwise.
      */

@@ -96,14 +96,6 @@ public interface Invokable<Type> {
     }
 
     /**
-     * Returns the number of parameters of this method or constructor.
-     *
-     * @return the number of parameters.
-     */
-    @Contract(pure = true)
-    int getParameterCount();
-
-    /**
      * Returns whether this method or constructor has parameters.
      *
      * @return {@code true} if this method or constructor has parameters, {@code false} otherwise.
@@ -112,4 +104,12 @@ public interface Invokable<Type> {
     default boolean hasParameters() {
         return this.getParameterCount() > 0;
     }
+
+    /**
+     * Returns the number of parameters of this method or constructor.
+     *
+     * @return the number of parameters.
+     */
+    @Contract(pure = true)
+    int getParameterCount();
 }

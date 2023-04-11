@@ -9,7 +9,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -34,20 +37,6 @@ public final class BasicMirrorClass<T>
     @ApiStatus.Internal
     private BasicMirrorClass(@NotNull Class<T> clazz) {
         this.clazz = clazz;
-    }
-
-    /**
-     * Creates a new {@link BasicMirrorClass} instance. This method should not be used directly. Use
-     * {@link Mirror#mirror(Class)} instead.
-     *
-     * @param clazz The class.
-     * @param <T>   The type of the class.
-     * @return The new {@link BasicMirrorClass} instance.
-     */
-    @ApiStatus.Internal
-    @Contract(value = "_ -> new", pure = true)
-    public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
-        return new BasicMirrorClass<>(clazz);
     }
 
     @Override
@@ -94,6 +83,20 @@ public final class BasicMirrorClass<T>
         return Optional.empty();
     }
 
+    /**
+     * Creates a new {@link BasicMirrorClass} instance. This method should not be used directly. Use
+     * {@link Mirror#mirror(Class)} instead.
+     *
+     * @param clazz The class.
+     * @param <T>   The type of the class.
+     * @return The new {@link BasicMirrorClass} instance.
+     */
+    @ApiStatus.Internal
+    @Contract(value = "_ -> new", pure = true)
+    public static <T> @NotNull BasicMirrorClass<T> from(@NotNull Class<T> clazz) {
+        return new BasicMirrorClass<>(clazz);
+    }
+
     @Override
     public boolean hasSuperclass() {
         return this.clazz.getSuperclass() != null;
@@ -123,12 +126,12 @@ public final class BasicMirrorClass<T>
                 this.add(BasicMirrorClass.this);
 
             Arrays.stream(subClasses)
-                .map(BasicMirrorClass::from)
-                .forEach(mClass -> {
-                    this.add(mClass);
-                    if (recurseInnerClasses.asBoolean())
-                        this.addAll(mClass.getInnerClasses(recurseInnerClasses).toList());
-                });
+                    .map(BasicMirrorClass::from)
+                    .forEach(mClass -> {
+                        this.add(mClass);
+                        if (recurseInnerClasses.asBoolean())
+                            this.addAll(mClass.getInnerClasses(recurseInnerClasses).toList());
+                    });
         }}.stream();
     }
 
