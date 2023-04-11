@@ -1,4 +1,4 @@
-package fade.mirror.filter.by;
+package fade.mirror.filter.criterion;
 
 import fade.mirror.filter.RewriteOperation;
 import org.jetbrains.annotations.NotNull;

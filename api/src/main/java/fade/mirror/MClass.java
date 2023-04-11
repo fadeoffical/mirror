@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import fade.mirror.filter.ConstructorFilter;
 import fade.mirror.internal.impl.BasicMirrorClass;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -120,7 +121,7 @@ public sealed interface MClass<T>
      * @return a constructor stream.
      */
     @Contract(pure = true)
-    default @NotNull Stream<MConstructor<T>> getConstructors(@NotNull Predicate<MConstructor<T>> filter) {
+    default @NotNull Stream<MConstructor<T>> getConstructors(@NotNull ConstructorFilter<T> filter) {
         return this.getConstructors().filter(filter);
     }
 

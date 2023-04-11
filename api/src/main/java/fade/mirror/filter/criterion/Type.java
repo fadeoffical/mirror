@@ -1,4 +1,4 @@
-package fade.mirror.filter.by;
+package fade.mirror.filter.criterion;
 
 // see comment from line 7 onwards
 @SuppressWarnings({"MarkerInterface", "unused" /* R */})

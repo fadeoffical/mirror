@@ -1,6 +1,9 @@
 package fade.mirror;
 
+import fade.mirror.filter.ConstructorFilter;
 import fade.mirror.filter.Filter;
+import fade.mirror.filter.TypeComparisonBy;
+import fade.mirror.filter.criterion.Criterion;
 import fade.mirror.mock.MockAnnotation;
 import fade.mirror.mock.MockClass;
 import fade.mirror.mock.MockUser;
@@ -130,13 +133,14 @@ class MirrorTest {
     @Test
     @DisplayName("Filter for annotation does not include elements without annotations -- Constructors")
     void testNonAnnotatedConstructors() {
-        List<? extends MConstructor<?>> userConstructors = mirror(MockUser.class).getConstructors(Filter.forConstructors()
-                .withAnnotation(MockAnnotation.class)::test).toList();
+
+        List<? extends MConstructor<?>> userConstructors = mirror(MockUser.class).getConstructors(Filter.forConstructors().withAnnotation(
+                Criterion.forAnnotation().compareTypesBy(TypeComparisonBy.Equality).ofType(MockAnnotation.class)
+        )).toList();
 
         assertTrue(userConstructors.isEmpty(), "'userConstructors' should not include any MConstructors");
 
-        List<? extends MConstructor<?>> mockClassConstructors = mirror(MockClass.class).getConstructors(Filter.forConstructors()
-                .withAnnotation(MockAnnotation.class)::test).toList();
+        List<? extends MConstructor<?>> mockClassConstructors = mirror(MockClass.class).getConstructors(filter).toList();
 
         assertFalse(mockClassConstructors.isEmpty(), "'mockClassConstructors' should include MConstructors");
     }

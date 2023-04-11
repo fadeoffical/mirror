@@ -7,4 +7,5 @@ module fade.mirror {
     exports fade.mirror;
     exports fade.mirror.filter;
     exports fade.mirror.exception;
+    exports fade.mirror.filter.criterion;
 }

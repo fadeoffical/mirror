@@ -6,12 +6,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents a mirror wrapper that can be copied.
  *
- * @param <T> The type to be returned by the methods; for chaining.
+ * @param <Self> The type to be returned by the methods; for chaining.
  * @author fade
  */
-public interface Copyable<T> {
-
+public interface Copyable<Self> {
 
     @Contract(pure = true)
-    @NotNull T copy();
+    @NotNull Self copy();
 }
