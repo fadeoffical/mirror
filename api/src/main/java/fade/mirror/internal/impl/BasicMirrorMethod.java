@@ -21,11 +21,11 @@ import java.util.stream.Stream;
 /**
  * A basic implementation of {@link MMethod}.
  *
- * @param <T> The return type of the method.
+ * @param <Type> The return type of the method.
  * @author fade
  */
-public final class BasicMirrorMethod<T>
-        implements MMethod<T> {
+public final class BasicMirrorMethod<Type>
+        implements MMethod<Type> {
 
     private final Method method;
 
@@ -36,7 +36,7 @@ public final class BasicMirrorMethod<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @Nullable T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments) {
+    public @Nullable Type invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments) {
         this.requireAccessible(instance); // todo: is the check below necessary?
 
         if (!this.isAccessible(instance))
@@ -52,17 +52,11 @@ public final class BasicMirrorMethod<T>
                 throw InvocationException.from("Could not invoke method '%s' from '%s'; it is static but an instance was provided", this.getName(), this.getDeclaringClass()
                         .getName());
 
-            return (T) this.method.invoke(instance, arguments);
+            return (Type) this.method.invoke(instance, arguments);
         } catch (IllegalAccessException | InvocationTargetException exception) {
             throw InvocationException.from(exception, "Could not invoke method '%s' from '%s'", this.getName(), this.getDeclaringClass()
                     .getName());
         }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Class<T> getReturnType() {
-        return (Class<T>) this.method.getReturnType();
     }
 
     @Override
@@ -76,7 +70,23 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public @NotNull MMethod<T> copy() {
+    public @NotNull Stream<MParameter<?>> getParameters() {
+        return Arrays.stream(this.method.getParameters()).map(BasicMirrorParameter::from);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Class<Type> getReturnType() {
+        return (Class<Type>) this.method.getReturnType();
+    }
+
+    @Override
+    public int getParameterCount() {
+        return this.method.getParameterCount();
+    }
+
+    @Override
+    public @NotNull MMethod<Type> copy() {
         return BasicMirrorMethod.from(this.method);
     }
 
@@ -85,13 +95,13 @@ public final class BasicMirrorMethod<T>
      * {@link Mirror#mirror(Method)}.
      *
      * @param method The method to create the mirror from.
-     * @param <T>    The return type of the method.
+     * @param <Type>    The return type of the method.
      * @return The created mirror.
      */
 
     @ApiStatus.Internal
     @Contract(value = "_ -> new", pure = true)
-    public static <T> @NotNull BasicMirrorMethod<T> from(@NotNull Method method) {
+    public static <Type> @NotNull BasicMirrorMethod<Type> from(@NotNull Method method) {
         return new BasicMirrorMethod<>(method);
     }
 
@@ -101,7 +111,7 @@ public final class BasicMirrorMethod<T>
     }
 
     @Override
-    public @NotNull MMethod<T> makeAccessible(@Nullable Object instance) {
+    public @NotNull MMethod<Type> makeAccessible(@Nullable Object instance) {
         if (!this.isAccessible(instance))
             this.method.setAccessible(true);
 
@@ -121,16 +131,5 @@ public final class BasicMirrorMethod<T>
     @Override
     public int getAnnotationCount() {
         return this.method.getAnnotations().length;
-    }
-
-
-    @Override
-    public @NotNull Stream<MParameter<?>> getParameters() {
-        return Arrays.stream(this.method.getParameters()).map(BasicMirrorParameter::from);
-    }
-
-    @Override
-    public int getParameterCount() {
-        return this.method.getParameterCount();
     }
 }

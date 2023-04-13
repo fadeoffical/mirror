@@ -14,10 +14,10 @@ import java.util.stream.Stream;
 /**
  * Represents a class.
  *
- * @param <T> The type of the class.
+ * @param <Type> The type of the class.
  * @author fade
  */
-public sealed interface MClass<T>
+public sealed interface MClass<Type>
         extends Annotated, Named
         permits BasicMirrorClass {
 
@@ -27,7 +27,7 @@ public sealed interface MClass<T>
      * @return The raw class.
      */
     @Contract(pure = true)
-    @NotNull Class<T> getRawClass();
+    @NotNull Class<Type> getRawClass();
 
     @Contract(pure = true)
     @NotNull Stream<MClass<?>> getSuperclasses();
@@ -36,21 +36,21 @@ public sealed interface MClass<T>
     @NotNull Stream<MClass<?>> getSuperclasses(@NotNull MClass.IncludeSelf includeSelf);
 
     @Contract(pure = true)
-    @NotNull Optional<MClass<?>> getSuperclass();
-
-    @Contract(pure = true)
     @SuppressWarnings("unchecked")
-    default @NotNull Optional<MClass<T>> getSuperclassAsThis() {
-        return this.getSuperclass().map(clazz -> (MClass<T>) clazz);
+    default @NotNull Optional<MClass<Type>> getSuperclassAsThis() {
+        return this.getSuperclass().map(clazz -> (MClass<Type>) clazz);
     }
 
     @Contract(pure = true)
-    default <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter) {
+    @NotNull Optional<MClass<?>> getSuperclass();
+
+    @Contract(pure = true)
+    default <ClassType> @NotNull Optional<MClass<ClassType>> getSuperclassUntil(@NotNull Predicate<MClass<ClassType>> filter) {
         return this.getSuperclassUntil(filter, IncludeSelf.No);
     }
 
     @Contract(pure = true)
-    <C> @NotNull Optional<MClass<C>> getSuperclassUntil(@NotNull Predicate<MClass<C>> filter, @NotNull MClass.IncludeSelf includeSuperclasses);
+    <ClassType> @NotNull Optional<MClass<ClassType>> getSuperclassUntil(@NotNull Predicate<MClass<ClassType>> filter, @NotNull MClass.IncludeSelf includeSuperclasses);
 
     @Contract(pure = true)
     boolean hasSuperclass();
@@ -62,28 +62,18 @@ public sealed interface MClass<T>
     boolean isSuperclassOf(@NotNull Class<?> clazz);
 
     @Contract(pure = true)
-    <O extends T> @NotNull T cast(@NotNull O object);
+    <SuperType extends Type> @NotNull Type cast(@NotNull SuperType object);
 
-    @Contract(pure = true)
-    @NotNull Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf);
-
-    @NotNull
-    default Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses) {
-        return this.getInnerClasses(recurseInnerClasses, IncludeSelf.No);
-    }
-
-    @NotNull
-    default Stream<MClass<?>> getInnerClasses(@NotNull MClass.IncludeSelf includeSelf) {
-        return this.getInnerClasses(RecurseInnerClasses.No, includeSelf);
+    default @NotNull Optional<MClass<?>> getInnerClass() { // todo: is this method of any use?
+        return this.getInnerClasses().findFirst();
     }
 
     default @NotNull Stream<MClass<?>> getInnerClasses() {
         return this.getInnerClasses(RecurseInnerClasses.No, IncludeSelf.No);
     }
 
-    default @NotNull Optional<MClass<?>> getInnerClass() { // todo: is this method of any use?
-        return this.getInnerClasses().findFirst();
-    }
+    @Contract(pure = true)
+    @NotNull Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf);
 
     default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter) {
         return this.getInnerClasses().filter(filter).findFirst();
@@ -93,12 +83,33 @@ public sealed interface MClass<T>
         return this.getInnerClasses(recurseInnerClasses).filter(filter).findFirst();
     }
 
+    @NotNull
+    default Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses) {
+        return this.getInnerClasses(recurseInnerClasses, IncludeSelf.No);
+    }
+
     default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.IncludeSelf includeSelf) {
         return this.getInnerClasses(includeSelf).filter(filter).findFirst();
     }
 
+    @NotNull
+    default Stream<MClass<?>> getInnerClasses(@NotNull MClass.IncludeSelf includeSelf) {
+        return this.getInnerClasses(RecurseInnerClasses.No, includeSelf);
+    }
+
     default @NotNull Optional<MClass<?>> getInnerClass(@NotNull Predicate<MClass<?>> filter, @NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf) {
         return this.getInnerClasses(recurseInnerClasses, includeSelf).filter(filter).findFirst();
+    }
+
+    /**
+     * Returns an optional containing the first constructor of this class that matches the given filter. The optional
+     * may be empty if the class has no constructors that match the filter. The optional will never be {@code null}.
+     *
+     * @return the first constructor that matches the filter.
+     */
+    @Contract(pure = true)
+    default @NotNull Optional<MConstructor<Type>> getConstructor() {
+        return this.getConstructors().findFirst();
     }
 
     /**
@@ -109,7 +120,19 @@ public sealed interface MClass<T>
      * @return a constructor stream.
      */
     @Contract(pure = true)
-    @NotNull Stream<MConstructor<T>> getConstructors();
+    @NotNull Stream<MConstructor<Type>> getConstructors();
+
+    /**
+     * Returns an optional containing the first constructor of this class that matches the given filter. The optional
+     * may be empty if the class has no constructors that match the filter. The optional will never be {@code null}.
+     *
+     * @param filter the filter to apply.
+     * @return the first constructor that matches the filter.
+     */
+    @Contract(pure = true)
+    default @NotNull Optional<MConstructor<Type>> getConstructor(@NotNull Predicate<MConstructor<Type>> filter) {
+        return this.getConstructors(filter).findFirst();
+    }
 
     /**
      * Returns a stream of all constructors of this class that match the given filter. The stream is ordered by the
@@ -120,31 +143,8 @@ public sealed interface MClass<T>
      * @return a constructor stream.
      */
     @Contract(pure = true)
-    default @NotNull Stream<MConstructor<T>> getConstructors(@NotNull Predicate<MConstructor<T>> filter) {
+    default @NotNull Stream<MConstructor<Type>> getConstructors(@NotNull Predicate<MConstructor<Type>> filter) {
         return this.getConstructors().filter(filter);
-    }
-
-    /**
-     * Returns an optional containing the first constructor of this class that matches the given filter. The optional
-     * may be empty if the class has no constructors that match the filter. The optional will never be {@code null}.
-     *
-     * @return the first constructor that matches the filter.
-     */
-    @Contract(pure = true)
-    default @NotNull Optional<MConstructor<T>> getConstructor() {
-        return this.getConstructors().findFirst();
-    }
-
-    /**
-     * Returns an optional containing the first constructor of this class that matches the given filter. The optional
-     * may be empty if the class has no constructors that match the filter. The optional will never be {@code null}.
-     *
-     * @param filter the filter to apply.
-     * @return the first constructor that matches the filter.
-     */
-    @Contract(pure = true)
-    default @NotNull Optional<MConstructor<T>> getConstructor(@NotNull Predicate<MConstructor<T>> filter) {
-        return this.getConstructors(filter).findFirst();
     }
 
     /**
@@ -166,10 +166,7 @@ public sealed interface MClass<T>
      * @return a raw constructor stream.
      */
     @Contract(pure = true)
-    @NotNull Stream<Constructor<T>> getRawConstructors();
-
-    @Contract(pure = true)
-    @NotNull Stream<MField<?>> getFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
+    @NotNull Stream<Constructor<Type>> getRawConstructors();
 
     /**
      * Returns a stream of all fields of this class. The stream is ordered by the declaration order of the fields in the
@@ -183,40 +180,40 @@ public sealed interface MClass<T>
     }
 
     @Contract(pure = true)
-    <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+    @NotNull Stream<MField<?>> getFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
+
+    @Contract(pure = true)
+    <FieldType> @NotNull Stream<MField<FieldType>> getFields(@NotNull Predicate<MField<FieldType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns a stream of all fields of this class that match the given filter. The stream is ordered by the
      * declaration order of the fields in the source code. The stream may be empty if the class has no fields that match
      * the filter. The stream will never be {@code null}.
      *
-     * @param filter the filter to apply.
-     * @param <F>    the type of the field.
+     * @param filter      the filter to apply.
+     * @param <FieldType> the type of the field.
      * @return a field stream.
      */
     @Contract(pure = true)
-    default <F> @NotNull Stream<MField<F>> getFields(@NotNull Predicate<MField<F>> filter) {
+    default <FieldType> @NotNull Stream<MField<FieldType>> getFields(@NotNull Predicate<MField<FieldType>> filter) {
         return this.getFields(filter, MClass.IncludeSuperclasses.No);
     }
 
     @Contract(pure = true)
-    <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+    <FieldType> @NotNull Optional<MField<FieldType>> getField(@NotNull Predicate<MField<FieldType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns an optional containing the first field of this class that matches the given filter. The optional may be
      * empty if the class has no fields that match the filter. The optional will never be {@code null}.
      *
-     * @param filter the filter to apply.
-     * @param <F>    the type of the field.
+     * @param filter      the filter to apply.
+     * @param <FieldType> the type of the field.
      * @return the first field that matches the filter.
      */
     @Contract(pure = true)
-    default <F> @NotNull Optional<MField<F>> getField(@NotNull Predicate<MField<F>> filter) {
+    default <FieldType> @NotNull Optional<MField<FieldType>> getField(@NotNull Predicate<MField<FieldType>> filter) {
         return this.getField(filter, MClass.IncludeSuperclasses.No);
     }
-
-    @Contract(pure = true)
-    boolean hasFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns whether this class has any fields.
@@ -229,7 +226,7 @@ public sealed interface MClass<T>
     }
 
     @Contract(pure = true)
-    int getFieldCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
+    boolean hasFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns the number of fields of this class.
@@ -240,6 +237,9 @@ public sealed interface MClass<T>
     default int getFieldCount() {
         return this.getFieldCount(MClass.IncludeSuperclasses.No);
     }
+
+    @Contract(pure = true)
+    int getFieldCount(@NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns a stream of all raw fields of this class. The stream is ordered by the declaration order of the fields in
@@ -277,10 +277,10 @@ public sealed interface MClass<T>
      * @return a method stream.
      */
     @Contract(pure = true)
-    <F> @NotNull Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter);
+    <MethodType> @NotNull Stream<MMethod<MethodType>> getMethods(@NotNull Predicate<MMethod<MethodType>> filter);
 
     @Contract(pure = true)
-    <F> @NotNull Stream<MMethod<F>> getMethods(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+    <MethodType> @NotNull Stream<MMethod<MethodType>> getMethods(@NotNull Predicate<MMethod<MethodType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns an optional containing the first method of this class that matches the given filter. The optional may be
@@ -290,10 +290,10 @@ public sealed interface MClass<T>
      * @return the first method that matches the filter.
      */
     @Contract(pure = true)
-    <F> @NotNull Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter);
+    <FieldType> @NotNull Optional<MMethod<FieldType>> getMethod(@NotNull Predicate<MMethod<FieldType>> filter);
 
     @Contract(pure = true)
-    <F> @NotNull Optional<MMethod<F>> getMethod(@NotNull Predicate<MMethod<F>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
+    <FieldType> @NotNull Optional<MMethod<FieldType>> getMethod(@NotNull Predicate<MMethod<FieldType>> filter, @NotNull MClass.IncludeSuperclasses includeSuperclasses);
 
     /**
      * Returns whether this class has any methods.
@@ -373,7 +373,7 @@ public sealed interface MClass<T>
 
         @Override
         @Contract(pure = true)
-        public boolean include() {
+        public boolean asBoolean() {
             return this == Yes;
         }
     }
@@ -384,7 +384,7 @@ public sealed interface MClass<T>
 
         @Override
         @Contract(pure = true)
-        public boolean include() {
+        public boolean asBoolean() {
             return this == Yes;
         }
     }
@@ -395,7 +395,7 @@ public sealed interface MClass<T>
 
         @Override
         @Contract(pure = true)
-        public boolean include() {
+        public boolean asBoolean() {
             return this == Yes;
         }
     }
@@ -403,6 +403,6 @@ public sealed interface MClass<T>
     interface Include {
 
         @Contract(pure = true)
-        boolean include();
+        boolean asBoolean();
     }
 }

@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author fade
  */
-public final class BasicMethodFilter<T>
-        implements MethodFilter<T> {
+public final class BasicMethodFilter<Type>
+        implements MethodFilter<Type> {
 
     /**
      * The parameter types to filter by. If {@code null}, no filtering will be done.
@@ -68,12 +68,12 @@ public final class BasicMethodFilter<T>
      *
      * @return The new {@link BasicMethodFilter}.
      */
-    public static <T> MethodFilter<T> create() {
+    public static <Type> MethodFilter<Type> create() {
         return new BasicMethodFilter<>();
     }
 
     @Override
-    public boolean test(MMethod<T> method) {
+    public boolean test(MMethod<Type> method) {
         if (this.name != null && !method.getName().equals(this.name)) return false;
         if (this.parameterTypes != null && !method.getParameters()
                 .map(MParameter::getType)
@@ -89,45 +89,45 @@ public final class BasicMethodFilter<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull <C> MethodFilter<C> ofType(@NotNull Class<C> type) {
+    public @NotNull <ClassType> MethodFilter<ClassType> ofType(@NotNull Class<ClassType> type) {
         this.returnType = type;
-        return (MethodFilter<C>) this;
+        return (MethodFilter<ClassType>) this;
     }
 
     @Override
-    public @NotNull MethodFilter<T> withNoAnnotations() {
+    public @NotNull MethodFilter<Type> withNoAnnotations() {
         this.annotations = new ArrayList<>(0);
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
+    public @NotNull MethodFilter<Type> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
         if (this.annotations == null) this.annotations = new ArrayList<>(annotations.size());
         operation.apply(this.annotations, annotations);
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter<T> withNoParameters() {
+    public @NotNull MethodFilter<Type> withNoParameters() {
         this.parameterTypes = new ArrayList<>(0);
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter<T> withParameters(@NotNull List<Class<?>> parameterTypes, @NotNull RewriteOperation operation) {
+    public @NotNull MethodFilter<Type> withParameters(@NotNull List<Class<?>> parameterTypes, @NotNull RewriteOperation operation) {
         if (this.parameterTypes == null) this.parameterTypes = new ArrayList<>(parameterTypes.size());
         operation.apply(this.parameterTypes, parameterTypes);
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter<T> withName(@NotNull String name) {
+    public @NotNull MethodFilter<Type> withName(@NotNull String name) {
         this.name = name;
         return this;
     }
 
     @Override
-    public @NotNull MethodFilter<T> copy() {
+    public @NotNull MethodFilter<Type> copy() {
         return new BasicMethodFilter<>(this.parameterTypes, this.annotations, this.name, this.returnType);
     }
 }

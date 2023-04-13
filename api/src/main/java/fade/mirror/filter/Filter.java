@@ -12,11 +12,11 @@ import java.util.function.Predicate;
 /**
  * Represents a filter. A filter can be used to filter elements of a class, method, constructor or parameter.
  *
- * @param <T> The type of the element to filter.
+ * @param <Type> The type of the element to filter.
  * @author fade
  */
-public interface Filter<T>
-        extends Predicate<T>, Copyable<Filter<T>> {
+public interface Filter<Type>
+        extends Predicate<Type>, Copyable<Filter<Type>> {
 
     /**
      * Returns a new method filter. This type of filter can be used to filter methods by name, parameters, return type

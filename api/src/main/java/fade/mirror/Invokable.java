@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 /**
  * Represents a method or constructor that can be invoked.
  *
- * @param <T> the return type of the method or constructor
+ * @param <Type> the return type of the method or constructor
  * @author fade
  */
-public interface Invokable<T> {
+public interface Invokable<Type> {
 
     /**
      * Invokes the method or constructor represented by this object.
@@ -23,11 +23,11 @@ public interface Invokable<T> {
      * @param arguments the arguments to the method or constructor.
      * @return the result of the method or constructor.
      */
-    default @Nullable T invokeWithNoInstance(@Nullable Object... arguments) {
+    default @Nullable Type invokeWithNoInstance(@Nullable Object... arguments) {
         return this.invokeWithInstance(null, arguments);
     }
 
-    @Nullable T invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments);
+    @Nullable Type invokeWithInstance(@Nullable Object instance, @Nullable Object... arguments);
 
     /**
      * Tests whether the method or constructor represented by this object can be invoked with the given arguments.
@@ -67,7 +67,7 @@ public interface Invokable<T> {
      * @return the return type.
      */
     @Contract(pure = true)
-    @NotNull Class<T> getReturnType();
+    @NotNull Class<Type> getReturnType();
 
     /**
      * Returns an optional containing the first parameter of this method or constructor that matches the given filter.
@@ -96,14 +96,6 @@ public interface Invokable<T> {
     }
 
     /**
-     * Returns the number of parameters of this method or constructor.
-     *
-     * @return the number of parameters.
-     */
-    @Contract(pure = true)
-    int getParameterCount();
-
-    /**
      * Returns whether this method or constructor has parameters.
      *
      * @return {@code true} if this method or constructor has parameters, {@code false} otherwise.
@@ -112,4 +104,12 @@ public interface Invokable<T> {
     default boolean hasParameters() {
         return this.getParameterCount() > 0;
     }
+
+    /**
+     * Returns the number of parameters of this method or constructor.
+     *
+     * @return the number of parameters.
+     */
+    @Contract(pure = true)
+    int getParameterCount();
 }

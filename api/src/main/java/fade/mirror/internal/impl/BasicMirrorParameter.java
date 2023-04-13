@@ -13,10 +13,10 @@ import java.util.stream.Stream;
 /**
  * Basic implementation of {@link MParameter}.
  *
- * @param <T> The type of the parameter.
+ * @param <Type> The type of the parameter.
  */
-public final class BasicMirrorParameter<T>
-        implements MParameter<T> {
+public final class BasicMirrorParameter<Type>
+        implements MParameter<Type> {
 
     private final Parameter parameter;
 
@@ -45,8 +45,8 @@ public final class BasicMirrorParameter<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Class<T> getType() {
-        return (Class<T>) this.parameter.getType();
+    public @NotNull Class<Type> getType() {
+        return (Class<Type>) this.parameter.getType();
     }
 
     @Override

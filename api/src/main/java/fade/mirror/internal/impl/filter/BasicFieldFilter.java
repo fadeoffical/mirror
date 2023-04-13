@@ -14,11 +14,11 @@ import java.util.List;
 /**
  * Basic implementation of {@link FieldFilter}.
  *
- * @param <T> The type of the field.
+ * @param <Type> The type of the field.
  * @author fade
  */
-public final class BasicFieldFilter<T>
-        implements FieldFilter<T> {
+public final class BasicFieldFilter<Type>
+        implements FieldFilter<Type> {
 
     /**
      * The annotations to filter by. If {@code null}, no filtering will be done.
@@ -66,13 +66,13 @@ public final class BasicFieldFilter<T>
     }
 
     @Override
-    public @NotNull FieldFilter<T> withNoAnnotations() {
+    public @NotNull FieldFilter<Type> withNoAnnotations() {
         this.annotations = new ArrayList<>(0);
         return this;
     }
 
     @Override
-    public @NotNull FieldFilter<T> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
+    public @NotNull FieldFilter<Type> withAnnotations(@NotNull List<Class<? extends Annotation>> annotations, @NotNull RewriteOperation operation) {
         if (this.annotations == null) this.annotations = new ArrayList<>(annotations.size());
         operation.apply(this.annotations, annotations);
         this.annotations.addAll(annotations);
@@ -82,19 +82,19 @@ public final class BasicFieldFilter<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public <C> @NotNull FieldFilter<C> ofType(@NotNull Class<C> type) {
+    public <ClassType> @NotNull FieldFilter<ClassType> ofType(@NotNull Class<ClassType> type) {
         this.type = type;
-        return (FieldFilter<C>) this;
+        return (FieldFilter<ClassType>) this;
     }
 
     @Override
-    public @NotNull FieldFilter<T> withName(@NotNull String name) {
+    public @NotNull FieldFilter<Type> withName(@NotNull String name) {
         this.name = name;
         return this;
     }
 
     @Override
-    public boolean test(MField<T> field) {
+    public boolean test(MField<Type> field) {
         if (this.name != null && !field.getName().equals(this.name)) return false;
         if (this.annotations != null && (field.getAnnotations().findAny().isEmpty() || !field.getAnnotations()
                 .allMatch(annotation -> this.annotations.stream()
@@ -104,7 +104,7 @@ public final class BasicFieldFilter<T>
     }
 
     @Override
-    public @NotNull FieldFilter<T> copy() {
+    public @NotNull FieldFilter<Type> copy() {
         return new BasicFieldFilter<>(this.annotations, this.name, this.type);
     }
 }

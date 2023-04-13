@@ -1,7 +1,7 @@
 package fade.mirror.filter;
 
 import fade.mirror.MConstructor;
-import fade.mirror.filter.by.Annotations;
+import fade.mirror.filter.by.ByAnnotations;
 import fade.mirror.filter.by.Parameters;
 
 /**
@@ -14,5 +14,5 @@ import fade.mirror.filter.by.Parameters;
  * @author fade
  */
 public interface ConstructorFilter
-        extends Filter<MConstructor<?>>, Parameters<ConstructorFilter>, Annotations<ConstructorFilter> {
+        extends Filter<MConstructor<?>>, Parameters<ConstructorFilter>, ByAnnotations<ConstructorFilter> {
 }

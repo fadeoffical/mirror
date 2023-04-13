@@ -17,11 +17,11 @@ import java.util.stream.Stream;
 /**
  * A basic implementation of {@link MField}.
  *
- * @param <T> The type of the field.
+ * @param <Type> The type of the field.
  * @author fade
  */
-public final class BasicMirrorField<T>
-        implements MField<T> {
+public final class BasicMirrorField<Type>
+        implements MField<Type> {
 
     private final Field field;
 
@@ -35,12 +35,12 @@ public final class BasicMirrorField<T>
      * {@link Mirror#mirror(Field)}.
      *
      * @param field The field to create the mirror from.
-     * @param <T>   The type of the field.
+     * @param <Type>   The type of the field.
      * @return The created mirror.
      */
     @ApiStatus.Internal
     @Contract(value = "_ -> new", pure = true)
-    public static <T> @NotNull BasicMirrorField<T> from(@NotNull Field field) {
+    public static <Type> @NotNull BasicMirrorField<Type> from(@NotNull Field field) {
         return new BasicMirrorField<>(field);
     }
 
@@ -56,23 +56,23 @@ public final class BasicMirrorField<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Class<T> getType() {
-        return (Class<T>) this.field.getType();
+    public @NotNull Class<Type> getType() {
+        return (Class<Type>) this.field.getType();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Optional<T> getValue(@Nullable Object instance) {
+    public @NotNull Optional<Type> getValue(@Nullable Object instance) {
         this.requireAccessible(instance);
         try {
-            return Optional.ofNullable((T) this.field.get(instance));
+            return Optional.ofNullable((Type) this.field.get(instance));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public @NotNull MField<T> setValue(@Nullable Object instance, @Nullable T value) {
+    public @NotNull MField<Type> setValue(@Nullable Object instance, @Nullable Type value) {
         this.requireAccessible(instance);
         try {
             this.field.set(instance, value);
@@ -98,7 +98,7 @@ public final class BasicMirrorField<T>
     }
 
     @Override
-    public @NotNull MField<T> makeAccessible(@Nullable Object instance) {
+    public @NotNull MField<Type> makeAccessible(@Nullable Object instance) {
         if (!this.isAccessible(instance))
             this.field.trySetAccessible();
 

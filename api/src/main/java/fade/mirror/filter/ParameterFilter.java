@@ -1,9 +1,9 @@
 package fade.mirror.filter;
 
 import fade.mirror.MParameter;
-import fade.mirror.filter.by.Annotations;
-import fade.mirror.filter.by.Name;
-import fade.mirror.filter.by.Type;
+import fade.mirror.filter.by.ByAnnotations;
+import fade.mirror.filter.by.ByName;
+import fade.mirror.filter.by.ByType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,8 +15,11 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author fade
  */
-public interface ParameterFilter // todo: should it be generic? see by.Type
-        extends Filter<MParameter<?>>, Annotations<ParameterFilter>, Type<ParameterFilter>, Name<ParameterFilter> {
+public interface ParameterFilter // todo: should it be generic? see by.ByType
+        extends Filter<MParameter<?>>,
+                ByAnnotations<ParameterFilter>,
+                ByType<ParameterFilter>,
+                ByName<ParameterFilter> {
 
-    <C> @NotNull ParameterFilter ofType(Class<C> type);
+    <ClassType> @NotNull ParameterFilter ofType(Class<ClassType> type);
 }
