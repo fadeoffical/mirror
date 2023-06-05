@@ -3,7 +3,9 @@ package fade.mirror.internal.impl.filter;
 import fade.mirror.filter.Filter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public abstract class BaseFilter<Type> implements Filter<Type> {
@@ -18,7 +20,7 @@ public abstract class BaseFilter<Type> implements Filter<Type> {
         return Collections.unmodifiableSet(this.criteria);
     }
 
-    protected @NotNull BaseFilter<Type> addCriterion(@NotNull Predicate<Type> criterion) {
+    public final @NotNull BaseFilter<Type> addCriterion(@NotNull Predicate<Type> criterion) {
         this.criteria.add(criterion);
         return this;
     }

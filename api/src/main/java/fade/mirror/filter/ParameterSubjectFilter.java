@@ -1,9 +1,6 @@
 package fade.mirror.filter;
 
 import fade.mirror.MParameter;
-import fade.mirror.filter.criterion.AnnotationCriterion;
-import fade.mirror.filter.criterion.NameFilter;
-import fade.mirror.filter.criterion.Type;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author fade
  */
 public interface ParameterSubjectFilter // todo: should it be generic? see by.Type
-        extends Filter<MParameter<?>>, AnnotationCriterion<ParameterSubjectFilter>, Type<ParameterSubjectFilter>,
+        extends Filter<MParameter<?>>, AnnotationCriterion<ParameterSubjectFilter>,
                 NameFilter<ParameterSubjectFilter> {
 
     <C> @NotNull ParameterSubjectFilter ofType(Class<C> type);

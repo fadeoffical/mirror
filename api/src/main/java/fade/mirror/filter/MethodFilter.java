@@ -13,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author fade
  */
-public interface MethodFilter<T>
-        extends Filter<MMethod<T>>{
+public interface MethodFilter<Type>
+        extends Filter<MMethod<Type>>{
 
-    <C> @NotNull MethodFilter<C> ofType(@NotNull Class<C> type);
+    <ClassType> @NotNull MethodFilter<ClassType> ofType(@NotNull Class<ClassType> type);
 
     @Override
-    @NotNull MethodFilter<T> copy();
+    @NotNull MethodFilter<Type> copy();
 }

@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 public enum TypeComparisonBy {
 
     Equality,
+
+    // default
     Assignability;
 
     @Contract(pure = true)

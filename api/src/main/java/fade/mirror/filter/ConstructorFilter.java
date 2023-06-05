@@ -1,7 +1,6 @@
 package fade.mirror.filter;
 
 import fade.mirror.MConstructor;
-import fade.mirror.filter.criterion.AnnotationCriterion;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -18,9 +17,15 @@ import java.lang.annotation.Annotation;
 public interface ConstructorFilter<Type>
         extends Filter<MConstructor<Type>> {
 
-    <AnnotationType extends Annotation> @NotNull ConstructorFilter<Type> withAnnotation(@NotNull AnnotationCriterion<AnnotationType> annotationFilter);
+    @NotNull ConstructorFilter<Type> withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull TypeComparisonBy comparisonBy);
 
+    @NotNull
+    default ConstructorFilter<Type> withAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return this.withAnnotation(annotation, TypeComparisonBy.Assignability);
+    }
 
     @Override
     @NotNull ConstructorFilter<Type> copy();
+
+    @NotNull ConstructorFilter<Type> ofType(Class<? extends Type> type);
 }

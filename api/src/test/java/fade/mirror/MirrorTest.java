@@ -1,9 +1,7 @@
 package fade.mirror;
 
-import fade.mirror.filter.ConstructorFilter;
 import fade.mirror.filter.Filter;
 import fade.mirror.filter.TypeComparisonBy;
-import fade.mirror.filter.criterion.Criterion;
 import fade.mirror.mock.MockAnnotation;
 import fade.mirror.mock.MockClass;
 import fade.mirror.mock.MockUser;
@@ -140,9 +138,9 @@ class MirrorTest {
 
         assertTrue(userConstructors.isEmpty(), "'userConstructors' should not include any MConstructors");
 
-        List<? extends MConstructor<?>> mockClassConstructors = mirror(MockClass.class).getConstructors(filter).toList();
+        List<? extends MConstructor<?>> constructors = mirror(MockClass.class).getConstructors(filter).toList();
 
-        assertFalse(mockClassConstructors.isEmpty(), "'mockClassConstructors' should include MConstructors");
+        assertFalse(constructors.isEmpty(), "'constructors' should include MConstructors");
     }
 
     @Test

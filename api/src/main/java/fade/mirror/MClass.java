@@ -15,10 +15,10 @@ import java.util.stream.Stream;
 /**
  * Represents a class.
  *
- * @param <T> The type of the class.
+ * @param <Type> The type of the class.
  * @author fade
  */
-public sealed interface MClass<T>
+public sealed interface MClass<Type>
         extends Annotated, Named
         permits BasicMirrorClass {
 
@@ -28,7 +28,7 @@ public sealed interface MClass<T>
      * @return The raw class.
      */
     @Contract(pure = true)
-    @NotNull Class<T> getRawClass();
+    @NotNull Class<Type> getRawClass();
 
     @Contract(pure = true)
     @NotNull Stream<MClass<?>> getSuperclasses();
@@ -41,8 +41,8 @@ public sealed interface MClass<T>
 
     @Contract(pure = true)
     @SuppressWarnings("unchecked")
-    default @NotNull Optional<MClass<T>> getSuperclassAsThis() {
-        return this.getSuperclass().map(clazz -> (MClass<T>) clazz);
+    default @NotNull Optional<MClass<Type>> getSuperclassAsThis() {
+        return this.getSuperclass().map(clazz -> (MClass<Type>) clazz);
     }
 
     @Contract(pure = true)
@@ -63,7 +63,7 @@ public sealed interface MClass<T>
     boolean isSuperclassOf(@NotNull Class<?> clazz);
 
     @Contract(pure = true)
-    <O extends T> @NotNull T cast(@NotNull O object);
+    <O extends Type> @NotNull Type cast(@NotNull O object);
 
     @Contract(pure = true)
     @NotNull Stream<MClass<?>> getInnerClasses(@NotNull MClass.RecurseInnerClasses recurseInnerClasses, @NotNull MClass.IncludeSelf includeSelf);
@@ -110,7 +110,7 @@ public sealed interface MClass<T>
      * @return a constructor stream.
      */
     @Contract(pure = true)
-    @NotNull Stream<MConstructor<T>> getConstructors();
+    @NotNull Stream<MConstructor<Type>> getConstructors();
 
     /**
      * Returns a stream of all constructors of this class that match the given filter. The stream is ordered by the
@@ -121,7 +121,7 @@ public sealed interface MClass<T>
      * @return a constructor stream.
      */
     @Contract(pure = true)
-    default @NotNull Stream<MConstructor<T>> getConstructors(@NotNull ConstructorFilter<T> filter) {
+    default @NotNull Stream<MConstructor<Type>> getConstructors(@NotNull ConstructorFilter<Type> filter) {
         return this.getConstructors().filter(filter);
     }
 
@@ -132,7 +132,7 @@ public sealed interface MClass<T>
      * @return the first constructor that matches the filter.
      */
     @Contract(pure = true)
-    default @NotNull Optional<MConstructor<T>> getConstructor() {
+    default @NotNull Optional<MConstructor<Type>> getConstructor() {
         return this.getConstructors().findFirst();
     }
 
@@ -144,7 +144,7 @@ public sealed interface MClass<T>
      * @return the first constructor that matches the filter.
      */
     @Contract(pure = true)
-    default @NotNull Optional<MConstructor<T>> getConstructor(@NotNull Predicate<MConstructor<T>> filter) {
+    default @NotNull Optional<MConstructor<Type>> getConstructor(@NotNull ConstructorFilter<Type> filter) {
         return this.getConstructors(filter).findFirst();
     }
 
@@ -167,7 +167,7 @@ public sealed interface MClass<T>
      * @return a raw constructor stream.
      */
     @Contract(pure = true)
-    @NotNull Stream<Constructor<T>> getRawConstructors();
+    @NotNull Stream<Constructor<Type>> getRawConstructors();
 
     @Contract(pure = true)
     @NotNull Stream<MField<?>> getFields(@NotNull MClass.IncludeSuperclasses includeSuperclasses);

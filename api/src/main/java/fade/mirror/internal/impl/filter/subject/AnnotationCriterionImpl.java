@@ -1,13 +1,12 @@
 package fade.mirror.internal.impl.filter.subject;
 
 import fade.mirror.filter.TypeComparisonBy;
-import fade.mirror.filter.criterion.AnnotationCriterion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 
-public class AnnotationCriterionImpl<Type extends Annotation>
+public final class AnnotationCriterionImpl<Type extends Annotation>
         implements AnnotationCriterion<Type> {
 
     private @Nullable Class<? extends Type> type;

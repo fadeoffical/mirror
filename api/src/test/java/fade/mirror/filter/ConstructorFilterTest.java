@@ -45,8 +45,8 @@ class ConstructorFilterTest {
     @Test
     @DisplayName("Filter ofType must not be null")
     void testMethodFilterOfType() {
-        Filter<?> filter = Filter.forConstructors();
-        Filter<?> ofType = filter.ofType(Object.class);
+        ConstructorFilter<?> filter = Filter.forConstructors();
+        ConstructorFilter<?> ofType = filter.ofType(Object.class);
         assertNotNull(ofType, "'ofType' is null");
     }
 
