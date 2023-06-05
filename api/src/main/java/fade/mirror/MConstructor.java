@@ -9,11 +9,11 @@ import java.lang.reflect.Constructor;
 /**
  * Represents a constructor of a {@link MClass}. A constructor has parameters and may also have annotations.
  *
- * @param <T> the type of the class that declares this constructor
+ * @param <Type> the type of the class that declares this constructor
  * @author fade
  */
-public sealed interface MConstructor<T>
-        extends Invokable<T>, Accessible<MConstructor<T>>, Annotated, Declared
+public sealed interface MConstructor<Type>
+        extends Invokable<Type>, Accessible<MConstructor<Type>>, Annotated, Declared
         permits BasicMirrorConstructor {
 
     /**
@@ -22,6 +22,6 @@ public sealed interface MConstructor<T>
      * @return the raw constructor.
      */
     @Contract(pure = true)
-    @NotNull Constructor<T> getRawConstructor();
+    @NotNull Constructor<Type> getRawConstructor();
 
 }

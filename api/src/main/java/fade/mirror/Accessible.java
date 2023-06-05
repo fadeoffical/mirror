@@ -14,13 +14,20 @@ import java.util.function.Supplier;
  * Represents an object that can be accessed. This interface is used to provide methods to check the accessibility of an
  * object and to make it accessible.
  *
- * @param <T> The type of the object.
+ * @param <Self> The type of the object.
  * @author fade
  */
-public interface Accessible<T extends Accessible<T>> {
+public interface Accessible<Self extends Accessible<Self>> {
 
+    /**
+     * Checks if the object is package-private.
+     *
+     * @return {@code true} if the object is package-private, {@code false} otherwise.
+     */
     @Contract(pure = true)
-    int getModifiers();
+    default boolean isPackagePrivate() {
+        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
+    }
 
     /**
      * Checks if the object is public.
@@ -43,16 +50,6 @@ public interface Accessible<T extends Accessible<T>> {
     }
 
     /**
-     * Checks if the object is package-private.
-     *
-     * @return {@code true} if the object is package-private, {@code false} otherwise.
-     */
-    @Contract(pure = true)
-    default boolean isPackagePrivate() {
-        return !this.isPublic() && !this.isProtected() && !this.isPrivate();
-    }
-
-    /**
      * Checks if the object is private.
      *
      * @return {@code true} if the object is private, {@code false} otherwise.
@@ -61,6 +58,9 @@ public interface Accessible<T extends Accessible<T>> {
     default boolean isPrivate() {
         return Modifier.isPrivate(this.getModifiers());
     }
+
+    @Contract(pure = true)
+    int getModifiers();
 
     /**
      * Checks if the object is static.
@@ -79,9 +79,9 @@ public interface Accessible<T extends Accessible<T>> {
      * @return the wrapper.
      */
     @SuppressWarnings("unchecked")
-    default @NotNull T requireAccessible() {
+    default @NotNull Self requireAccessible() {
         this.makeAccessible().throwIfInaccessible(() -> InaccessibleException.from("Object is not accessible"));
-        return (T) this;
+        return (Self) this;
     }
 
     @Contract(pure = true)
@@ -95,13 +95,13 @@ public interface Accessible<T extends Accessible<T>> {
      *
      * @return the wrapper.
      */
-    default @NotNull T makeAccessible() {
+    default @NotNull Self makeAccessible() {
         return this.makeAccessible(null);
     }
 
     /**
-     * Checks if the object is accessible. An object is accessible when
-     * {@link java.lang.reflect.AccessibleObject#canAccess(Object)} returns {@code true} for the wrapped object.
+     * Checks if the object is accessible. An object is accessible when {@link AccessibleObject#canAccess(Object)}
+     * returns {@code true} for the wrapped object.
      *
      * @return {@code true} if the object is accessible, {@code false} otherwise.
      */
@@ -110,16 +110,16 @@ public interface Accessible<T extends Accessible<T>> {
         return this.isAccessible(null);
     }
 
-    @NotNull T makeAccessible(@Nullable Object instance);
+    @NotNull Self makeAccessible(@Nullable Object instance);
 
     @Contract(pure = true)
     boolean isAccessible(@Nullable Object instance);
 
     @SuppressWarnings("unchecked")
-    default @NotNull T requireAccessible(@Nullable Object instance) {
+    default @NotNull Self requireAccessible(@Nullable Object instance) {
         this.makeAccessible(instance)
                 .throwIfInaccessible(instance, () -> InaccessibleException.from("Object is not accessible"));
-        return (T) this;
+        return (Self) this;
     }
 
     @Contract(pure = true)
@@ -130,9 +130,9 @@ public interface Accessible<T extends Accessible<T>> {
 
     @Contract(pure = true)
     @SuppressWarnings("unchecked")
-    default @NotNull T ifAccessible(@NotNull Consumer<T> consumer) {
-        if (this.isAccessible()) consumer.accept((T) this);
-        return (T) this;
+    default @NotNull Self ifAccessible(@NotNull Consumer<Self> consumer) {
+        if (this.isAccessible()) consumer.accept((Self) this);
+        return (Self) this;
     }
 
     /**
@@ -143,8 +143,8 @@ public interface Accessible<T extends Accessible<T>> {
      */
     @Contract(pure = true)
     @SuppressWarnings("unchecked")
-    default @NotNull T ifNotAccessible(@NotNull Consumer<T> consumer) {
-        if (!this.isAccessible()) consumer.accept((T) this);
-        return (T) this;
+    default @NotNull Self ifNotAccessible(@NotNull Consumer<Self> consumer) {
+        if (!this.isAccessible()) consumer.accept((Self) this);
+        return (Self) this;
     }
 }

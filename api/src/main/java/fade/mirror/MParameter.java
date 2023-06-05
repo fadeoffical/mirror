@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
  * Represents a parameter of a {@link MMethod} or {@link MConstructor}. A parameter has a name and a type. It may also
  * have annotations.
  *
- * @param <T> the type of the parameter
+ * @param <Type> the type of the parameter
  * @author fade
  */
-public interface MParameter<T>
+public interface MParameter<Type>
         extends Annotated, Named {
 
     /**
@@ -19,5 +19,5 @@ public interface MParameter<T>
      * @return the type.
      */
     @Contract(pure = true)
-    @NotNull Class<T> getType();
+    @NotNull Class<Type> getType();
 }

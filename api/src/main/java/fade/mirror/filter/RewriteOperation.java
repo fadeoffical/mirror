@@ -7,7 +7,7 @@ import java.util.List;
 public enum RewriteOperation {
     Append, Prepend, Replace;
 
-    public <T> void apply(@NotNull List<T> list, @NotNull List<T> other) {
+    public <Type> void apply(@NotNull List<Type> list, @NotNull List<Type> other) {
         switch (this) {
             case Append -> list.addAll(other);
             case Prepend -> list.addAll(0, other);

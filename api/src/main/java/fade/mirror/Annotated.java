@@ -18,41 +18,6 @@ import java.util.stream.Stream;
 public interface Annotated {
 
     /**
-     * Returns a stream of all annotations of this element. The stream is ordered by the declaration order of the
-     * annotations in the source code. The stream may be empty if the element has no annotations. The stream will never
-     * be {@code null}.
-     *
-     * @return all annotations of this element
-     */
-    @Contract(pure = true)
-    @NotNull Stream<Annotation> getAnnotations();
-
-    /**
-     * Returns a stream of all annotations of this element that match the given filter. The stream is ordered by the
-     * declaration order of the annotations in the source code. The stream may be empty if the element has no
-     * annotations that match the filter. The stream will never be {@code null}.
-     *
-     * @param filter the filter to apply.
-     * @return all annotations of this element that match the filter.
-     */
-    @Contract(pure = true)
-    default @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations().filter(filter);
-    }
-
-    /**
-     * Returns an optional containing the first annotation of this element that matches the given filter. The optional
-     * may be empty if the element has no annotations that match the filter. The optional will never be {@code null}.
-     *
-     * @param filter the filter to apply.
-     * @return the first annotation of this element that matches the filter.
-     */
-    @Contract(pure = true)
-    default @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
-        return this.getAnnotations(filter).findFirst();
-    }
-
-    /**
      * Checks if this element is annotated with all the given annotations. This method is equivalent to calling
      * {@link #isAnnotatedWith(Class)} for each annotation and checking if all calls return {@code true}. If the given
      * array is empty, this method returns {@code true}. If the given array contains an annotation that is not present
@@ -73,6 +38,16 @@ public interface Annotated {
     }
 
     /**
+     * Returns a stream of all annotations of this element. The stream is ordered by the declaration order of the
+     * annotations in the source code. The stream may be empty if the element has no annotations. The stream will never
+     * be {@code null}.
+     *
+     * @return all annotations of this element
+     */
+    @Contract(pure = true)
+    @NotNull Stream<Annotation> getAnnotations();
+
+    /**
      * Checks if this element is annotated with the given annotation. If the given annotation is not present on this
      * element, this method will return {@code false}.
      *
@@ -89,23 +64,40 @@ public interface Annotated {
      * Returns an optional containing the first annotation of this element that matches the given type. The optional may
      * be empty if the element has no annotation that match the type. The optional will never be {@code null}.
      *
-     * @param type the annotation type to match.
-     * @param <T>  the type of the annotation.
+     * @param type        the annotation type to match.
+     * @param <ClassType> the type of the annotation.
      * @return the first annotation of this element that matches the type.
      */
     @Contract(pure = true)
-    default <T extends Annotation> @NotNull Optional<T> getAnnotationOfType(@NotNull Class<T> type) {
+    default <ClassType extends Annotation> @NotNull Optional<ClassType> getAnnotationOfType(@NotNull Class<ClassType> type) {
         return this.getAnnotation(annotation -> type.isAssignableFrom(annotation.annotationType()))
                 .map(type::cast);
     }
 
     /**
-     * Returns the number of annotations of this element.
+     * Returns an optional containing the first annotation of this element that matches the given filter. The optional
+     * may be empty if the element has no annotations that match the filter. The optional will never be {@code null}.
      *
-     * @return the number of annotations of this element.
+     * @param filter the filter to apply.
+     * @return the first annotation of this element that matches the filter.
      */
     @Contract(pure = true)
-    int getAnnotationCount();
+    default @NotNull Optional<Annotation> getAnnotation(@NotNull Predicate<Annotation> filter) {
+        return this.getAnnotations(filter).findFirst();
+    }
+
+    /**
+     * Returns a stream of all annotations of this element that match the given filter. The stream is ordered by the
+     * declaration order of the annotations in the source code. The stream may be empty if the element has no
+     * annotations that match the filter. The stream will never be {@code null}.
+     *
+     * @param filter the filter to apply.
+     * @return all annotations of this element that match the filter.
+     */
+    @Contract(pure = true)
+    default @NotNull Stream<Annotation> getAnnotations(@NotNull Predicate<Annotation> filter) {
+        return this.getAnnotations().filter(filter);
+    }
 
     /**
      * Returns whether this element has any annotations.
@@ -116,4 +108,12 @@ public interface Annotated {
     default boolean isAnnotated() {
         return this.getAnnotationCount() > 0;
     }
+
+    /**
+     * Returns the number of annotations of this element.
+     *
+     * @return the number of annotations of this element.
+     */
+    @Contract(pure = true)
+    int getAnnotationCount();
 }
