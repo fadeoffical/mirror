@@ -25,8 +25,8 @@ public final class ConstructorFilterImpl<Type>
     }
 
     @Override
-    public @NotNull ConstructorFilter<Type> ofType(Class<? extends Type> type) {
-        this.addCriterion(constructor -> constructor.getDeclaringClass().getRawClass().equals(type));
+    public @NotNull ConstructorFilter<Type> ofType(Class<? extends Type> type, @NotNull TypeComparisonBy comparisonBy) {
+        this.addCriterion(constructor -> comparisonBy.compare(constructor.getDeclaringClass().getRawClass(), type));
         return this;
     }
 

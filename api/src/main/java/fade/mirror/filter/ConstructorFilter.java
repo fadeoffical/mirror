@@ -27,5 +27,9 @@ public interface ConstructorFilter<Type>
     @Override
     @NotNull ConstructorFilter<Type> copy();
 
-    @NotNull ConstructorFilter<Type> ofType(Class<? extends Type> type);
+    @NotNull ConstructorFilter<Type> ofType(Class<? extends Type> type, @NotNull TypeComparisonBy comparisonBy);
+
+    default @NotNull ConstructorFilter<Type> ofType(Class<? extends Type> type) {
+        return this.ofType(type, TypeComparisonBy.Assignability);
+    }
 }
