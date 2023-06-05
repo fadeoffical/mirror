@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import fade.mirror.filter.ConstructorFilter;
 import fade.mirror.filter.Filter;
 import fade.mirror.mock.MockUser;
 import fade.mirror.mock.MockUserSubClass;
@@ -38,8 +39,8 @@ class MockUserTest {
     @Test
     @DisplayName("instantiate user with username and email")
     void testAccessDefaultConstructorAndInstantiate() {
-        MockUser user = mirror(MockUser.class)
-                .getConstructor(Filter.forConstructors().withParameters(List.of(String.class, String.class))::test)
+                MockUser user = mirror(MockUser.class)
+                .getConstructor(Filter.forConstructors().withParameters(List.of(String.class, String.class)))
                 .orElseThrow()
                 .requireAccessible()
                 .invokeWithNoInstance("bob", "bob@example.com");

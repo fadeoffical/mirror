@@ -1,5 +1,6 @@
 package fade.mirror;
 
+import fade.mirror.filter.TypeComparisonBy;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +32,11 @@ public interface Annotated {
         return this.getAnnotations().map(Annotation::annotationType).allMatch(annotationSet::contains);
     }
 
+    @Contract(pure = true)
+    default boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation, @NotNull TypeComparisonBy comparisonBy) {
+        return this.getAnnotations().map(Annotation::annotationType).anyMatch(other -> comparisonBy.compare(annotation, other));
+    }
+
     /**
      * Returns a stream of all annotations of this element. The stream is ordered by the declaration order of the
      * annotations in the source code. The stream may be empty if the element has no annotations. The stream will never
@@ -50,8 +56,9 @@ public interface Annotated {
      */
     @Contract(pure = true)
     default boolean isAnnotatedWith(@NotNull Class<? extends Annotation> annotation) {
-        return this.getAnnotations().map(Annotation::annotationType).anyMatch(annotation::equals);
+        return this.isAnnotatedWith(annotation, TypeComparisonBy.Assignability);
     }
+
 
     /**
      * Returns an optional containing the first annotation of this element that matches the given type. The optional may

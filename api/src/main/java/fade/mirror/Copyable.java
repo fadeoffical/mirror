@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <Self> The type to be returned by the methods; for chaining.
  * @author fade
  */
-public interface Copyable<Self extends Copyable<Self>> {
+public interface Copyable<Self> {
 
     @Contract(pure = true)
     @NotNull Self copy();

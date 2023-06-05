@@ -1,10 +1,7 @@
 package fade.mirror.filter;
 
 import fade.mirror.Copyable;
-import fade.mirror.internal.impl.filter.BasicConstructorFilter;
-import fade.mirror.internal.impl.filter.BasicFieldFilter;
-import fade.mirror.internal.impl.filter.BasicMethodFilter;
-import fade.mirror.internal.impl.filter.BasicParameterFilter;
+import fade.mirror.internal.impl.filter.ConstructorFilterImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
@@ -12,22 +9,12 @@ import java.util.function.Predicate;
 /**
  * Represents a filter. A filter can be used to filter elements of a class, method, constructor or parameter.
  *
- * @param <Type> The type of the element to filter.
+ * @param <SubjectType> The type of the element to filter.
  * @author fade
  */
-public interface Filter<Type>
-        extends Predicate<Type>, Copyable<Filter<Type>> {
-
-    /**
-     * Returns a new method filter. This type of filter can be used to filter methods by name, parameters, return type
-     * and annotations.
-     *
-     * @return the method filter
-     * @see MethodFilter
-     */
-    static @NotNull MethodFilter<?> forMethods() {
-        return BasicMethodFilter.create();
-    }
+public interface Filter<SubjectType>
+        extends Predicate<SubjectType>,
+                Copyable<Filter<SubjectType>> {
 
     /**
      * Returns a new constructor filter. This type of filter can be used to filter constructors by parameters and
@@ -36,18 +23,29 @@ public interface Filter<Type>
      * @return the constructor filter
      * @see ConstructorFilter
      */
-    static @NotNull ConstructorFilter forConstructors() {
-        return BasicConstructorFilter.create();
+    static <Type> @NotNull ConstructorFilter<Type> forConstructors() {
+        return ConstructorFilterImpl.create();
+    }
+
+    /**
+     * Returns a new method filter. This type of filter can be used to filter methods by name, parameters, return type
+     * and annotations.
+     *
+     * @return the method filter
+     * @see MethodFilter
+     */
+    static <Type> @NotNull MethodFilter<Type> forMethods() {
+        return MethodFilterImpl.create();
     }
 
     /**
      * Returns a new field filter. This type of filter can be used to filter fields by type, name and annotations.
      *
      * @return the field filter
-     * @see FieldFilter
+     * @see FieldSubjectFilter
      */
-    static @NotNull FieldFilter<?> forFields() {
-        return BasicFieldFilter.create();
+    static @NotNull FieldSubjectFilter<?> forFields() {
+        return BasicFieldSubjectFilter.create();
     }
 
     /**
@@ -55,10 +53,10 @@ public interface Filter<Type>
      * annotations.
      *
      * @return the parameter filter
-     * @see ParameterFilter
+     * @see ParameterSubjectFilter
      */
-    static @NotNull ParameterFilter forParameters() {
-        return BasicParameterFilter.create();
+    static @NotNull ParameterSubjectFilter forParameters() {
+        return BasicParameterSubjectFilter.create();
     }
 
 }

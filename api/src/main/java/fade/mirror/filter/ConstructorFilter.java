@@ -1,8 +1,9 @@
 package fade.mirror.filter;
 
 import fade.mirror.MConstructor;
-import fade.mirror.filter.by.ByAnnotations;
-import fade.mirror.filter.by.Parameters;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Represents a filter for constructors. The filter can be used to filter constructors by parameters and annotations.
@@ -13,6 +14,22 @@ import fade.mirror.filter.by.Parameters;
  *
  * @author fade
  */
-public interface ConstructorFilter
-        extends Filter<MConstructor<?>>, Parameters<ConstructorFilter>, ByAnnotations<ConstructorFilter> {
+public interface ConstructorFilter<Type>
+        extends Filter<MConstructor<Type>> {
+
+    @NotNull ConstructorFilter<Type> withAnnotation(@NotNull Class<? extends Annotation> annotation, @NotNull TypeComparisonBy comparisonBy);
+
+    @NotNull
+    default ConstructorFilter<Type> withAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return this.withAnnotation(annotation, TypeComparisonBy.Assignability);
+    }
+
+    @Override
+    @NotNull ConstructorFilter<Type> copy();
+
+    @NotNull ConstructorFilter<Type> ofType(Class<? extends Type> type, @NotNull TypeComparisonBy comparisonBy);
+
+    default @NotNull ConstructorFilter<Type> ofType(Class<? extends Type> type) {
+        return this.ofType(type, TypeComparisonBy.Assignability);
+    }
 }
